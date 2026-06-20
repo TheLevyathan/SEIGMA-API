@@ -52,7 +52,7 @@ Tu devrais voir 3 clients.
 | **3** | [03-activities-timelogs.md](03-activities-timelogs.md) | Activities (planning) + Timelogs (poinçons) |
 | **4** | [04-operations-ecriture.md](04-operations-ecriture.md) | Créer et modifier : SalesOrder, Activity, Timelog |
 | **5** | [05-modeles-reference.md](05-modeles-reference.md) | Catalogue des 10+ ModelCodes, relations, pipeline VENTES |
-| **6** | [06-guides-pratiques.md](06-guides-pratiques.md) | Workflows : facturation, planning, sync Supabase |
+| **6** | [06-guides-pratiques.md](06-guides-pratiques.md) | Workflows : facturation, planning, sync externe |
 | **7** | [07-pitfalls-limitations.md](07-pitfalls-limitations.md) | Tous les pièges, bugs connus et workarounds |
 | **8** | [08-checklist-completion.md](08-checklist-completion.md) | Checklist des 🚧 à compléter pour votre instance |
 
@@ -64,7 +64,7 @@ Tu devrais voir 3 clients.
 - 📅 Récupérer le planning quotidien des équipes/employés (getactivitiesfordate)
 - ⏱️ Gérer les poinçons (timelogs) par WO : consulter, créer, modifier, supprimer
 - ✍️ Créer et modifier des bons de travail (SalesOrder)
-- 🔄 Synchroniser SEIGMA ↔ Supabase pour les apps {VOTRE_ENTREPRISE} (facturation, billets, pourboires, reconnaissance)
+- 🔄 Synchroniser SEIGMA avec votre base de données (facturation, planification, suivi)
 
 ## Ce que cette API NE permet PAS de faire
 

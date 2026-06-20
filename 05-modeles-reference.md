@@ -1,6 +1,6 @@
 # Chapitre 5 — Catalogue des ModelCodes SEIGMA
 
-> **Version documentée** : v1.13.0 (basée sur le skill SEIGMA)
+> **Version documentée** : 1.0.0 | **Sources** : PDFs officiels SEIGMA + tests de production
 > **Dernière mise à jour** : 2026-06-20
 >
 > 🚧 **À compléter** : Tous les chiffres d'enregistrements (~589, ~1935, etc.) sont basés sur une instance de référence en juin 2026. Ces nombres **varient considérablement** selon votre instance SEIGMA. Utilisez-les uniquement comme ordre de grandeur. Les ReferenceId de référentiels (PaymentTerm, Warehouse, etc.) sont également spécifiques à chaque instance.

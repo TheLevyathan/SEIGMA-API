@@ -1,6 +1,6 @@
 # Chapitre 3 — Activity API & Timelog API
 
-> **API SEIGMA v1.13.0** — Gestion des activités (rendez-vous, tâches planifiées) et des poinçons (suivi du temps).
+> **API SEIGMA** — Gestion des activités (rendez-vous, tâches planifiées) et des poinçons (suivi du temps).
 
 ---
 
@@ -1376,4 +1376,4 @@ GET    /api/reference/{ModelCode}/{refId}/timelogs/{id}/stop    → Arrêter le 
 
 ---
 
-> **Documentation générée pour SEIGMA API v1.13.0** — Dernière mise à jour : Juin 2026
+

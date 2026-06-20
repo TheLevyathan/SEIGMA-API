@@ -682,7 +682,7 @@ Trois champs sont **strictement requis**.
 | `Amount` | `decimal` | Montant encaissé |
 | `PaymentMethodId` | `{"ReferenceId": "{id-methode-paiement}"}` | ⚠️ **Obligatoire** — mode de paiement |
 
-> ⚠️ **PaymentMethodId est obligatoire !** Vous devez d'abord rechercher les méthodes de paiement disponibles via `POST /api/reference/PaymentMethod/search`. Exemple de méthode trouvée : « Carte de crédit » (`52bb87e0-...`).
+> ⚠️ **PaymentMethodId est obligatoire !** Vous devez d'abord rechercher les méthodes de paiement disponibles via `POST /api/reference/PaymentMethod/search`. Exemple de méthode trouvée : « Carte de crédit » (`{un-id-paymentmethod}`).
 
 ### 4.5.2 Champs optionnels notables
 
@@ -717,7 +717,7 @@ curl -X POST "{VOTRE_INSTANCE}/api/reference/Receipt" \
     "Properties": {
       "CustomerId": {"ReferenceId": "550e8400-e29b-41d4-a716-446655440000"},
       "Amount": 500.00,
-      "PaymentMethodId": {"ReferenceId": "52bb87e0-e29b-41d4-a716-446655440005"}
+      "PaymentMethodId": {"ReferenceId": "{un-id-paymentmethod}"}
     }
   }'
 ```
@@ -786,7 +786,7 @@ curl -X POST "{VOTRE_INSTANCE}/api/reference/PaymentMethod/search" \
   }'
 ```
 
-> ⚠️ **PaymentMethodId est obligatoire** pour la création de `Receipt`. Utilisez `POST /api/reference/PaymentMethod/search` pour obtenir les méthodes disponibles. Exemple : « Carte de crédit » (`52bb87e0-...`).
+> ⚠️ **PaymentMethodId est obligatoire** pour la création de `Receipt`. Utilisez `POST /api/reference/PaymentMethod/search` pour obtenir les méthodes disponibles. Exemple : « Carte de crédit » (`{un-id-paymentmethod}`).
 
 > 🚧 **Spécifique à l'instance :** les IDs de référentiels varient d'une instance SEIGMA à l'autre. Ne les hardcodez jamais. Utilisez toujours les endpoints `/api/search` ou `/api/reference/{ModelCode}/search` pour les résoudre dynamiquement.
 

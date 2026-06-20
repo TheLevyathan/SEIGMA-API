@@ -1,7 +1,7 @@
 # Chapitre 7 — Pièges et limitations
 
 > **Dernière mise à jour** : 2026-06-20
-> **Source** : skill seigma-api v1.13.0 + tests de production
+> **Source** : PDFs officiels SEIGMA + tests de production
 
 ---
 
@@ -23,7 +23,7 @@
 | **Endpoint** | `POST /api/activity` (sans referenceId) |
 | **Erreur** | HTTP 404 — aucune action sur le contrôleur |
 | **Impact** | Impossible de créer une activité non liée à une référence |
-| **Workaround** | Créer via `POST /api/activity/{referenceId}` (liée à une référence existante) ou planifier côté Supabase |
+| **Workaround** | Créer via `POST /api/activity/{referenceId}` (liée à une référence existante) ou planifier côté application |
 
 ### 3. Activity/search → 500 — Recherche d'activités impossible
 

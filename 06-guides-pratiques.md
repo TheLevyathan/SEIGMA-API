@@ -1,6 +1,6 @@
 # Chapitre 6 — Guides pratiques (Workflows)
 
-> **Version documentée** : API SEIGMA v1.13.0 — Basée sur les Edge Functions Supabase de production {VOTRE_ENTREPRISE}.
+> **Version documentée** : 1.0.0 | **Sources** : PDFs officiels SEIGMA + tests de production
 > **Dernière mise à jour** : 2026-06-20
 
 ---
@@ -9,7 +9,7 @@
 
 1. [Workflow 1 : Facturation — Pipeline Lead → Paiement](#workflow-1--facturation--pipeline-lead--paiement)
 2. [Workflow 2 : Planning équipes — getactivitiesfordate](#workflow-2--planning-équipes--getactivitiesfordate)
-3. [Workflow 3 : Synchronisation Supabase ↔ SEIGMA](#workflow-3--synchronisation-supabase--seigma)
+3. [Workflow 3 : Synchronisation par lots et performance](#workflow-3--synchronisation-par-lots-et-performance)
 4. [Bonus : Chercher un WO par numéro](#bonus--chercher-un-wo-par-numéro)
 5. [Aide-mémoire des patterns](#aide-mémoire-des-patterns)
 
@@ -238,9 +238,9 @@ for (const inv of invoiceDetails) {
 
 > 🚨 **CRITIQUE** — Les lots `receiptDetails` et `invoiceDetails` doivent être dans le **même `Promise.all`** (pas séquentiels). Une exécution séquentielle receipt→invoice cause un **timeout** sur les grosses instances (v51).
 
-### 6.1.6 Pattern ETL — Conversion SalesOrder → Row Supabase
+### 6.1.6 Pattern ETL — Conversion SalesOrder → structure de données
 
-Le pattern de migration ETL convertit un SalesOrder SEIGMA (87 champs) en une ligne structurée pour Supabase :
+Le pattern de migration ETL convertit un SalesOrder SEIGMA (87 champs) en une structure de données pour votre base :
 
 ```typescript
 interface WorkOrderRow {
@@ -355,7 +355,7 @@ function extractRefColor(field: unknown): string {
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-> ℹ️ Ce pipeline est implémenté en production dans l'Edge Function `seigma-facturation` — voir `{VOTRE_PROJET}/supabase/functions/seigma-facturation/index.ts`.
+
 
 ---
 
@@ -635,51 +635,189 @@ async function buildDailyPlan(
 
 ---
 
-## Workflow 3 — Synchronisation Supabase ↔ SEIGMA
+## Workflow 3 — Synchronisation par lots et performance
 
-### 6.3.1 Architecture des Edge Functions
+### 6.3.1 Stratégie de synchronisation
 
-L'infrastructure {VOTRE_ENTREPRISE} utilise **4 Edge Functions Supabase** pour synchroniser les données SEIGMA vers Supabase :
+La synchronisation entre SEIGMA et votre base de données nécessite trois patterns :
 
-| Edge Function | Modèle(s) SEIGMA | Table(s) Supabase | Fréquence |
-|---|---|---|---|
-| `seigma-facturation` | SalesOrder, Receipt, SalesInvoice | `facturation_cache` | Manuel / Cron |
-| `seigma-timelogs` | SalesOrder (timelogs), Activity | `seigma_employees`, `seigma_geocache` | Manuel / Cron |
-| `seigma-clients` | Customer, SalesOrder, Quotation | Segmentation clients | Manuel |
-| `bl-vitres-sync` | Call, SalesOrder | `billets_cache`, `billets_suivi`, `billets_attributions` | Manuel / Cron |
+| Pattern | Objectif | Quand |
+|---------|----------|------|
+| **fetchAll paginé** | Lire toutes les pages d'un modèle | Données maîtres (clients, produits) |
+| **chunkedDetails** | Obtenir le détail de N IDs sans timeout | Enrichissement (Receipt → SalesInvoice → SalesOrder) |
+| **throttledFetch** | Respecter les limites de concurrence | Toute synchronisation massive |
 
-```
-┌──────────────┐     ┌──────────────────┐     ┌──────────────┐
-│              │     │                  │     │              │
-│  SEIGMA API  │────▶│  Edge Functions  │────▶│   Supabase   │
-│  (source)    │     │  (Deno/TS)       │     │   (cache)    │
-│              │     │                  │     │              │
-└──────────────┘     └──────────────────┘     └──────────────┘
-                            │
-                    ┌───────┴───────┐
-                    │  seigma_cache │
-                    │  billets_cache│
-                    │  facturation_ │
-                    │  cache        │
-                    └───────────────┘
-```
-
-### 6.3.2 Pattern fetchAll — Pagination dynamique
-
-Le pattern `fetchAll` utilise `metadata.totalCount` pour déterminer le nombre de pages à récupérer, puis lance toutes les pages en parallèle :
+### 6.3.2 Pattern fetchAll — pagination dynamique
 
 ```typescript
-// Étape 1 : Sonder le totalCount avec une requête Limit=1
-async function probeTotalCount(
+const SEIGMA_BASE = `https://{VOTRE_INSTANCE}.seigma.app/api`;
+
+interface FetchPageResult {
+  references?: Record<string, unknown>[];
+  metadata?: { totalCount: number };
+}
+
+async function fetchPage(
   token: string,
-  model: string
-): Promise<number> {
+  model: string,
+  offset: number,
+  limit = 50,
+  selectAttributes?: string[]
+): Promise<FetchPageResult> {
+  const body: Record<string, unknown> = {
+    Offset: offset,
+    Limit: limit,
+    IsSelector: false,
+    ModelListId: null,
+    CurrentReferenceId: null,
+    WhereCondition: [],
+    WhereOrCondition: [],
+    WhereInCondition: [],
+    OrderByCondition: [{ ModelAttributeCode: "DateCreated", IsDescending: true }],
+  };
+  if (selectAttributes && selectAttributes.length > 0) {
+    body.SelectAttributes = selectAttributes;
+  }
+
   const r = await fetch(`${SEIGMA_BASE}/api/reference/${model}/search`, {
     method: "POST",
     headers: seigmaHeaders(token),
-    body: JSON.stringify({
-      Offset: 0,
-      Limit: 1,
+    body: JSON.stringify(body),
+  });
+  return r.json() as Promise<FetchPageResult>;
+}
+
+async function fetchTotalCount(token: string, model: string): Promise<number> {
+  const result = await fetchPage(token, model, 0, 1, ["ReferenceId"]);
+  return result.metadata?.totalCount ?? 0;
+}
+
+async function fetchAll(
+  token: string,
+  model: string,
+  pageSize = 50,
+  selectAttributes?: string[]
+): Promise<Record<string, unknown>[]> {
+  const total = await fetchTotalCount(token, model);
+  const pages = Math.ceil(total / pageSize);
+
+  const pagePromises = Array.from({ length: pages }, (_, i) =>
+    fetchPage(token, model, i * pageSize, pageSize, selectAttributes)
+  );
+
+  const results = await Promise.all(pagePromises);
+  return results.flatMap((p) => p.references ?? []);
+}
+
+// Usage
+const allCustomers = await fetchAll(token, "Customer", 50, ["ReferenceId", "Name"]);
+console.log(`${allCustomers.length} clients récupérés`);
+```
+
+### 6.3.3 Pattern chunkedDetails — résoudre N IDs sans timeout
+
+```typescript
+async function getDetail(
+  token: string,
+  model: string,
+  id: string
+): Promise<Record<string, unknown> | null> {
+  const r = await fetch(`${SEIGMA_BASE}/api/reference/${model}/${id}`, {
+    headers: seigmaHeaders(token),
+  });
+  if (!r.ok) return null;
+  const d = await r.json();
+  return (d.reference ?? null) as Record<string, unknown> | null;
+}
+
+async function chunkedDetails<T>(
+  token: string,
+  model: string,
+  ids: string[],
+  batchSize = 25
+): Promise<(T | null)[]> {
+  const results: (T | null)[] = [];
+  for (let i = 0; i < ids.length; i += batchSize) {
+    const batch = ids.slice(i, i + batchSize);
+    const batchResults = await Promise.all(
+      batch.map((id) => getDetail(token, model, id) as Promise<T | null>)
+    );
+    results.push(...batchResults);
+  }
+  return results;
+}
+
+// Usage typique : enrichir des Receipts avec leur SalesOrderId transitif
+const receipts = await fetchAll(token, "Receipt", 50);
+const receiptIds = receipts.map((r) => r.ReferenceId as string);
+
+// Étape 1 : getDetail sur chaque Receipt → SalesInvoiceId
+const receiptDetails = await chunkedDetails<{ SalesInvoiceId?: { ReferenceId: string } }>(
+  token, "Receipt", receiptIds
+);
+
+// Étape 2 : getDetail sur chaque SalesInvoice → SalesOrderId
+const invoiceIds = receiptDetails
+  .map((r) => r?.SalesInvoiceId?.ReferenceId)
+  .filter(Boolean) as string[];
+const invoiceDetails = await chunkedDetails<{ SalesOrderId?: { ReferenceId: string } }>(
+  token, "SalesInvoice", invoiceIds
+);
+```
+
+### 6.3.4 Pattern throttledFetch — respecter la concurrence
+
+```typescript
+function createSemaphore(max: number) {
+  let running = 0;
+  const queue: (() => void)[] = [];
+
+  const next = () => {
+    if (queue.length > 0 && running < max) {
+      running++;
+      queue.shift()!();
+    }
+  };
+
+  return {
+    acquire: () =>
+      new Promise<void>((resolve) => {
+        const task = () => {
+          resolve();
+          running--;
+          next();
+        };
+        running < max ? (running++, task()) : queue.push(task);
+      }),
+  };
+}
+
+const semaphore = createSemaphore(50);
+
+async function throttledFetch(url: string, init?: RequestInit): Promise<Response> {
+  await semaphore.acquire();
+  try {
+    return await fetch(url, init);
+  } catch (err) {
+    // Un échec réseau n'est pas un bannissement — réessayer une fois
+    await new Promise((r) => setTimeout(r, 2000));
+    return fetch(url, init);
+  }
+}
+
+// Usage dans fetchAll
+async function fetchAllThrottled(
+  token: string,
+  model: string,
+  pageSize = 50
+): Promise<Record<string, unknown>[]> {
+  const total = await fetchTotalCount(token, model);
+  const pages = Math.ceil(total / pageSize);
+
+  const pagePromises = Array.from({ length: pages }, async (_, i) => {
+    const body: Record<string, unknown> = {
+      Offset: i * pageSize,
+      Limit: pageSize,
       IsSelector: false,
       ModelListId: null,
       CurrentReferenceId: null,
@@ -687,348 +825,60 @@ async function probeTotalCount(
       WhereOrCondition: [],
       WhereInCondition: [],
       OrderByCondition: [],
-    }),
-  });
-  const d = await r.json();
-  return (d.metadata?.totalCount as number) ?? 0;
-}
+    };
 
-// Étape 2 : Fetch toutes les pages en parallèle
-async function fetchAllDynamic(
-  token: string,
-  model: string,
-  pageSize = 50,
-  selectAttributes?: string[]
-): Promise<Record<string, unknown>[]> {
-  const totalCount = await probeTotalCount(token, model);
-  const totalPages = Math.ceil(totalCount / pageSize);
-
-  console.log(`[fetchAll] ${model}: ${totalCount} refs, ${totalPages} pages`);
-
-  const body: Record<string, unknown> = {
-    IsSelector: false,
-    ModelListId: null,
-    CurrentReferenceId: null,
-    WhereCondition: [],
-    WhereOrCondition: [],
-    WhereInCondition: [],
-    OrderByCondition: [
-      { ModelAttributeCode: "DateCreated", IsDescending: true },
-    ],
-  };
-  if (selectAttributes?.length) {
-    body.SelectAttributes = selectAttributes;
-  }
-
-  const pages = await Promise.all(
-    Array.from({ length: totalPages }, (_, i) =>
-      fetch(`${SEIGMA_BASE}/api/reference/${model}/search`, {
-        method: "POST",
-        headers: seigmaHeaders(token),
-        body: JSON.stringify({
-          ...body,
-          Offset: i * pageSize,
-          Limit: pageSize,
-        }),
-      })
-        .then((r) => r.json())
-        .then((d) => (d.references ?? []) as Record<string, unknown>[])
-        .catch(() => [] as Record<string, unknown>[])
-    )
-  );
-
-  return pages.flat();
-}
-```
-
-> ℹ️ **SelectAttributes** réduit la payload de ~10× en ne retournant que les champs demandés. Utilisez-le systématiquement pour les modèles volumineux (Customer: 60 champs → 5 champs nécessaires).
-
-### 6.3.3 Pattern chunkedDetails — getDetail par lots
-
-Pour les opérations nécessitant le détail complet de nombreuses références, le pattern `chunkedDetails` évite les timeouts en découpant les appels par lots de 25 :
-
-```typescript
-async function chunkedDetails<T>(
-  token: string,
-  model: string,
-  ids: string[],
-  batchSize = 25,
-  mapper: (detail: Record<string, unknown>) => T
-): Promise<(T | null)[]> {
-  const results: (T | null)[] = [];
-
-  for (let i = 0; i < ids.length; i += batchSize) {
-    const batch = ids.slice(i, i + batchSize);
-
-    const batchResults = await Promise.all(
-      batch.map(async (id) => {
-        try {
-          const r = await fetch(
-            `${SEIGMA_BASE}/api/reference/${model}/${id}`,
-            { headers: seigmaHeaders(token) }
-          );
-          if (!r.ok) return null;
-          const d = await r.json();
-          return mapper(d.reference as Record<string, unknown>);
-        } catch {
-          return null;
-        }
-      })
-    );
-
-    results.push(...batchResults);
-  }
-
-  return results;
-}
-
-// Usage : récupérer le détail de 200 SalesOrder
-const woIds = ["guid-1", "guid-2", /* ... 198 de plus */];
-const woDetails = await chunkedDetails(
-  token,
-  "SalesOrder",
-  woIds,
-  25, // lots de 25
-  (wo) => ({
-    id: wo.ReferenceId,
-    total: wo.Total,
-    status: extractRefDisplay(wo.SalesOrderStatusId),
-  })
-);
-```
-
-### 6.3.4 Gestion du rate limiting
-
-L'API SEIGMA a deux limitations critiques :
-
-| Limitation | Seuil | Comportement au dépassement |
-|---|---|---|
-| **Timeout O(n²)** | >200 résultats par requête | Timeout exponentiel, échecs de connexion |
-| **Parallélisme** | >50 requêtes simultanées | Rate limiting agressif, bannissement IP |
-
-```typescript
-// ── Limiter la concurrence avec un sémaphore ──
-class Semaphore {
-  private permits: number;
-  private queue: (() => void)[] = [];
-
-  constructor(count: number) {
-    this.permits = count;
-  }
-
-  async acquire(): Promise<void> {
-    if (this.permits > 0) {
-      this.permits--;
-      return;
-    }
-    return new Promise<void>((resolve) => {
-      this.queue.push(() => {
-        this.permits--;
-        resolve();
-      });
+    const r = await throttledFetch(`${SEIGMA_BASE}/api/reference/${model}/search`, {
+      method: "POST",
+      headers: seigmaHeaders(token),
+      body: JSON.stringify(body),
     });
-  }
+    const d = (await r.json()) as FetchPageResult;
+    return d.references ?? [];
+  });
 
-  release(): void {
-    this.permits++;
-    const next = this.queue.shift();
-    if (next) next();
-  }
-}
-
-// Usage : max 50 requêtes parallèles
-const semaphore = new Semaphore(50);
-
-async function throttledFetch(
-  url: string,
-  opts: RequestInit
-): Promise<Response> {
-  await semaphore.acquire();
-  try {
-    return await fetch(url, opts);
-  } finally {
-    semaphore.release();
-  }
-}
-
-// ── Pagination safe avec retry 1x sur 500 ──
-async function seigmaFetchWithRetry(
-  url: string,
-  opts: RequestInit,
-  retries = 1
-): Promise<any> {
-  for (let i = 0; i <= retries; i++) {
-    try {
-      const r = await throttledFetch(url, opts);
-      const text = await r.text();
-
-      if (!r.ok || text.trimStart().startsWith("<")) {
-        if (i < retries && r.status === 500) {
-          await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
-          continue;
-        }
-        throw new Error(`HTTP ${r.status}: ${text.slice(0, 300)}`);
-      }
-
-      return JSON.parse(text);
-    } catch (e) {
-      if (i >= retries) throw e;
-      await new Promise((r) => setTimeout(r, 1000 * (i + 1)));
-    }
-  }
+  const results = await Promise.all(pagePromises);
+  return results.flat();
 }
 ```
 
-> ⚠️ **Règle d'or** — Ne dépassez **jamais** `Limit: 200` par requête. Pour les modèles >200 enregistrements, paginez systématiquement.
+> ⚠️ **Attention** : SEIGMA limite le nombre de requêtes simultanées. Un sémaphore à 50 est une valeur de départ prudente. Ajustez selon le comportement observé sur votre instance. En cas d'erreurs 500 soudaines sur de gros volumes, réduisez à 25.
 
-### 6.3.5 Cache Supabase
+> 🚧 **À compléter** : Les limites exactes de rate limiting varient selon votre instance SEIGMA. Testez avec un petit lot (10 pages) avant de lancer une synchronisation massive.
 
-Les Edge Functions utilisent deux tables de cache pour éviter de refetcher les mêmes données :
+### 6.3.5 Cache local — pattern TTL mémoire
 
-#### seigma_cache — Cache générique clé-valeur
-
-```sql
-CREATE TABLE public.seigma_cache (
-  key        TEXT PRIMARY KEY,
-  data       JSONB NOT NULL DEFAULT '{}',
-  fetched_at TIMESTAMPTZ DEFAULT NOW(),
-  fetched_by TEXT NOT NULL DEFAULT ''
-);
-```
+Pour éviter de refetch les mêmes données dans une session :
 
 ```typescript
-// Pattern : lire le cache, ne fetcher que les IDs manquants
-async function getCachedOrFetch<T>(
-  supabase: any,
-  cacheKey: string,
-  ids: string[],
-  fetcher: (missingIds: string[]) => Promise<Record<string, T>>
-): Promise<Map<string, T>> {
-  const result = new Map<string, T>();
+const memoryCache = new Map<string, { data: unknown; timestamp: number }>();
+const CACHE_TTL = 15 * 60 * 1000; // 15 minutes
 
-  // 1. Lire le cache
-  let cachedMap: Record<string, T> = {};
-  try {
-    const { data } = await supabase
-      .from("seigma_cache")
-      .select("data")
-      .eq("key", cacheKey)
-      .maybeSingle();
-    if (data?.data) cachedMap = data.data as Record<string, T>;
-  } catch {
-    /* cache miss OK */
+function getCached<T>(key: string): T | null {
+  const entry = memoryCache.get(key);
+  if (entry && Date.now() - entry.timestamp < CACHE_TTL) {
+    return entry.data as T;
   }
-
-  // 2. Séparer présents/absents
-  const missing: string[] = [];
-  for (const id of ids) {
-    if (cachedMap[id]) result.set(id, cachedMap[id]);
-    else missing.push(id);
-  }
-
-  if (missing.length === 0) return result;
-
-  // 3. Fetcher les manquants
-  const fresh = await fetcher(missing);
-  const merged = { ...cachedMap };
-
-  for (const [id, value] of Object.entries(fresh)) {
-    result.set(id, value);
-    merged[id] = value;
-  }
-
-  // 4. Mettre à jour le cache (fire-and-forget)
-  supabase
-    .from("seigma_cache")
-    .upsert(
-      {
-        key: cacheKey,
-        data: merged,
-        fetched_at: new Date().toISOString(),
-        fetched_by: "seigma-sync",
-      },
-      { onConflict: "key" }
-    )
-    .then(() => {})
-    .catch(() => {});
-
-  return result;
+  memoryCache.delete(key);
+  return null;
 }
-```
 
-#### billets_cache — Cache dédié aux Calls/Billets
-
-```typescript
-// Pattern : UPSERT avec données enrichies (WO + timelogs)
-async function upsertBillet(
-  supabase: any,
-  callId: string,
-  callDetail: Record<string, unknown>,
-  woData: Record<string, unknown> | null,
-  timelogs: Record<string, unknown>[]
-): Promise<void> {
-  const payload = {
-    call_id: callId,
-    display: callDetail.Display,
-    number: callDetail.Number,
-    description: callDetail.Description,
-    status_display: extractRefDisplay(callDetail.CallStatusId),
-    priority_display: extractRefDisplay(callDetail.PriorityId),
-    assigned_to_display: extractUserDisplay(callDetail.AssignedToId),
-    customer_display: extractRefDisplay(callDetail.CustomerId),
-    sales_order_id: extractRefId(callDetail.SalesOrderId),
-    wo_data: woData,
-    timelogs: timelogs,
-    synced_at: new Date().toISOString(),
-  };
-
-  await supabase
-    .from("billets_cache")
-    .upsert(payload, { onConflict: "call_id" });
-}
-```
-
-### 6.3.6 Realtime Subscriptions
-
-Supabase Realtime permet de notifier le frontend des changements de cache :
-
-```typescript
-// S'abonner aux changements du cache facturation
-function subscribeToFacturationCache(
-  supabase: any,
-  onUpdate: (data: any) => void
-) {
-  const channel = supabase
-    .channel("facturation-changes")
-    .on(
-      "postgres_changes",
-      {
-        event: "*",
-        schema: "public",
-        table: "facturation_cache",
-      },
-      (payload: any) => {
-        console.log("Cache mis à jour:", payload);
-        onUpdate(payload.new?.data ?? []);
-      }
-    )
-    .subscribe();
-
-  return () => {
-    supabase.removeChannel(channel);
-  };
+function setCache(key: string, data: unknown): void {
+  memoryCache.set(key, { data, timestamp: Date.now() });
 }
 
 // Usage
-const unsubscribe = subscribeToFacturationCache(supabase, (data) => {
-  console.log(`${data.length} WOs dans le cache`);
-});
+async function getCachedActivities(token: string, teamUserId: string, date: string) {
+  const cacheKey = `activities:${teamUserId}:${date}`;
+  const cached = getCached<SeigmaActivity[]>(cacheKey);
+  if (cached) return cached;
 
-// Nettoyage
-// unsubscribe();
+  const activities = await fetchActivities(token, teamUserId, date);
+  setCache(cacheKey, activities);
+  return activities;
+}
 ```
 
----
+> 💡 **Astuce** : Pour une persistance entre redémarrages, stockez le cache dans votre base de données avec une colonne `expires_at`. Faites un upsert avec `ON CONFLICT` plutôt qu'un insert pour éviter les doublons.
 
 ## Bonus — Chercher un WO par numéro
 
@@ -1136,7 +986,7 @@ if (fullWO) {
 | **fetchAll** | Récupérer N pages en parallèle | O(pages) | Limit max 200, O(n²) au-delà |
 | **chunkedDetails** | getDetail sur N IDs | O(N/25) lots | Toujours dans le même Promise.all |
 | **cache mémoire** | Éviter les refetch | O(1) | TTL cohérent (15 min) |
-| **cache Supabase** | Persistance entre appels | O(1) + 1 write | Fire-and-forget l'upsert |
+| **cache persistant** | Persistance entre redémarrages | O(1) + 1 write | Upsert dans votre base |
 | **WhereCondition** | Filtrer par champ | O(1) | Number ≠ Display, Operator pas OperatorCode |
 | **extractRefId/Display** | Extraire d'un objet Reference | O(1) | Le champ peut être string OU objet |
 | **throttledFetch** | Respecter rate limit | Sémaphore(50) | Dépassement → bannissement IP |

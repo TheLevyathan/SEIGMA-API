@@ -1,6 +1,6 @@
 # Chapitre 2 — Référence API SEIGMA
 
-> **Version documentée** : v1.13.0 (basée sur le skill SEIGMA)
+> **Version documentée** : 1.0.0 | **Sources** : PDFs officiels SEIGMA + tests de production
 > **Dernière mise à jour** : 2026-06-20
 
 ---
@@ -992,6 +992,6 @@ curl -X POST \
 
 ---
 
-> **Prochain chapitre** : [03 — Authentification et sécurité](03-authentification.md)
+> **Prochain chapitre** : [03 — Activities & Timelogs](03-activities-timelogs.md)
 >
 > **Chapitre précédent** : [01 — Introduction à l'API SEIGMA](01-introduction.md)

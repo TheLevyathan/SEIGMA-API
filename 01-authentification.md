@@ -110,10 +110,10 @@ Tous les appels subséquents à l'API nécessitent **trois en-têtes obligatoire
 
 ## 7. Exemples d’intégration
 
-### 7.1 TypeScript / Deno — Edge Function Supabase
+### 7.1 TypeScript / Deno
 
 ```typescript
-import "jsr:@supabase/functions-js/edge-runtime.d.ts";
+// (imports dépendent de votre runtime — Deno, Node.js, ou autre)
 
 // ⚠️ Utilisez des variables d'environnement pour les valeurs sensibles
 const SEIGMA_BASE = Deno.env.get("SEIGMA_BASE_URL")!; // ex: "https://instance.seigma.app/api"
