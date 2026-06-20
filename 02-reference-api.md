@@ -204,7 +204,7 @@ Tableau de conditions combinées en **ET logique**. Chaque condition est un obje
 | `StartsWith` | Commence par | `"Value": "SO-"` |
 | `EndsWith` | Termine par | `"Value": "-001"` |
 
-> ⚠️ **Attention** : Certains modèles utilisent `OperatorCode` au lieu de `Operator`. Essayez `Operator` d'abord ; si l'API renvoie une erreur silencieuse, basculez sur `OperatorCode`. Le skill v1.13.0 recommande de toujours essayer `Operator` en premier.
+> ⚠️ **Attention** : Certains modèles utilisent `OperatorCode` au lieu de `Operator`. Essayez `Operator` d'abord ; si l'API renvoie une erreur silencieuse, basculez sur `OperatorCode`.
 
 ### WhereOrCondition — Filtres OR
 
@@ -310,7 +310,7 @@ Pour les attributs de **type liste** (MultiSelect, MultiUser, etc.). Permet de f
 
 > 🚧 **À compléter** : La disponibilité des ModelCodes dépend de votre instance SEIGMA. Certains modèles listés ci-dessous peuvent ne pas être disponibles ou avoir un nombre d'enregistrements différent. Testez toujours avec un appel minimal avant d'intégrer.
 
-Voici les `ModelCode` documentés et testés avec le skill v1.13.0. Les statistiques sont indicatives et dépendent de l'instance SEIGMA cible.
+Voici les `ModelCode` documentés et testés. Les statistiques sont indicatives et dépendent de l'instance SEIGMA cible.
 
 ### SalesOrder — Bons de commande
 

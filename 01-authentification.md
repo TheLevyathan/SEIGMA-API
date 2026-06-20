@@ -31,7 +31,9 @@ curl -X POST https://{VOTRE_INSTANCE}.seigma.app/api/auth/authenticate \
 | **Endpoint**    | `POST /api/auth/authenticate`                       |
 | **Content-Type**| `application/json`                                  |
 
-> 🚧 **À compléter** : Remplacez `{VOTRE_INSTANCE}`, `{VOTRE_EMAIL}` et `{VOTRE_MOT_DE_PASSE}` par les credentials de votre propre instance SEIGMA. Contactez votre administrateur SEIGMA si vous ne disposez pas d'un compte API dédié.
+> 🚧 **À compléter** : Remplacez `{VOTRE_INSTANCE}`, `{VOTRE_EMAIL}` et `{VOTRE_MOT_DE_PASSE}` par les credentials de votre propre instance SEIGMA.
+
+Contactez votre administrateur SEIGMA si vous ne disposez pas d'un compte API dédié.
 
 ---
 
