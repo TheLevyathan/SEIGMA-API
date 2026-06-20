@@ -651,10 +651,88 @@ Les endpoints suivants retournent systématiquement **HTTP 500 Internal Server E
 | `POST /api/reference/Report/search` | 🔴 500 | Erreur interne serveur |
 | `GET /api/reference/{ModelCode}/metadata` | 🔴 500 | Endpoint inexistant |
 | `GET /api/reference/Contact/{id}` | 🔴 404 | Endpoint inexistant |
+| `POST /api/reference/Payable/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/InventoryAdjustment/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/ProductBrand/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/MessageTemplate/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/EmailSender/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/FinancialReport/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/TimeLogReport/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/QuotationItem/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/InvoiceItem/search` | 🔴 500 | Erreur interne serveur |
+| `POST /api/reference/WorkOrderItem/search` | 🔴 500 | Erreur interne serveur |
 
 > ✅ **Corrigé — Juin 2026** : `Employee/search` n'est plus cassé. Il retourne 200 avec 0 résultat pour les comptes non-admin. Voir la section [Employee](#employee--employés).
 
 > **Note** : Ces endpoints peuvent fonctionner sur d'autres versions ou configurations de SEIGMA. Toujours tester avec un appel minimal avant d'intégrer.
+
+---
+
+## Modèles additionnels
+
+> **Découverte** : 2026-06-20 via l'interface web SEIGMA (compte `web@blvitres.com`). Ces 35 ModelCodes additionnels sont accessibles en GET/search mais n'avaient pas encore été documentés dans ce catalogue.
+
+### Achats
+
+| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
+|-----------|-------------|--------|-----|--------|--------|
+| `Supplier` | Fournisseurs | 0 | ❓ | ✅ | 🟢 Stable |
+| `SupplierContact` | Contacts fournisseurs | 0 | ❓ | ✅ | 🟢 Stable |
+
+### Inventaire
+
+| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
+|-----------|-------------|--------|-----|--------|--------|
+| `Equipment` | Équipements | 2 | ❓ | ✅ | 🟢 Stable |
+| `InventoryLog` | Logs d'inventaire | 0 | ❓ | ✅ | 🟢 Stable |
+| `ProductCategory` | Catégories de produit | 5 | ❓ | ✅ | 🟢 Stable |
+| `ProductType` | Types de produit | 3 | ❓ | ✅ | 🟢 Stable |
+
+### Suivi / Triggers
+
+| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
+|-----------|-------------|--------|-----|--------|--------|
+| `PaymentTransaction` | Transactions de paiement | 16 | ❓ | ✅ | 🟢 Stable |
+| `PaymentTransactionStatus` | Statuts de transaction | 3 | ❓ | ✅ | 🟢 Stable |
+| `Trigger` | Déclencheurs | 22 | ❓ | ✅ | 🟢 Stable |
+| `TriggerAction` | Actions de déclenchement | 26 | ❓ | ✅ | 🟢 Stable |
+| `TriggerCondition` | Conditions de déclenchement | 28 | ❓ | ✅ | 🟢 Stable |
+| `TriggerType` | Types de déclencheur | 2 | ❓ | ✅ | 🟢 Stable |
+| `AlertType` | Types d'alerte | 5 | ❓ | ✅ | 🟢 Stable |
+| `Form` | Formulaires | 1 | ❓ | ✅ | 🟢 Stable |
+| `TextMessageTemplate` | Gabarits message texte | 2 | ❓ | ✅ | 🟢 Stable |
+| `ActivityFollowUp` | Suivis d'activité | 3 | ❓ | ✅ | 🟢 Stable |
+| `LeadPipeline` | Pipelines de lead | 1 | ❓ | ✅ | 🟢 Stable |
+| `LeadSource` | Sources de lead | 7 | ❓ | ✅ | 🟢 Stable |
+| `Question` | Questions | 12 | ❓ | ✅ | 🟢 Stable |
+| `ContactMethod` | Méthodes de contact | 3 | ❓ | ✅ | 🟢 Stable |
+| `TimeLogType` | Types de poinçon | 2 | ❓ | ✅ | 🟢 Stable |
+| `TimeLogMode` | Modes de poinçon | 3 | ❓ | ✅ | 🟢 Stable |
+
+### Référentiels additionnels
+
+| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
+|-----------|-------------|--------|-----|--------|--------|
+| `Country` | Pays | 2 | ❓ | ✅ | 🟢 Stable |
+| `CountryState` | Provinces/États | 63 | ❓ | ✅ | 🟢 Stable |
+| `TaxCode` | Codes de taxe | 3 | ❓ | ✅ | 🟢 Stable |
+| `SalesOrderStatus` | Statuts de bon de travail | 7 | ❓ | ✅ | 🟢 Stable |
+| `SalesInvoiceStatus` | Statuts de facture | 5 | ❓ | ✅ | 🟢 Stable |
+| `ReceiptStatus` | Statuts de reçu | 5 | ❓ | ✅ | 🟢 Stable |
+| `CallStatus` | Statuts de billet | 6 | ❓ | ✅ | 🟢 Stable |
+| `CallType` | Types de billet | 4 | ❓ | ✅ | 🟢 Stable |
+| `Territory` | Territoires | 17 | ❓ | ✅ | 🟢 Stable |
+| `ActivityType` | Types d'activité | 11 | ❓ | ✅ | 🟢 Stable |
+| `ActivityLabel` | Étiquettes d'activité | 15 | ❓ | ✅ | 🟢 Stable |
+| `ActivityCategory` | Catégories d'activité | 1 | ❓ | ✅ | 🟢 Stable |
+
+### Autres
+
+| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
+|-----------|-------------|--------|-----|--------|--------|
+| `SalesOrderCustomList1` | Liste personnalisée 1 des WO | 2 | ❓ | ✅ | 🟢 Stable |
+
+> **Note** : Les `ProductCategory` (5) et `ProductType` (3) apparaissent ci-dessus dans la section **Inventaire**. Ils sont également listés comme référentiels dans l'interface web mais ne sont pas dupliqués. Le `LeadSource` (7) référencé dans le modèle `Customer` est documenté dans **Suivi / Triggers**. Le `ContactMethod` (3) et le `TaxCode` (3) sont aussi référencés par `Customer`.
 
 ---
 

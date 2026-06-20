@@ -251,7 +251,7 @@ curl -X POST \
 | `metadata.UserId` | `UserAssignableModel` | Utilisateur concerné (écho) |
 | `activities[]` | `Activity[]` | Tableau des activités de la journée |
 
-> ℹ️ Dans une configuration typique avec 9 équipes, cet endpoint peut retourner environ **39 activités** pour une journée.
+> ℹ️ Dans une configuration typique, cet endpoint peut retourner les activités planifiées pour la journée. Le nombre d'activités varie selon votre volume d'opérations.
 
 **Implémentations :**
 

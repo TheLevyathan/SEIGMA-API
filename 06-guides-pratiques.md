@@ -363,7 +363,7 @@ function extractRefColor(field: unknown): string {
 
 ### 6.2.1 Vue d'ensemble
 
-Le planning quotidien de {VOTRE_ENTREPRISE} repose sur **9 équipes** avec chacune un `UserId` unique. L'endpoint `POST /api/activity/getactivitiesfordate` retourne les activités d'un utilisateur (chef d'équipe) pour une date donnée.
+Le planning quotidien de {VOTRE_ENTREPRISE} repose sur des équipes avec chacune un `UserId` unique. L'endpoint `POST /api/activity/getactivitiesfordate` retourne les activités d'un utilisateur (chef d'équipe) pour une date donnée.
 
 ### 6.2.2 Configuration des équipes
 
@@ -384,7 +384,7 @@ const SEIGMA_TEAMS = [
 ];
 ```
 
-### 6.2.3 Fetch parallèle des 9 équipes
+### 6.2.3 Fetch parallèle des équipes
 
 ```typescript
 interface TeamActivity {
@@ -418,7 +418,7 @@ async function fetchAllTeamActivities(
   // "2026-06-20T00:00:00"  → ✅ CORRECT
   const dateStart = `${dateStr}T00:00:00`;
 
-  // Promise.all sur les 9 équipes — 9 appels simultanés
+  // Promise.all sur les équipes/configurations — appels simultanés
   const teamPromises = SEIGMA_TEAMS.map(async (team) => {
     try {
       const r = await fetch(
@@ -583,7 +583,7 @@ async function getCachedActivities(
 ### 6.2.6 Exemple complet — Page de planning
 
 ```typescript
-// Planification complète d'une journée pour les 9 équipes
+// Planification complète d'une journée pour les équipes/configurations
 async function buildDailyPlan(
   token: string,
   dateStr: string
