@@ -54,6 +54,7 @@ Tu devrais voir 3 clients.
 | **5** | [05-modeles-reference.md](05-modeles-reference.md) | Catalogue des 10+ ModelCodes, relations, pipeline VENTES |
 | **6** | [06-guides-pratiques.md](06-guides-pratiques.md) | Workflows : facturation, planning, sync Supabase |
 | **7** | [07-pitfalls-limitations.md](07-pitfalls-limitations.md) | Tous les pièges, bugs connus et workarounds |
+| **8** | [08-checklist-completion.md](08-checklist-completion.md) | Checklist des 🚧 à compléter pour votre instance |
 
 ---
 
