@@ -88,17 +88,17 @@ Contactez votre administrateur SEIGMA si vous ne disposez pas d'un compte API d�
 
 | Code HTTP | Cause probable                                      |
 |-----------|-----------------------------------------------------|
-| `401`     | Identifiants invalides (courriel ou mot de passe).  |
+| `404`     | Identifiants invalides (courriel ou mot de passe).  |
 | `400`     | Corps de requête mal formé ou champ manquant.       |
 | `500`     | Erreur interne du serveur d'authentification.       |
 
-> ⚠️ **Attention** — L'API ne renvoie **pas de message d'erreur détaillé** en cas de 401. Traitez tout 401 comme « credentials invalides » sans tenter de deviner la raison précise.
+> ⚠️ **Attention** — L'API ne renvoie **pas de message d'erreur détaillé** en cas de 404. Traitez tout 404 comme « credentials invalides » sans tenter de deviner la raison précise.
 
 ---
 
 ## 6. Utilisation du jeton
 
-Tous les appels subséquents à l'API nécessitent **trois en-têtes obligatoires** :
+Tous les appels subséquents à l'API nécessitent **trois en-têtes recommandés** (seigma-company peut être omis si le token JWT est associé à une seule compagnie) :
 
 | En-tête             | Valeur                              | Description                               |
 |---------------------|-------------------------------------|-------------------------------------------|

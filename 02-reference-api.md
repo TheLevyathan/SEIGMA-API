@@ -51,7 +51,7 @@ GET /api/reference/{ModelCode}/{ReferenceId}
 | Paramètre | Type | Description |
 |-----------|------|-------------|
 | `ModelCode` | `string` | Code du modèle (ex. `SalesOrder`, `Customer`) |
-| `ReferenceId` | `integer` | Identifiant unique de la référence |
+| `ReferenceId` | `string (UUID)` | Identifiant unique de la référence |
 
 ### Exemple cURL
 
@@ -116,7 +116,7 @@ Les attributs à l'intérieur de `reference` varient selon le `ModelCode`. Voir 
 | `200 OK` | Référence trouvée et retournée |
 | `401 Unauthorized` | Authentification requise |
 | `403 Forbidden` | Accès non autorisé à ce modèle |
-| `404 Not Found` | Référence inexistante ou `ModelCode` invalide |
+| `500 Internal Server Error` | Référence inexistante ou `ModelCode` invalide (bug SEIGMA — le serveur crash au lieu de retourner 404) |
 | `500 Internal Server Error` | Erreur serveur (modèle instable, voir [Endpoints cassés](#endpoints-cassés)) |
 
 ---
@@ -164,7 +164,7 @@ POST /api/reference/{ModelCode}/search
 | `Limit` | `integer` | Oui | Nombre maximum de résultats (max conseillé : 200) |
 | `IsSelector` | `boolean` | Oui | Contexte sélecteur (`false` pour recherche standard) |
 | `ModelListId` | `integer` ou `null` | Oui | Filtre par liste de modèles (`null` = aucune) |
-| `CurrentReferenceId` | `integer` ou `null` | Oui | Référence courante pour contexte (`null` = aucune) |
+| `CurrentReferenceId` | `string (UUID)` ou `null` | Oui | Référence courante pour contexte (`null` = aucune) |
 | `WhereCondition` | `array` | Oui | Conditions AND (voir ci-dessous) |
 | `WhereOrCondition` | `array` | Oui | Conditions OR (voir ci-dessous) |
 | `WhereInCondition` | `array` | Oui | Conditions IN pour attributs de type liste |
@@ -466,7 +466,7 @@ Liste simple d'attributs scalaires. Présents dans toutes les références.
 | Sous-attribut | Type | Description |
 |---------------|------|-------------|
 | `Display` | `string` | Libellé affiché dans l'interface |
-| `ReferenceId` | `integer` | Identifiant unique |
+| `ReferenceId` | `string (UUID)` | Identifiant unique |
 | `ModelCode` | `string` | Code du modèle parent |
 | `ModelName` | `string` | Nom lisible du modèle |
 | `Color` | `string` | Couleur hexadécimale associée |

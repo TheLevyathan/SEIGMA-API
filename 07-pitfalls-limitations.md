@@ -126,11 +126,17 @@ Tous les 21 produits ont `Price: 0.0` dans leur définition. Le prix réel est d
 
 | Champ | Operator | OperatorCode |
 |-------|----------|-------------|
-| `Number` (SalesOrder) | `"="` ✅ | `"Equal"` ❌ (0 résultat) |
+| `Number` (SalesOrder) | `"="` ✅ | `"Equal"` ❌ (retourne HTTP 500 — crash serveur) |
 | `SalesOrderStatusId` | `"="` ✅ | `"Equal"` ✅ |
 | `Display` | `"Like"` ✅ | — |
 
 **Règle** : Essayer `Operator` d'abord. Si 0 résultat, essayer `OperatorCode`.
+
+### 12bis. Contains / StartsWith / EndsWith → HTTP 500 (crash serveur)
+
+Les opérateurs `Contains`, `StartsWith` et `EndsWith` retournent **HTTP 500 Internal Server Error** sur certains champs (notamment `SalesOrderStatusId`). Le serveur crash au lieu de retourner des résultats.
+
+**Workaround** : Utiliser exclusivement l'opérateur `"="` pour les filtres sur ces attributs problématiques.
 
 ### 13. Recherche par numéro de WO — utiliser Number, pas Display
 

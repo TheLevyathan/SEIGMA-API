@@ -65,7 +65,7 @@ async function fetchCompletedOrders(
             },
             {
               ModelAttributeCode: "SalesOrderStatusId",
-              Operator: "Contains",
+              Operator: "=",
               Value: "Terminé",
             },
           ],
@@ -84,7 +84,7 @@ async function fetchCompletedOrders(
 }
 ```
 
-> ℹ️ **Note** — Le filtre `Contains` sur `SalesOrderStatusId` fonctionne car le search retourne le Display sous forme de string dans ce champ. Utilisez `=` pour une correspondance exacte si vous connaissez la valeur précise.
+> ℹ️ **Note** — Le filtre `=` sur `SalesOrderStatusId` fonctionne car le search retourne le Display sous forme de string dans ce champ. ⚠️ **ATTENTION** : `Contains`, `StartsWith` et `EndsWith` sur ce champ retournent **HTTP 500** (crash serveur) — utilisez exclusivement `=`.
 
 ### 6.1.3 Étape 2 — Obtenir le client d'un WO
 
