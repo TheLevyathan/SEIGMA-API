@@ -954,3 +954,7 @@ print(f"Chrono arrêté : {stopped['StartTime']} → {stopped['EndTime']}")
 ---
 
 > **Résumé du chapitre :** toute écriture SEIGMA passe par `"Properties"` / `"Attributes"` avec des IDs en objets `{"ReferenceId":"…"}`. Les trois endpoints principaux couvrent les bons de travail, les activités et les poinçons. Les pièges majeurs sont les formats d'ID, le français dans les messages d'erreur, et le comportement PATCH-like du PUT qui vide les champs absents.
+
+---
+
+◄ [Précédent : 03 — Activities & Timelogs](03-activities-timelogs.md) │ [Index](index.md) │ [Suivant : 05 — Modèles de référence](05-modeles-reference.md) ►

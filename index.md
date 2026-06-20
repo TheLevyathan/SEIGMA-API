@@ -22,6 +22,40 @@ Cette documentation est **neutre** et conçue pour s'adapter à n'importe quelle
 
 ---
 
+## Glossaire métier SEIGMA
+
+| Terme SEIGMA | Signification | ModelCode / Endpoint |
+|---|---|---|
+| **WO** (Work Order) | Bon de travail | `SalesOrder` |
+| **Soumission** | Devis envoyé au client | `Quotation` |
+| **Billet** | Appel de service / billet de support | `Call` |
+| **Reçu / Encaissement** | Paiement enregistré | `Receipt` |
+| **Poinçon / Timelog** | Entrée de temps pointée | `…/timelogs/*` |
+| **ModelCode** | Identifiant du modèle dans l'URL | Ex: `SalesOrder`, `Customer` |
+| **ReferenceId** | UUID unique d'une fiche | Format: `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| **ModelAttributeCode** | Nom d'un champ dans WhereCondition | Ex: `Display`, `DateCreated` |
+| **Pipeline VENTES** | Lead → Quotation → SalesOrder → SalesInvoice → Receipt | N/A |
+| **Prospect / Lead** | Contact non qualifié | `Lead` |
+
+---
+
+## Cheat-sheet — Quel endpoint pour quoi ?
+
+| Je veux… | Endpoint |
+|---|---|
+| Chercher un client par nom | `POST /api/reference/Customer/search` avec `WhereCondition: [{"ModelAttributeCode":"Display","Operator":"=","Value":"Nom"}]` |
+| Lire un bon de travail | `GET /api/reference/SalesOrder/{ReferenceId}` |
+| Créer une facture | `POST /api/reference/SalesInvoice` |
+| Enregistrer un paiement | `POST /api/reference/Receipt` |
+| Voir les activités du jour | `POST /api/activity/getactivitiesfordate` |
+| Ajouter un poinçon | `POST …/timelogs/add` |
+| Lister tous les statuts de WO | `POST /api/reference/SalesOrderStatus/search` |
+| Trouver l'ID d'un territoire | `POST /api/reference/Territory/search` |
+| Paginer (>50 résultats) | `POST …/search` avec `Offset` et `Limit` |
+| Filtrer par plage de dates | `WhereCondition: [{"ModelAttributeCode":"DateCreated","Operator":">=","Value":"2026-01-01"}]` |
+
+---
+
 ## Quickstart — Premier appel en 2 minutes
 
 ```bash
@@ -53,6 +87,16 @@ Tu devrais voir 1 résultat.
 | **6** | [06-guides-pratiques.md](06-guides-pratiques.md) | Workflows : facturation, planning, sync externe |
 | **7** | [07-pitfalls-limitations.md](07-pitfalls-limitations.md) | Tous les pièges, bugs connus et workarounds |
 | **8** | [08-checklist-completion.md](08-checklist-completion.md) | Checklist des 🚧 à compléter pour votre instance |
+
+---
+
+## Parcours de lecture
+
+**🚀 Lecture seule (consulter des données) :** [01](01-authentification.md) → [02](02-reference-api.md) → [06](06-guides-pratiques.md)
+
+**🔧 Intégration complète (lire + écrire) :** [01](01-authentification.md) → [02](02-reference-api.md) → [03](03-activities-timelogs.md) → [04](04-operations-ecriture.md) → [05](05-modeles-reference.md) → [06](06-guides-pratiques.md) → [07](07-pitfalls-limitations.md)
+
+**🛠 Dépannage :** [07](07-pitfalls-limitations.md) → [08](08-checklist-completion.md)
 
 ---
 
@@ -96,3 +140,7 @@ https://{VOTRE_INSTANCE}.seigma.app/api/
 
 - **PDFs officiels SEIGMA** : Reference API, Activity API, Timelog API
 - **Instance SEIGMA** : https://{VOTRE_INSTANCE}.seigma.app
+
+---
+
+◄ [Index](index.md) │ [Suivant : 01 — Authentification](01-authentification.md) ►

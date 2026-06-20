@@ -5,6 +5,46 @@
 
 ---
 
+## Table des matières
+
+### Pièges critiques (bloquants)
+1. [SalesOrderLine INACCESSIBLE — HTTP 500](#1-salesorderline-inaccessible--http-500)
+2. [POST /api/activity → 404 — Création standalone impossible](#2-post-apiactivity--404--création-standalone-impossible)
+3. [Activity/search → 500 — Recherche d'activités impossible](#3-activitysearch--500--recherche-dactivités-impossible)
+4. [POST /api/timelogs/search avec WorkOrderId → 0 résultats](#4-post-apitimelogssearch-avec-workorderid--0-résultats)
+
+### Pièges de format
+5. [DateStart dans getactivitiesfordate — ISO complet obligatoire](#5-datestart-dans-getactivitiesfordate--iso-complet-obligatoire)
+6. [UserId dans getactivitiesfordate — OBJET obligatoire](#6-userid-dans-getactivitiesfordate--objet-obligatoire)
+7. [UserId dans Timelog — ModelAttributeList (pas UserAssignableModel)](#7-userid-dans-timelog--modelattributelist-pas-userassignablemodel)
+
+### Pièges de données
+8. [SalesOrderId est TRANSITIF sur Receipt](#8-salesorderid-est-transitif-sur-receipt)
+9. [SelectAttributes IGNORÉ sur Receipt/search et SalesInvoice/search](#9-selectattributes-ignoré-sur-receiptsearch-et-salesinvoicesearch)
+10. [Prix des produits à 0.0](#10-prix-des-produits-à-00)
+11. [WhereCondition par SalesOrderId sur Call/search → 500](#11-wherecondition-par-salesorderid-sur-callsearch--500)
+12. [PaymentMethodId obligatoire pour création de Receipt](#12-paymentmethodid-obligatoire-pour-création-de-receipt)
+
+### Pièges d'opérateur
+13. [Operator vs OperatorCode — comportement incohérent](#13-operator-vs-operatorcode--comportement-incohérent)
+14. [Contains / StartsWith / EndsWith → HTTP 500 (crash serveur)](#14-contains--startswith--endswith--http-500-crash-serveur)
+15. [Recherche par numéro de WO — utiliser Number, pas Display](#15-recherche-par-numéro-de-wo--utiliser-number-pas-display)
+
+### Pièges de performance
+16. [Timeout O(n²) sur grosses requêtes](#16-timeout-on²-sur-grosses-requêtes)
+17. [Rate limiting à >50 requêtes parallèles](#17-rate-limiting-à-50-requêtes-parallèles)
+
+### Pièges de body
+18. [Body canonique obligatoire pour certains search](#18-body-canonique-obligatoire-pour-certains-search)
+19. [Wrapper Properties/Attributes pour l'écriture](#19-wrapper-propertiesattributes-pour-lécriture)
+
+### Autres sections
+- [Endpoints complètement cassés (500 Object reference)](#endpoints-complètement-cassés-500-object-reference)
+- [Incohérences de conception](#incohérences-de-conception)
+- [Résumé des workarounds](#résumé-des-workarounds)
+
+---
+
 ## Pièges critiques (bloquants)
 
 ### 1. SalesOrderLine INACCESSIBLE — HTTP 500
@@ -204,7 +244,7 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 | Endpoint | Status |
 |----------|--------|
 | `POST /api/reference/User/search` | 500 — Object reference not set |
-| `POST /api/reference/Employee/search` | ⚠️ 200 mais 0 résultat pour compte non-admin (corrigé Juin 2026) |
+| `POST /api/reference/Employee/search` | ✅ CORRIGÉ — Juin 2026 : retourne 200 (0 résultat pour compte non-admin, résultats visibles avec compte admin) |
 | `POST /api/reference/Invoice/search` | 500 — Object reference not set |
 | `POST /api/reference/Activity/search` | 500 — Object reference not set |
 | `POST /api/reference/SalesOrderLine/search` | 500 — Object reference not set |
@@ -240,3 +280,7 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 | Call/search par SalesOrderId → 500 | Fetch all + filtre client |
 | PaymentMethodId obligatoire pour Receipt | POST /api/reference/PaymentMethod/search |
 | Rate limiting | semaphore(50), chunks de 25-50 |
+
+---
+
+◄ [Précédent : 06 — Guides pratiques](06-guides-pratiques.md) │ [Index](index.md) │ [Suivant : 08 — Checklist de complétion](08-checklist-completion.md) ►

@@ -44,7 +44,7 @@ Utilisez `WhereCondition` pour filtrer par statut. Le champ `SalesOrderStatusId`
 // Récupérer les WOs "Terminé" des 30 derniers jours
 async function fetchCompletedOrders(
   token: string,
-  sinceDate: string // ex: "20-05-2026" (format DD-MM-YYYY)
+  sinceDate: string // ex: "2026-05-20T00:00:00" (format ISO 8601 YYYY-MM-DD)
 ): Promise<Record<string, unknown>[]> {
   const pages = await Promise.all(
     Array.from({ length: 30 }, (_, i) =>
@@ -1007,4 +1007,6 @@ if (fullWO) {
 
 *Fin du chapitre 6 — Guides pratiques*
 
-*Chapitres précédents : [01-authentification.md](./01-authentification.md) · [02-reference-api.md](./02-reference-api.md) · [03-activities-timelogs.md](./03-activities-timelogs.md)*
+---
+
+◄ [Précédent : 05 — Modèles de référence](05-modeles-reference.md) │ [Index](index.md) │ [Suivant : 07 — Pièges et limitations](07-pitfalls-limitations.md) ►

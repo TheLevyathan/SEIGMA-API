@@ -1,5 +1,22 @@
 # Chapitre 1 — Authentification
 
+---
+
+## Table des matières
+
+1. [Aperçu rapide](#1-aperçu-rapide)
+2. [URL et méthode](#2-url-et-méthode)
+3. [Corps de la requête](#3-corps-de-la-requête)
+4. [Réponse (200 OK)](#4-réponse-200-ok)
+5. [Codes d'erreur](#5-codes-derreur)
+6. [Utilisation du jeton](#6-utilisation-du-jeton)
+7. [Exemples d'intégration](#7-exemples-dintégration)
+8. [Bonnes pratiques](#8-bonnes-pratiques)
+9. [⚠️ Pièges connus](#9-️-pièges-connus)
+10. [Résumé](#10-résumé)
+
+---
+
 L'endpoint `POST /api/auth/authenticate` échange un couple identifiant/mot de passe contre un jeton JWT valide 7 jours.
 
 ---
@@ -227,4 +244,4 @@ Vous ne saurez pas si c'est le courriel ou le mot de passe qui est erroné. Jour
 
 ---
 
-*Chapitre suivant : [02-reference-api.md](./02-reference-api.md)*
+◄ [Précédent : Accueil — Index](index.md) │ [Index](index.md) │ [Suivant : 02 — Référence API](02-reference-api.md) ►

@@ -61,3 +61,7 @@ Ces IDs sont nécessaires pour les opérations d'écriture (création de WO, fac
 ---
 
 > 💡 **Astuce** : Automatisez la résolution des IDs de référentiels dans votre code d'intégration. Ne les hardcodez jamais — utilisez les endpoints `search` au démarrage pour construire un cache local.
+
+---
+
+◄ [Précédent : 07 — Pièges et limitations](07-pitfalls-limitations.md) │ [Index](index.md) │ [Suivant : Accueil — Index](index.md) ►

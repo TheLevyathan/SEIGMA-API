@@ -553,50 +553,9 @@ Attribut de type référence vers un autre modèle (lookup/relation). Ex. `Custo
 
 ## Pièges et limitations (Pitfalls)
 
-### 1. SelectAttributes ignorés sur Receipt et SalesInvoice
+L'API SEIGMA présente plusieurs pièges documentés : `SelectAttributes` ignorés sur `Receipt`/`SalesInvoice`, `Operator` vs `OperatorCode`, `SalesOrderId` transitif sur `Receipt`, pagination, et différence search vs GET.
 
-Sur `SalesOrder`, `Quotation` et `Call/search`, il est possible d'utiliser `SelectAttributes` pour limiter les champs retournés. **Ce mécanisme est ignoré silencieusement** sur `Receipt` et `SalesInvoice`.
-
-- ✅ **Fonctionne** : `SalesOrder/search`, `Quotation/search`, `Call/search`
-- ❌ **Ignoré** : `Receipt/search`, `SalesInvoice/search`
-
-### 2. Operator vs OperatorCode
-
-Le champ de condition peut s'appeler `Operator` ou `OperatorCode` selon le modèle. La convention est flottante :
-
-- Essayez **toujours** `Operator` en premier
-- Si la recherche ne produit pas de résultats ou renvoie une erreur silencieuse, basculez sur `OperatorCode`
-
-### 3. SalesOrderId transitif sur Receipt
-
-L'attribut `SalesOrderId` sur `Receipt` est **transitif** : il n'est jamais résolu en un objet `SalesOrder` lors du search. Vous recevez uniquement l'ID brut.
-
-**Workaround** :
-
-```typescript
-// Étape 1 : chercher les reçus
-const receipts = await searchReferences('Receipt', {
-  WhereCondition: [{ ModelAttributeCode: 'TotalAmount', Operator: '>', Value: '1000' }]
-});
-
-// Étape 2 : résoudre manuellement chaque SalesOrderId
-for (const receipt of receipts.references) {
-  if (receipt.SalesOrderId) {
-    const order = await getReference('SalesOrder', receipt.SalesOrderId);
-    receipt._salesOrder = order.reference;
-  }
-}
-```
-
-### 4. Pagination
-
-- `Offset` est **0-based**
-- Le `Limit` maximum conseillé est **200**. Au-delà, l'API peut ralentir significativement.
-- `totalCount` dans la réponse reflète le nombre total de résultats correspondant aux filtres, pas le nombre total de références du modèle.
-
-### 5. Différence search vs GET
-
-Les résultats de `search` contiennent un **sous-ensemble** des attributs. Pour obtenir tous les champs (87 sur SalesOrder par exemple), vous devez faire un GET par `ReferenceId` pour chaque résultat.
+> → Voir [Chapitre 7 — Pièges et limitations](07-pitfalls-limitations.md) pour la référence complète de tous les pièges, bugs connus et workarounds.
 
 ---
 
@@ -992,6 +951,6 @@ curl -X POST \
 
 ---
 
-> **Prochain chapitre** : [03 — Activities & Timelogs](03-activities-timelogs.md)
->
-> **Chapitre précédent** : [01 — Authentification](01-authentification.md)
+---
+
+◄ [Précédent : 01 — Authentification](01-authentification.md) │ [Index](index.md) │ [Suivant : 03 — Activities & Timelogs](03-activities-timelogs.md) ►
