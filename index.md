@@ -134,6 +134,8 @@ https://{VOTRE_INSTANCE}.seigma.app/api/
 └── /activity/{refId}           ← POST créer activité liée
 ```
 
+> **GetReferences** — `POST /api/reference/{ModelCode}/GetReferences` résout des ReferenceId par lot. Body : `{"ReferenceIds":["uuid1","uuid2"]}`. Retourne les fiches complètes pour chaque ID fourni.
+
 ---
 
 ## Ressources

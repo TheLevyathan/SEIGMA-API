@@ -983,7 +983,7 @@ if (fullWO) {
 
 | Pattern | Usage | Complexité | Piège principal |
 |---|---|---|---|
-| **fetchAll** | Récupérer N pages en parallèle | O(pages) | Limit max 200, O(n²) au-delà |
+| **fetchAll** | Récupérer N pages en parallèle | O(pages) | Pas de plafond strict, O(n²) sur très larges volumes |
 | **chunkedDetails** | getDetail sur N IDs | O(N/25) lots | Toujours dans le même Promise.all |
 | **cache mémoire** | Éviter les refetch | O(1) | TTL cohérent (15 min) |
 | **cache persistant** | Persistance entre redémarrages | O(1) + 1 write | Upsert dans votre base |
@@ -995,7 +995,7 @@ if (fullWO) {
 
 | Symptôme | Cause probable | Solution |
 |---|---|---|
-| Erreur 500 sur search | `Limit` > 200 | Réduire à ≤200, paginer |
+| Erreur 500 sur search | `Limit` > 1000 (pas de plafond strict) | Réduire et paginer |
 | Timeout sur getDetail massif | Trop d'appels séquentiels | `chunkedDetails` avec lots de 25 |
 | Données manquantes après search | `SalesOrderId` transitif | getDetail sur chaque référence |
 | Erreur 500 sur getactivitiesfordate | `UserId` en string simple | Utiliser `{UserId, Display}` |

@@ -200,6 +200,8 @@ curl -X POST \
 | `DateStart` | `string` (ISO 8601 complet) | ✅ | Date cible au format ISO avec timestamp |
 
 > 🚨 **PIÈGE CRITIQUE — `DateStart` :** Le champ exige un **format ISO 8601 COMPLET avec horodatage**, par exemple `"2026-05-26T00:00:00"`. Si vous envoyez uniquement la date (`"2026-05-26"`), l'API retourne une **erreur 500**.
+>
+> ℹ️ **Note** : Le format date seule (`YYYY-MM-DD`) est également accepté mais **non recommandé**. Préférez le format ISO complet `YYYY-MM-DDTHH:MM:SS` pour éviter toute ambiguïté de fuseau horaire et garantir la compatibilité avec toutes les versions de SEIGMA.
 
 > 🚨 **PIÈGE CRITIQUE — `UserId` :** `UserId` est un **objet `UserAssignableModel`** contenant `{UserId, Display}`, **PAS une simple chaîne GUID**. Envoyer une string simple (`"UserId": "guid"`) provoque une **erreur 500**.
 
@@ -714,7 +716,7 @@ curl -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123
 | Code HTTP | Signification | Fréquence |
 |-----------|---------------|:---------:|
 | `200` | Succès — GET, PUT | Courant |
-| `201` | Créé avec succès — POST | Courant |
+| `200` | Créé (action MVC custom) — POST | Courant |
 | `204` | Supprimé avec succès — DELETE (pas de corps) | Courant |
 | `400` | Requête invalide (champs manquants, format incorrect) | Fréquent |
 | `401` | Token d'authentification manquant, invalide ou expiré | Fréquent |

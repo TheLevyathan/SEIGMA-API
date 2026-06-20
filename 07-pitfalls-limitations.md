@@ -197,7 +197,7 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 
 ### 16. Timeout O(n²) sur grosses requêtes
 
-- **Limite safe** : 200 résultats par requête
+- **Limite recommandée** : pas de plafond strict observé (testé jusqu'à 1000). Pour des performances optimales, paginez par tranches de 200.
 - **Au-delà** : timeout exponentiel, échecs de connexion
 - **Solution** : pagination avec chunks ≤ 200
 

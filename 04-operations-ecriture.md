@@ -749,29 +749,35 @@ Avant de créer un bon de travail, une facture ou un encaissement, vous devez ob
 ### 4.13.1 Obtenir un `CustomerId`
 
 ```bash
-curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=Customer&searchTerm={nom}" \
-  -H "Authorization: Bearer ***
+curl -X POST "{VOTRE_INSTANCE}/api/reference/Customer/search" \
+  -H "Authorization: Bearer ***" \
+  -H "Content-Type: application/json" \
+  -d '{"Offset":0,"Limit":50,"IsSelector":false,"CurrentReferenceId":null,"WhereCondition":[{"ModelAttributeCode":"Search","Operator":"StartsWith","Value":"{nom}"}]}'
 ```
 
 ### 4.13.2 Obtenir un `PaymentTermId`
 
 ```bash
-curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=PaymentTerm&searchTerm={terme}" \
-  -H "Authorization: Bearer ***
+curl -X POST "{VOTRE_INSTANCE}/api/reference/PaymentTerm/search" \
+  -H "Authorization: Bearer ***" \
+  -H "Content-Type: application/json" \
+  -d '{"Offset":0,"Limit":50,"IsSelector":false,"CurrentReferenceId":null,"WhereCondition":[{"ModelAttributeCode":"Search","Operator":"StartsWith","Value":"{terme}"}]}'
 ```
 
 ### 4.13.3 Obtenir un `WarehouseId`
 
 ```bash
-curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=Warehouse&searchTerm={entrepot}" \
-  -H "Authorization: Bearer ***
+curl -X POST "{VOTRE_INSTANCE}/api/reference/Warehouse/search" \
+  -H "Authorization: Bearer ***" \
+  -H "Content-Type: application/json" \
+  -d '{"Offset":0,"Limit":50,"IsSelector":false,"CurrentReferenceId":null,"WhereCondition":[{"ModelAttributeCode":"Search","Operator":"StartsWith","Value":"{entrepot}"}]}'
 ```
 
 ### 4.13.4 Obtenir un `PaymentMethodId` ⚠️ requis pour Receipt
 
 ```bash
 curl -X POST "{VOTRE_INSTANCE}/api/reference/PaymentMethod/search" \
-  -H "Authorization: Bearer *** \
+  -H "Authorization: Bearer ***" \
   -H "Content-Type: application/json" \
   -d '{
     "Offset": 0,
@@ -788,7 +794,7 @@ curl -X POST "{VOTRE_INSTANCE}/api/reference/PaymentMethod/search" \
 
 > ⚠️ **PaymentMethodId est obligatoire** pour la création de `Receipt`. Utilisez `POST /api/reference/PaymentMethod/search` pour obtenir les méthodes disponibles. Exemple : « Carte de crédit » (`{un-id-paymentmethod}`).
 
-> 🚧 **Spécifique à l'instance :** les IDs de référentiels varient d'une instance SEIGMA à l'autre. Ne les hardcodez jamais. Utilisez toujours les endpoints `/api/search` ou `/api/reference/{ModelCode}/search` pour les résoudre dynamiquement.
+> 🚧 **Spécifique à l'instance :** les IDs de référentiels varient d'une instance SEIGMA à l'autre. Ne les hardcodez jamais. Utilisez toujours `POST /api/reference/{ModelCode}/search` pour les résoudre dynamiquement.
 
 ---
 
