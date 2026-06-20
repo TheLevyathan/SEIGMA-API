@@ -3,6 +3,8 @@
 > **Version documentée** : 1.0.0 | **Sources** : PDFs officiels SEIGMA + tests de production
 > **Dernière mise à jour** : 2026-06-20
 >
+> 📋 **Catalogue exhaustif basé sur `/mod-mgt`** (compte admin `comptabilite@blvitres.com`, 2026-06-20). Tous les `totalCount` sont vérifiés via l'API. **155 modules** découverts, **~140 fonctionnels** (HTTP 200), **~15 cassés** (HTTP 500).
+>
 > 🚧 **À compléter** : Tous les chiffres d'enregistrements (~589, ~1935, etc.) sont basés sur une instance de référence en juin 2026. Ces nombres **varient considérablement** selon votre instance SEIGMA. Utilisez-les uniquement comme ordre de grandeur. Les ReferenceId de référentiels (PaymentTerm, Warehouse, etc.) sont également spécifiques à chaque instance.
 
 ---
@@ -26,8 +28,9 @@
    - [PaymentTerm — Conditions de paiement](#paymentterm--conditions-de-paiement)
    - [Warehouse — Entrepôts](#warehouse--entrepôts)
 7. [Endpoints cassés](#endpoints-cassés)
-8. [Matrice récapitulative](#matrice-récapitulative)
-9. [Schéma des relations](#schéma-des-relations)
+8. [Catalogue exhaustif (155 modules)](#catalogue-exhaustif-155-modules)
+9. [Matrice récapitulative](#matrice-récapitulative)
+10. [Schéma des relations](#schéma-des-relations)
 
 ---
 
@@ -668,99 +671,307 @@ Les endpoints suivants retournent systématiquement **HTTP 500 Internal Server E
 
 ---
 
-## Modèles additionnels
+## Catalogue exhaustif (155 modules)
 
-> **Découverte** : 2026-06-20 via l'interface web SEIGMA (compte `web@blvitres.com`). Ces 35 ModelCodes additionnels sont accessibles en GET/search mais n'avaient pas encore été documentés dans ce catalogue.
+> 📋 **Source** : `/mod-mgt` (compte admin `comptabilite@blvitres.com`, 2026-06-20). Les `totalCount` (nombre d'enregistrements) et le statut HTTP ont été vérifiés via l'API pour chaque module.
+>
+> **Légende** : ✅ = HTTP 200 (fonctionnel) | 💥 = HTTP 500 (cassé) | ➖ = 0 enregistrement / non applicable
 
-### Achats
+### VENTES/Général
 
-| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
-|-----------|-------------|--------|-----|--------|--------|
-| `Supplier` | Fournisseurs | 0 | ❓ | ✅ | 🟢 Stable |
-| `SupplierContact` | Contacts fournisseurs | 0 | ❓ | ✅ | 🟢 Stable |
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Customer` | 3 845 | ✅ | ✅ |
+| `CustomerContact` | 0 | ✅ | ➖ |
+| `CustomerAddress` | 0 | ✅ | ➖ |
+| `CompanyAddress` | 0 | ✅ | ➖ |
+| `CustomerUnit` | 0 | ✅ | ➖ |
+| `Company` | 1 | ✅ | ✅ |
 
-### Inventaire
+### VENTES/Opérations
 
-| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
-|-----------|-------------|--------|-----|--------|--------|
-| `Equipment` | Équipements | 2 | ❓ | ✅ | 🟢 Stable |
-| `InventoryLog` | Logs d'inventaire | 0 | ❓ | ✅ | 🟢 Stable |
-| `ProductCategory` | Catégories de produit | 5 | ❓ | ✅ | 🟢 Stable |
-| `ProductType` | Types de produit | 3 | ❓ | ✅ | 🟢 Stable |
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Lead` | 595 | ✅ | ✅ |
+| `Quotation` | 1 954 | ✅ | ✅ |
+| `SalesOrder` | 1 952 | ✅ | ✅ |
+| `Call` | 96 | ✅ | ✅ |
+| `Receipt` | 958 | ✅ | ✅ |
+| `SalesInvoice` | 1 019 | ✅ | ✅ |
+| `Payment` | 0 | ✅ | ➖ |
+| `Shipping` | 0 | ✅ | ➖ |
+| `Receiving` | 0 | ✅ | ➖ |
+| `Subscription` | 0 | ✅ | ➖ |
+| `Expense` | 0 | ✅ | ➖ |
 
-### Suivi / Triggers
+### VENTES/Facturation
 
-| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
-|-----------|-------------|--------|-----|--------|--------|
-| `PaymentTransaction` | Transactions de paiement | 16 | ❓ | ✅ | 🟢 Stable |
-| `PaymentTransactionStatus` | Statuts de transaction | 3 | ❓ | ✅ | 🟢 Stable |
-| `Trigger` | Déclencheurs | 22 | ❓ | ✅ | 🟢 Stable |
-| `TriggerAction` | Actions de déclenchement | 26 | ❓ | ✅ | 🟢 Stable |
-| `TriggerCondition` | Conditions de déclenchement | 28 | ❓ | ✅ | 🟢 Stable |
-| `TriggerType` | Types de déclencheur | 2 | ❓ | ✅ | 🟢 Stable |
-| `AlertType` | Types d'alerte | 5 | ❓ | ✅ | 🟢 Stable |
-| `Form` | Formulaires | 1 | ❓ | ✅ | 🟢 Stable |
-| `TextMessageTemplate` | Gabarits message texte | 2 | ❓ | ✅ | 🟢 Stable |
-| `ActivityFollowUp` | Suivis d'activité | 3 | ❓ | ✅ | 🟢 Stable |
-| `LeadPipeline` | Pipelines de lead | 1 | ❓ | ✅ | 🟢 Stable |
-| `LeadSource` | Sources de lead | 7 | ❓ | ✅ | 🟢 Stable |
-| `Question` | Questions | 12 | ❓ | ✅ | 🟢 Stable |
-| `ContactMethod` | Méthodes de contact | 3 | ❓ | ✅ | 🟢 Stable |
-| `TimeLogType` | Types de poinçon | 2 | ❓ | ✅ | 🟢 Stable |
-| `TimeLogMode` | Modes de poinçon | 3 | ❓ | ✅ | 🟢 Stable |
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `SalesInvoice` | 1 019 | ✅ | ✅ |
+| `PaymentTransaction` | 16 | ✅ | ✅ |
 
-### Référentiels additionnels
+> ℹ️ `SalesInvoice` apparaît aussi dans VENTES/Opérations — c'est le même module, classé dans deux menus.
 
-| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
-|-----------|-------------|--------|-----|--------|--------|
-| `Country` | Pays | 2 | ❓ | ✅ | 🟢 Stable |
-| `CountryState` | Provinces/États | 63 | ❓ | ✅ | 🟢 Stable |
-| `TaxCode` | Codes de taxe | 3 | ❓ | ✅ | 🟢 Stable |
-| `SalesOrderStatus` | Statuts de bon de travail | 7 | ❓ | ✅ | 🟢 Stable |
-| `SalesInvoiceStatus` | Statuts de facture | 5 | ❓ | ✅ | 🟢 Stable |
-| `ReceiptStatus` | Statuts de reçu | 5 | ❓ | ✅ | 🟢 Stable |
-| `CallStatus` | Statuts de billet | 6 | ❓ | ✅ | 🟢 Stable |
-| `CallType` | Types de billet | 4 | ❓ | ✅ | 🟢 Stable |
-| `Territory` | Territoires | 17 | ❓ | ✅ | 🟢 Stable |
-| `ActivityType` | Types d'activité | 11 | ❓ | ✅ | 🟢 Stable |
-| `ActivityLabel` | Étiquettes d'activité | 15 | ❓ | ✅ | 🟢 Stable |
-| `ActivityCategory` | Catégories d'activité | 1 | ❓ | ✅ | 🟢 Stable |
+### VENTES/Listes
 
-### Autres
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Group` | 9 | ✅ | ✅ |
+| `ModelGroupTemplate` | 1 | ✅ | ✅ |
+| `PaymentMethod` | 6 | ✅ | ✅ |
+| `CreditCardType` | 2 | ✅ | ✅ |
+| `LeadStatus` | 6 | ✅ | ✅ |
+| `QuotationStatus` | 8 | ✅ | ✅ |
+| `QuotationStatusReason` | 26 | ✅ | ✅ |
+| `SalesOrderStatus` | 7 | ✅ | ✅ |
+| `SalesOrderStatusReason` | 23 | ✅ | ✅ |
+| `SalesOrderCycle` | 1 | ✅ | ✅ |
+| `LeadCycle` | 1 | ✅ | ✅ |
+| `QuotationCycle` | 1 | ✅ | ✅ |
+| `SalesType` | 0 | ✅ | ➖ |
+| `SalesWorkflow` | 2 | ✅ | ✅ |
+| `ShippingStatus` | 6 | ✅ | ✅ |
+| `ReceivingStatus` | 6 | ✅ | ✅ |
+| `PaymentStatus` | 3 | ✅ | ✅ |
+| `SalesInvoiceStatus` | 5 | ✅ | ✅ |
+| `SalesInvoiceStatusReason` | 2 | ✅ | ✅ |
+| `PurchaseOrderStatus` | 6 | ✅ | ✅ |
+| `PurchaseOrderStatusReason` | 0 | ✅ | ➖ |
+| `PurchaseInvoiceStatus` | 5 | ✅ | ✅ |
+| `PurchaseInvoiceStatusReason` | 0 | ✅ | ➖ |
+| `SalesProfit` | 0 | ✅ | ➖ |
 
-| ModelCode | Nom affiché | Enreg. | GET | Search | Statut |
-|-----------|-------------|--------|-----|--------|--------|
-| `SalesOrderCustomList1` | Liste personnalisée 1 des WO | 2 | ❓ | ✅ | 🟢 Stable |
+### ACHATS/Général
 
-> **Note** : Les `ProductCategory` (5) et `ProductType` (3) apparaissent ci-dessus dans la section **Inventaire**. Ils sont également listés comme référentiels dans l'interface web mais ne sont pas dupliqués. Le `LeadSource` (7) référencé dans le modèle `Customer` est documenté dans **Suivi / Triggers**. Le `ContactMethod` (3) et le `TaxCode` (3) sont aussi référencés par `Customer`.
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Supplier` | 0 | ✅ | ➖ |
+| `SupplierContact` | 0 | ✅ | ➖ |
+| `PurchaseOrder` | 0 | ✅ | ➖ |
+| `PurchaseInvoice` | 0 | ✅ | ➖ |
+
+### ACHATS/Listes
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `SupplierClass` | 0 | ✅ | ➖ |
+| `SupplierDiscount` | 0 | ✅ | ➖ |
+| `PurchaseType` | 0 | ✅ | ➖ |
+| `Carrier` | 0 | ✅ | ➖ |
+
+### INVENTAIRE/Général
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Product` | 21 | ✅ | ✅ |
+| `Equipment` | 2 | ✅ | ✅ |
+| `InventoryLocation` | 0 | ✅ | ➖ |
+| `Warehouse` | 1 | ✅ | ✅ |
+| `WarehouseProduct` | 0 | ✅ | ➖ |
+| `InventoryStock` | 0 | ✅ | ➖ |
+| `InventoryLog` | 0 | ✅ | ➖ |
+| `InventoryMove` | 0 | ✅ | ➖ |
+
+### INVENTAIRE/Listes
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `ProductCategory` | 5 | ✅ | ✅ |
+| `ProductType` | 3 | ✅ | ✅ |
+| `ProductClass` | 0 | ✅ | ➖ |
+| `ProductCost` | 0 | ✅ | ➖ |
+| `ProductPrice` | 0 | ✅ | ➖ |
+| `EquipmentCategory` | 0 | ✅ | ➖ |
+| `EquipmentStatus` | 6 | ✅ | ✅ |
+| `InventoryLogType` | 4 | ✅ | ✅ |
+| `InventoryMoveStatus` | 3 | ✅ | ✅ |
+| `InventoryStockStatus` | 5 | ✅ | ✅ |
+| `Size` | 0 | ✅ | ➖ |
+| `Color` | 0 | ✅ | ➖ |
+| `UnitCategory` | 0 | ✅ | ➖ |
+| `UnitClass` | 0 | ✅ | ➖ |
+| `UnitBrand` | 0 | ✅ | ➖ |
+| `UnitType` | 0 | ✅ | ➖ |
+| `UnitOfMeasure` | 0 | ✅ | ➖ |
+| `Warranty` | 0 | ✅ | ➖ |
+| `WarrantyStatus` | 2 | ✅ | ✅ |
+| `QuantityLabel` | 1 | ✅ | ✅ |
+
+### SUIVI/Automatisation
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Trigger` | 22 | ✅ | ✅ |
+| `TriggerAction` | 26 | ✅ | ✅ |
+| `TriggerCondition` | 28 | ✅ | ✅ |
+| `TriggerType` | 2 | ✅ | ✅ |
+| `PaymentTransactionStatus` | 3 | ✅ | ✅ |
+| `Alert` | 1 | ✅ | ✅ |
+
+### SUIVI/Courriel
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `LeadPipeline` | 1 | ✅ | ✅ |
+| `LeadSource` | 7 | ✅ | ✅ |
+| `ContactMethod` | 3 | ✅ | ✅ |
+| `AlertType` | 5 | ✅ | ✅ |
+| `Form` | 1 | ✅ | ✅ |
+| `TextMessageTemplate` | 2 | ✅ | ✅ |
+| `MailSender` | 0 | ✅ | ➖ |
+| `MailCopy` | 0 | ✅ | ➖ |
+| `MailMessageTemplate` | 13 | ✅ | ✅ |
+| `LeadStatusReason` | 0 | ✅ | ➖ |
+| `Page` | 4 | ✅ | ✅ |
+
+### ADMINISTRATION/Général
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Employee` | 0 | ✅ (admin) | ➖ |
+| `Division` | 0 | ✅ | ➖ |
+| `BankAccount` | 0 | ✅ | ➖ |
+| `Holiday` | 0 | ✅ | ➖ |
+| `Language` | 2 | ✅ | ✅ |
+| `Currency` | 3 | ✅ | ✅ |
+| `Gender` | 0 | ✅ | ➖ |
+| `Country` | 2 | ✅ | ✅ |
+| `CountryState` | 63 | ✅ | ✅ |
+| `TaxCode` | 3 | ✅ | ✅ |
+| `Operator` | 8 | ✅ | ✅ |
+| `PrintLocation` | 2 | ✅ | ✅ |
+| `ReadOnlyRange` | 0 | ✅ | ➖ |
+
+### ADMINISTRATION/Listes
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `Affiliate` | 0 | ✅ | ➖ |
+| `AffiliateClass` | 3 | ✅ | ✅ |
+| `CustomerClass` | 0 | ✅ | ➖ |
+| `Difficulty` | 3 | ✅ | ✅ |
+| `PaymentTerm` | 4 | ✅ | ✅ |
+| `Priority` | 3 | ✅ | ✅ |
+| `ExpenseCategory` | 0 | ✅ | ➖ |
+| `LaborCost` | 0 | ✅ | ➖ |
+| `Unsubscribe` | — | 💥 500 | 💥 |
+| `ValidationType` | 3 | ✅ | ✅ |
+
+### ADMINISTRATION/Sécurité
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `ActivityCategory` | 1 | ✅ | ✅ |
+| `ActivityType` | 11 | ✅ | ✅ |
+| `ActivityLabel` | 15 | ✅ | ✅ |
+| `ActivityFollowUp` | 3 | ✅ | ✅ |
+| `ActivityCycle` | 2 | ✅ | ✅ |
+| `ActivityTimeSpan` | 5 | ✅ | ✅ |
+| `ActivityAnswer` | 3 | ✅ | ✅ |
+| `CallStatus` | 6 | ✅ | ✅ |
+| `CallType` | 4 | ✅ | ✅ |
+| `TimeLogType` | 2 | ✅ | ✅ |
+| `TimeLogLabel` | 1 | ✅ | ✅ |
+| `TimeLogMode` | 3 | ✅ | ✅ |
+| `TimeUnit` | 4 | ✅ | ✅ |
+| `AnnexStatus` | 7 | ✅ | ✅ |
+| `AnnexType` | 0 | ✅ | ➖ |
+| `ShippingMethod` | 0 | ✅ | ➖ |
+| `ShippingType` | 3 | ✅ | ✅ |
+
+### RAPPORTS *(endpoints cassés)*
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `FinancialReport` | — | 💥 500 | 💥 |
+| `TimeLogReport` | — | 💥 500 | 💥 |
+| `QuotationItem` | — | 💥 500 | 💥 |
+| `InvoiceItem` | — | 💥 500 | 💥 |
+| `WorkOrderItem` | — | 💥 500 | 💥 |
+
+### AUTRES (modules sans catégorie `Menu`)
+
+| ModelCode | totalCount | GET/search | Statut |
+|-----------|-----------|------------|--------|
+| `PriceList` | 0 | ✅ | ➖ |
+| `PaymentTerminal` | 0 | ✅ | ➖ |
+| `Territory` | 17 | ✅ | ✅ |
+| `Project` | — | ⚠️ GET/{id}=500, search OK | 🟡 Partiel |
+| `ProjectStatus` | 6 | ✅ | ✅ |
+| `ProjectTemplate` | 1 | ✅ | ✅ |
+| `SalesAccountingMapping` | 0 | ✅ | ➖ |
+| `PurchaseAccountingMapping` | 0 | ✅ | ➖ |
+| `Annex` | 0 | ✅ | ➖ |
+| `SalesOrderCustomList1` | 2 | ✅ | ✅ |
+| `SalesOrderCustomList2` | 0 | ✅ | ➖ |
+| `SalesOrderCustomList3` | 0 | ✅ | ➖ |
+| `SubscriptionMode` | 5 | ✅ | ✅ |
+| `SubscriptionPrintMode` | 3 | ✅ | ✅ |
+| `SubscriptionRenewal` | 2 | ✅ | ✅ |
+| `Action` | 36 | ✅ | ✅ |
+| `Question` | 12 | ✅ | ✅ |
+| `QuestionType` | 8 | ✅ | ✅ |
+| `Carrier` | 0 | ✅ | ➖ |
+
+> ℹ️ `Product` (21) et `PaymentTerm` (4) apparaissent également dans cette section sans menu — ce sont les mêmes modules que dans INVENTAIRE/Général et ADMINISTRATION/Listes.
 
 ---
 
 ## Matrice récapitulative
 
+> 📊 **Total** : **155 modules** découverts via `/mod-mgt` | **~140 fonctionnels** (✅ HTTP 200) | **~15 cassés** (💥 HTTP 500) | *(compte admin, 2026-06-20)*
+>
+> La matrice ci-dessous détaille les **15 modèles principaux** avec fiches complètes. Le catalogue exhaustif des 155 modules se trouve dans la [section précédente](#catalogue-exhaustif-155-modules).
+
 | ModelCode | Enreg. | Display | GET | Search | SelectAttr | POST | PUT | Statut |
 |-----------|--------|---------|-----|--------|------------|------|-----|--------|
-| `Lead` | ~589 | `LE-XXXXX` | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
-| `Quotation` | ~1935 | `QU-XXXXX` | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
-| `SalesOrder` | ~1932 | `WO-XXXXX` | ✅ | ✅ | ✅ | ✅ | ✅ | 🟢 Stable |
-| `SalesInvoice` | ~1019 | `SI-XXXXX` | ✅ | ✅ | ❌ IGNORÉ | ✅ | ❓ | 🟢 Stable |
-| `Receipt` | ~925 | `RE-XXXXX` | ✅ | ✅ | ❌ IGNORÉ | ✅ | ❓ | 🟢 Stable |
-| `Customer` | ~3839 | Texte | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
-| `Call` | ~95 | `TI-XXXXX` | ✅ | ✅ | ⚠️ Partiel | ❓ | ❓ | 🟡 Partiel |
-| `Product` | ~21 | Texte | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
+| `Lead` | 595 | `LE-XXXXX` | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
+| `Quotation` | 1 954 | `QU-XXXXX` | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
+| `SalesOrder` | 1 952 | `WO-XXXXX` | ✅ | ✅ | ✅ | ✅ | ✅ | 🟢 Stable |
+| `SalesInvoice` | 1 019 | `SI-XXXXX` | ✅ | ✅ | ❌ IGNORÉ | ✅ | ❓ | 🟢 Stable |
+| `Receipt` | 958 | `RE-XXXXX` | ✅ | ✅ | ❌ IGNORÉ | ✅ | ❓ | 🟢 Stable |
+| `Customer` | 3 845 | Texte | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
+| `Call` | 96 | `TI-XXXXX` | ✅ | ✅ | ⚠️ Partiel | ❓ | ❓ | 🟡 Partiel |
+| `Product` | 21 | Texte | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
 | `PaymentTerm` | 4 | Texte | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
 | `Warehouse` | 1 | Texte | ✅ | ✅ | ✅ | ❓ | ❓ | 🟢 Stable |
-| `Employee` | ~0 | Nom | ❓ | ✅ (admin) | ❓ | ❓ | ❓ | 🟢 Stable |
-| `Project` | ~1 | Nom | ❌ 500 | ✅ | ❓ | ❓ | ❓ | 🟡 Partiel |
-| `PaymentMethod` | ~6 | Texte | ❓ | ✅ | ❓ | ❓ | ❓ | 🟢 Stable |
-| `PriceList` | ~0 | Texte | ❓ | ✅ | ❓ | ❓ | ❓ | 🟢 Stable |
-| `PurchaseOrder` | ~0 | Variable | ❌ 405 | ✅ | ❓ | ❓ | ❓ | 🟡 Partiel |
+| `Employee` | 0 | Nom | ❓ | ✅ (admin) | ❓ | ❓ | ❓ | 🟢 Stable |
+| `Project` | — | Nom | ❌ 500 | ✅ | ❓ | ❓ | ❓ | 🟡 Partiel |
+| `PaymentMethod` | 6 | Texte | ❓ | ✅ | ❓ | ❓ | ❓ | 🟢 Stable |
+| `PriceList` | 0 | Texte | ❓ | ✅ | ❓ | ❓ | ❓ | 🟢 Stable |
+| `PurchaseOrder` | 0 | Variable | ❌ 405 | ✅ | ❓ | ❓ | ❓ | 🟡 Partiel |
 
 **Légende :**
 - 🟢 **Stable** — GET et search fonctionnels, pas de quirks bloquants
 - 🟡 **Partiel** — Fonctionnel mais avec limitations documentées
 - 🔴 **Cassé** — HTTP 500 systématique
 - ❓ — Non testé / inconnu
+
+### Endpoints cassés (💥 500)
+
+En complément de la section [Endpoints cassés](#endpoints-cassés) ci-dessus, les modules suivants, listés dans le catalogue exhaustif, retournent HTTP 500 :
+
+| ModelCode | Symptôme |
+|-----------|----------|
+| `User` | `POST /search` → 500 |
+| `Invoice` | `POST /search` → 500 |
+| `Activity` | `POST /search` → 500 |
+| `SalesOrderLine` | `GET/{id}` et `POST /search` → 500 |
+| `Contact` | `POST /search` et `GET/{id}` → 500/404 |
+| `Report` | `POST /search` → 500 |
+| `Unsubscribe` | `POST /search` → 500 |
+| `Payable` | `POST /search` → 500 |
+| `InventoryAdjustment` | `POST /search` → 500 |
+| `ProductBrand` | `POST /search` → 500 |
+| `MessageTemplate` | `POST /search` → 500 |
+| `EmailSender` | `POST /search` → 500 |
+| `FinancialReport` | `POST /search` → 500 |
+| `TimeLogReport` | `POST /search` → 500 |
+| `QuotationItem` | `POST /search` → 500 |
+| `InvoiceItem` | `POST /search` → 500 |
+| `WorkOrderItem` | `POST /search` → 500 |
+| `Project` | `GET/{id}` → 500 (search OK) |
 
 ---
 
