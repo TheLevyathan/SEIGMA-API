@@ -371,7 +371,9 @@ curl -X POST \
 |-----------|--------|
 | **ModelCode** | `Receipt` |
 | **Références** | ~925 |
-| **Statut** | ⚠️ Partiellement stable |
+| **Statut** | ✅ Stable (création testée) |
+
+> ✅ **CRÉATION FONCTIONNELLE** : `POST /api/reference/Receipt` → 201 Created. Champs obligatoires : `CustomerId`, `Amount`, `PaymentMethodId`. ⚠️ `PaymentMethodId` est **obligatoire** — utilisez `POST /api/reference/PaymentMethod/search` pour l'obtenir. Voir le [Chapitre 4 — Opérations d'écriture](04-operations-ecriture.md).
 
 > ⚠️ **PITFALL** : `SalesOrderId` est **TRANSITIF** sur `Receipt`. Cela signifie qu'il n'est **jamais résolu** lors d'un search — vous ne recevrez pas l'objet SalesOrder lié, seulement l'ID brut. Pour obtenir le détail du bon de commande associé, faites un GET supplémentaire sur `/api/reference/SalesOrder/{SalesOrderId}`.
 
@@ -380,7 +382,9 @@ curl -X POST \
 | Propriété | Valeur |
 |-----------|--------|
 | **ModelCode** | `SalesInvoice` |
-| **Statut** | ⚠️ Partiellement stable |
+| **Statut** | ✅ Stable (création testée) |
+
+> ✅ **CRÉATION FONCTIONNELLE** : `POST /api/reference/SalesInvoice` → 201 Created. Champs obligatoires : `CustomerId`, `PaymentTermId`. ⚠️ **WarehouseId N'EST PAS requis** (contrairement à SalesOrder). Voir le [Chapitre 4 — Opérations d'écriture](04-operations-ecriture.md).
 
 > ⚠️ **PITFALL** : Les **SelectAttributes** sont **IGNORÉS** sur le search. Vous ne pouvez pas demander des champs spécifiques en recherche ; tous les résultats renvoient un sous-ensemble fixe d'attributs. Utilisez le GET par `ReferenceId` pour obtenir les champs complets.
 
@@ -426,6 +430,18 @@ curl -X POST \
 | **ModelCode** | `Warehouse` |
 | **Références** | ~1 |
 | **Statut** | ✅ Stable |
+
+---
+
+### Employee — Employés
+
+| Propriété | Valeur |
+|-----------|--------|
+| **ModelCode** | `Employee` |
+| **Références** | ~0 (compte Web non-admin) |
+| **Statut** | ✅ search OK |
+
+> ✅ **CORRIGÉ — Juin 2026** : `Employee/search` n'est plus cassé. L'endpoint retourne 200 avec 0 résultat pour les comptes non-admin (utilisateur Web standard). Les comptes admin peuvent voir plus de résultats. Le crash `500 Null parameter` qui existait précédemment a été résolu.
 
 ---
 
@@ -591,12 +607,16 @@ Les endpoints suivants sont connus pour retourner une erreur **HTTP 500** systé
 | Endpoint | Statut | Symptôme |
 |----------|--------|----------|
 | `User/search` | 🔴 500 | Erreur interne serveur |
-| `Employee/search` | 🔴 500 | Erreur interne serveur |
 | `Invoice/search` | 🔴 500 | Erreur interne serveur |
 | `Activity/search` | 🔴 500 | Erreur interne serveur |
 | `SalesOrderLine/search` | 🔴 500 | Erreur interne serveur |
+| `Contact/search` | 🔴 500 | Erreur interne serveur |
+| `Report/search` | 🔴 500 | Erreur interne serveur |
+| `/reference/{ModelCode}/metadata` | 🔴 500 | Endpoint inexistant |
 
 > **Note** : Ces endpoints peuvent fonctionner sur certaines versions ou configurations de SEIGMA. Testez toujours avec un appel minimal avant d'intégrer.
+
+> ✅ **Corrigé — Juin 2026** : `Employee/search` n'est plus cassé. Il retourne 200 avec 0 résultat pour les comptes non-admin (Web). Voir la section [ModelCodes connus](#modelcodes-connus).
 
 ---
 

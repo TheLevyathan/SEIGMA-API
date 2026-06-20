@@ -112,6 +112,12 @@ Tous les 21 produits ont `Price: 0.0` dans leur définition. Le prix réel est d
 
 **Workaround** : Récupérer tous les Calls (95 max), filtrer côté client.
 
+### 12. PaymentMethodId obligatoire pour création de Receipt
+
+`POST /api/reference/Receipt` exige **obligatoirement** `PaymentMethodId` (en plus de `CustomerId` et `Amount`). Sans cela, l'API retourne `400`.
+
+**Workaround** : Utiliser `POST /api/reference/PaymentMethod/search` pour obtenir les méthodes disponibles. Exemple : « Carte de crédit » (`52bb87e0-...`).
+
 ---
 
 ## Pièges d'opérateur
@@ -192,11 +198,14 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 | Endpoint | Status |
 |----------|--------|
 | `POST /api/reference/User/search` | 500 — Object reference not set |
-| `POST /api/reference/Employee/search` | 500 — Null parameter in dictionary |
+| `POST /api/reference/Employee/search` | ⚠️ 200 mais 0 résultat pour compte non-admin (corrigé Juin 2026) |
 | `POST /api/reference/Invoice/search` | 500 — Object reference not set |
 | `POST /api/reference/Activity/search` | 500 — Object reference not set |
 | `POST /api/reference/SalesOrderLine/search` | 500 — Object reference not set |
 | `GET /api/reference/SalesOrder/{id}/lines` | 500 — Object reference not set |
+| `POST /api/reference/Contact/search` | 500 — Object reference not set |
+| `POST /api/reference/Report/search` | 500 — Object reference not set |
+| `GET /api/reference/{ModelCode}/metadata` | 500 — Endpoint inexistant (pas un endpoint valide) |
 
 ⚠️ Ces endpoints existent (pas de 404) mais crashent côté serveur — probablement un bug SEIGMA ou des paramètres obligatoires non documentés.
 
@@ -223,4 +232,5 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 | SalesOrderId transitif sur Receipt | chunkedDetails (getDetail Receipt → SalesInvoice → SalesOrder) |
 | SelectAttributes ignoré sur Receipt/SalesInvoice | getDetail unitaire obligatoire |
 | Call/search par SalesOrderId → 500 | Fetch all + filtre client |
+| PaymentMethodId obligatoire pour Receipt | POST /api/reference/PaymentMethod/search |
 | Rate limiting | semaphore(50), chunks de 25-50 |

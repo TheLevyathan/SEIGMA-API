@@ -5,16 +5,18 @@
 - [4.1 Format universel d'écriture](#41-format-universel-décriture)
 - [4.2 Créer un bon de travail — `POST /api/reference/SalesOrder`](#42-créer-un-bon-de-travail--post-apireferencesalesorder)
 - [4.3 Modifier un bon de travail — `PUT /api/reference/SalesOrder/{id}`](#43-modifier-un-bon-de-travail--put-apireferencesalesorderid)
-- [4.4 Créer une activité liée — `POST /api/activity/{referenceId}`](#44-créer-une-activité-liée--post-apiactivityreferenceid)
-- [4.5 Modifier une activité — `PUT /api/activity/{activityId}`](#45-modifier-une-activité--put-apiactivityactivityid)
-- [4.6 Ajouter un poinçon — `POST …/timelogs/add`](#46-ajouter-un-poinçon--post-timelogsadd)
-- [4.7 Modifier un poinçon — `PUT …/timelogs`](#47-modifier-un-poinçon--put-timelogs)
-- [4.8 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`](#48-supprimer-un-poinçon--delete-timelogstimelogid)
-- [4.9 Démarrer un chrono — `GET …/timelogs/start`](#49-démarrer-un-chrono--get-timelogsstart)
-- [4.10 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`](#410-arrêter-un-chrono--get-timelogstimelogidstop)
-- [4.11 Référentiels nécessaires](#411-référentiels-nécessaires)
-- [4.12 Pièges et limitations](#412-pièges-et-limitations)
-- [4.13 Exemples complets](#413-exemples-complets)
+- [4.4 Créer une facture — `POST /api/reference/SalesInvoice`](#411-créer-une-facture--post-apireferencesalesinvoice)
+- [4.5 Créer un encaissement — `POST /api/reference/Receipt`](#412-créer-un-encaissement--post-apireferencereceipt)
+- [4.6 Créer une activité liée — `POST /api/activity/{referenceId}`](#44-créer-une-activité-liée--post-apiactivityreferenceid)
+- [4.7 Modifier une activité — `PUT /api/activity/{activityId}`](#45-modifier-une-activité--put-apiactivityactivityid)
+- [4.8 Ajouter un poinçon — `POST …/timelogs/add`](#46-ajouter-un-poinçon--post-timelogsadd)
+- [4.9 Modifier un poinçon — `PUT …/timelogs`](#47-modifier-un-poinçon--put-timelogs)
+- [4.10 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`](#48-supprimer-un-poinçon--delete-timelogstimelogid)
+- [4.11 Démarrer un chrono — `GET …/timelogs/start`](#49-démarrer-un-chrono--get-timelogsstart)
+- [4.12 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`](#410-arrêter-un-chrono--get-timelogstimelogidstop)
+- [4.13 Référentiels nécessaires](#413-référentiels-nécessaires)
+- [4.14 Pièges et limitations](#414-pièges-et-limitations)
+- [4.15 Exemples complets](#415-exemples-complets)
 
 ---
 
@@ -186,7 +188,7 @@ curl -X PUT "{VOTRE_INSTANCE}/api/reference/SalesOrder/{referenceId}" \
 
 ---
 
-## 4.4 Créer une activité liée — `POST /api/activity/{referenceId}`
+## 4.6 Créer une activité liée — `POST /api/activity/{referenceId}`
 
 Crée une activité (rendez-vous, tâche, note) attachée à une référence existante.
 
@@ -291,7 +293,7 @@ curl -X POST "{VOTRE_INSTANCE}/api/activity/{referenceId}" \
 
 ---
 
-## 4.5 Modifier une activité — `PUT /api/activity/{activityId}`
+## 4.7 Modifier une activité — `PUT /api/activity/{activityId}`
 
 Modifie une activité existante. Seuls les champs envoyés sont mis à jour.
 
@@ -341,7 +343,7 @@ curl -X PUT "{VOTRE_INSTANCE}/api/activity/{activityId}" \
 
 ---
 
-## 4.6 Ajouter un poinçon — `POST …/timelogs/add`
+## 4.8 Ajouter un poinçon — `POST …/timelogs/add`
 
 Ajoute une entrée de temps (poinçon) sur une référence.
 
@@ -430,7 +432,7 @@ curl -X POST "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/add" \
 
 ---
 
-## 4.7 Modifier un poinçon — `PUT …/timelogs`
+## 4.9 Modifier un poinçon — `PUT …/timelogs`
 
 Modifie une entrée de temps existante.
 
@@ -487,7 +489,7 @@ curl -X PUT "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs" \
 
 ---
 
-## 4.8 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`
+## 4.10 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`
 
 Supprime définitivement une entrée de temps.
 
@@ -510,7 +512,7 @@ Succès : corps vide, status `204`.
 
 ---
 
-## 4.9 Démarrer un chrono — `GET …/timelogs/start`
+## 4.11 Démarrer un chrono — `GET …/timelogs/start`
 
 Démarre un chronomètre (TimeLog sans `EndTime`) sur une référence.
 
@@ -545,7 +547,7 @@ curl -X GET "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/start" \
 
 ---
 
-## 4.10 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`
+## 4.12 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`
 
 Arrête un chronomètre en cours.
 
@@ -579,36 +581,218 @@ curl -X GET "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/{timelog
 
 ---
 
-## 4.11 Référentiels nécessaires
+## 4.4 Créer une facture — `POST /api/reference/SalesInvoice`
 
-Avant de créer un bon de travail, vous devez obtenir les IDs des trois référentiels obligatoires.
+Crée une facture de vente (SalesInvoice) dans SEIGMA.
 
-### 4.11.1 Obtenir un `CustomerId`
+| Élément | Détail |
+|---|---|
+| **URL** | `POST {VOTRE_INSTANCE}/api/reference/SalesInvoice` |
+| **Status succès** | `201 Created` |
+| **Authentification** | Bearer token (voir Chapitre 2) |
 
-```bash
-curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=Customer&searchTerm={nom}" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}"
+### 4.4.1 Champs obligatoires
+
+Deux champs sont **strictement requis** sous forme d'objets `ReferenceId`.
+
+| Champ SEIGMA | Format | Message d'erreur si absent |
+|---|---|---|
+| `CustomerId` | `{"ReferenceId": "{id-client}"}` | `"[Client] doit être défini"` |
+| `PaymentTermId` | `{"ReferenceId": "{id-terme-paiement}"}` | `"[Termes] doit être défini"` |
+
+> ⚠️ **Pas de WarehouseId** : Contrairement à `SalesOrder`, `WarehouseId` **n'est PAS requis** pour créer une `SalesInvoice`.
+
+### 4.4.2 Champs optionnels notables
+
+| Champ | Type | Description |
+|---|---|---|
+| `SalesOrderId` | `ReferenceId` | Bon de travail lié (`null` si non lié) |
+| `DateInvoiced` | DateTime ISO | Date de facturation |
+| `Total` | decimal | Total |
+| `Balance` | decimal | Solde dû |
+| `Description` | string | Description |
+
+### 4.4.3 Corps canonique
+
+```json
+{
+  "Properties": {
+    "CustomerId": {"ReferenceId": "{un-id-client}"},
+    "PaymentTermId": {"ReferenceId": "{un-id-terme-paiement}"},
+    "DateInvoiced": "2026-06-20T00:00:00",
+    "Total": 1500.00,
+    "Balance": 1500.00,
+    "Description": "Facture créée via API"
+  }
+}
 ```
 
-### 4.11.2 Obtenir un `PaymentTermId`
+### 4.4.4 Exemple cURL
 
 ```bash
-curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=PaymentTerm&searchTerm={terme}" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}"
+curl -X POST "{VOTRE_INSTANCE}/api/reference/SalesInvoice" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "Properties": {
+      "CustomerId": {"ReferenceId": "550e8400-e29b-41d4-a716-446655440000"},
+      "PaymentTermId": {"ReferenceId": "660e8400-e29b-41d4-a716-446655440001"},
+      "Description": "Facture créée via API"
+    }
+  }'
 ```
 
-### 4.11.3 Obtenir un `WarehouseId`
+### 4.4.5 Réponse
 
-```bash
-curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=Warehouse&searchTerm={entrepot}" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}"
+**Succès (201 Created) :**
+
+```json
+{
+  "successMessages": ["Sauvegarde réussie"],
+  "reference": {
+    "ReferenceId": "990e8400-e29b-41d4-a716-446655440004",
+    "ModelCode": "SalesInvoice",
+    "Display": "SI-XXXXX",
+    "Properties": { "…": "…" }
+  }
+}
 ```
 
-> 🚧 **Spécifique à l'instance :** les IDs de référentiels varient d'une instance SEIGMA à l'autre. Ne les hardcodez jamais. Utilisez toujours les endpoints `/api/search` pour les résoudre dynamiquement.
+Le `Display` suit le format `SI-XXXXX` (numéro de facture auto-généré).
 
 ---
 
-## 4.12 Pièges et limitations
+## 4.5 Créer un encaissement — `POST /api/reference/Receipt`
+
+Crée un encaissement (Receipt) dans SEIGMA.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `POST {VOTRE_INSTANCE}/api/reference/Receipt` |
+| **Status succès** | `201 Created` |
+| **Authentification** | Bearer token (voir Chapitre 2) |
+
+### 4.5.1 Champs obligatoires
+
+Trois champs sont **strictement requis**.
+
+| Champ SEIGMA | Format | Détail |
+|---|---|---|
+| `CustomerId` | `{"ReferenceId": "{id-client}"}` | Client qui paie |
+| `Amount` | `decimal` | Montant encaissé |
+| `PaymentMethodId` | `{"ReferenceId": "{id-methode-paiement}"}` | ⚠️ **Obligatoire** — mode de paiement |
+
+> ⚠️ **PaymentMethodId est obligatoire !** Vous devez d'abord rechercher les méthodes de paiement disponibles via `POST /api/reference/PaymentMethod/search`. Exemple de méthode trouvée : « Carte de crédit » (`52bb87e0-...`).
+
+### 4.5.2 Champs optionnels notables
+
+| Champ | Type | Description |
+|---|---|---|
+| `SalesInvoiceId` | `ReferenceId` | Facture liée |
+| `PaymentDate` | DateTime ISO | Date du paiement |
+| `Reference` | string | Référence du paiement |
+| `TransactionId` | string | ID de transaction |
+
+### 4.5.3 Corps canonique
+
+```json
+{
+  "Properties": {
+    "CustomerId": {"ReferenceId": "{un-id-client}"},
+    "Amount": 500.00,
+    "PaymentMethodId": {"ReferenceId": "{un-id-paymentmethod}"},
+    "PaymentDate": "2026-06-20T00:00:00",
+    "Reference": "Paiement facture SI-00123"
+  }
+}
+```
+
+### 4.5.4 Exemple cURL
+
+```bash
+curl -X POST "{VOTRE_INSTANCE}/api/reference/Receipt" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "Properties": {
+      "CustomerId": {"ReferenceId": "550e8400-e29b-41d4-a716-446655440000"},
+      "Amount": 500.00,
+      "PaymentMethodId": {"ReferenceId": "52bb87e0-e29b-41d4-a716-446655440005"}
+    }
+  }'
+```
+
+### 4.5.5 Réponse
+
+**Succès (201 Created) :**
+
+```json
+{
+  "successMessages": ["Sauvegarde réussie"],
+  "reference": {
+    "ReferenceId": "aa0e8400-e29b-41d4-a716-446655440006",
+    "ModelCode": "Receipt",
+    "Display": "RE-XXXXX",
+    "Properties": { "…": "…" }
+  }
+}
+```
+
+Le `Display` suit le format `RE-XXXXX` (numéro d'encaissement auto-généré).
+
+---
+
+## 4.13 Référentiels nécessaires
+
+Avant de créer un bon de travail, une facture ou un encaissement, vous devez obtenir les IDs des référentiels obligatoires.
+
+### 4.13.1 Obtenir un `CustomerId`
+
+```bash
+curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=Customer&searchTerm={nom}" \
+  -H "Authorization: Bearer ***
+```
+
+### 4.13.2 Obtenir un `PaymentTermId`
+
+```bash
+curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=PaymentTerm&searchTerm={terme}" \
+  -H "Authorization: Bearer ***
+```
+
+### 4.13.3 Obtenir un `WarehouseId`
+
+```bash
+curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=Warehouse&searchTerm={entrepot}" \
+  -H "Authorization: Bearer ***
+```
+
+### 4.13.4 Obtenir un `PaymentMethodId` ⚠️ requis pour Receipt
+
+```bash
+curl -X POST "{VOTRE_INSTANCE}/api/reference/PaymentMethod/search" \
+  -H "Authorization: Bearer *** \
+  -H "Content-Type: application/json" \
+  -d '{
+    "Offset": 0,
+    "Limit": 50,
+    "IsSelector": false,
+    "ModelListId": null,
+    "CurrentReferenceId": null,
+    "WhereCondition": [],
+    "WhereOrCondition": [],
+    "WhereInCondition": [],
+    "OrderByCondition": []
+  }'
+```
+
+> ⚠️ **PaymentMethodId est obligatoire** pour la création de `Receipt`. Utilisez `POST /api/reference/PaymentMethod/search` pour obtenir les méthodes disponibles. Exemple : « Carte de crédit » (`52bb87e0-...`).
+
+> 🚧 **Spécifique à l'instance :** les IDs de référentiels varient d'une instance SEIGMA à l'autre. Ne les hardcodez jamais. Utilisez toujours les endpoints `/api/search` ou `/api/reference/{ModelCode}/search` pour les résoudre dynamiquement.
+
+---
+
+## 4.14 Pièges et limitations
 
 | # | Piège | Conséquence | Solution |
 |---|---|---|---|
@@ -620,12 +804,13 @@ curl -X GET "{VOTRE_INSTANCE}/api/search?modelCode=Warehouse&searchTerm={entrepo
 | 6 | `UserId` poinçon ≠ `AssignedToId` activité | Formats incompatibles | Poinçon : `{Display, ReferenceId, ModelCode:"User"}`. Activité : `{UserId, Display}` |
 | 7 | `PUT …/timelogs` sans `TimeLogId` | Erreur | Toujours inclure `TimeLogId` dans le corps |
 | 8 | `LogDate` non modifiable en PUT | Valeur inchangée | Pas de solution — c'est verrouillé par SEIGMA |
+| 9 | `PaymentMethodId` obligatoire pour Receipt | `400` si absent | Utiliser `POST /api/reference/PaymentMethod/search` pour l'obtenir |
 
 ---
 
-## 4.13 Exemples complets
+## 4.15 Exemples complets
 
-### 4.13.1 TypeScript — Créer un bon de travail
+### 4.15.1 TypeScript — Créer un bon de travail
 
 ```typescript
 const BASE_URL = "{VOTRE_INSTANCE}";
@@ -681,7 +866,7 @@ const result = await createSalesOrder({
 console.log("Bon créé :", result.reference.ReferenceId);
 ```
 
-### 4.13.2 Python — Créer un bon de travail
+### 4.15.2 Python — Créer un bon de travail
 
 ```python
 import requests
@@ -734,7 +919,7 @@ result = create_sales_order(
 print(f"Bon créé : {result['reference']['ReferenceId']}")
 ```
 
-### 4.13.3 Python — Démarrer et arrêter un chrono
+### 4.15.3 Python — Démarrer et arrêter un chrono
 
 ```python
 import requests
