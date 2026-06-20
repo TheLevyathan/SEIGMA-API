@@ -308,6 +308,8 @@ Pour les attributs de **type liste** (MultiSelect, MultiUser, etc.). Permet de f
 
 ## ModelCodes connus
 
+> 🚧 **À compléter** : La disponibilité des ModelCodes dépend de votre instance SEIGMA. Certains modèles listés ci-dessous peuvent ne pas être disponibles ou avoir un nombre d'enregistrements différent. Testez toujours avec un appel minimal avant d'intégrer.
+
 Voici les `ModelCode` documentés et testés avec le skill v1.13.0. Les statistiques sont indicatives et dépendent de l'instance SEIGMA cible.
 
 ### SalesOrder — Bons de commande

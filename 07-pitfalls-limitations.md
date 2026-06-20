@@ -187,6 +187,8 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 
 ## Endpoints complètement cassés (500 Object reference)
 
+> ℹ️ **Note** : Les endpoints listés ci-dessous peuvent avoir été corrigés dans des versions plus récentes de SEIGMA. Testez toujours avec un appel minimal avant d'intégrer — ces observations sont basées sur une version spécifique testée en juin 2026.
+
 | Endpoint | Status |
 |----------|--------|
 | `POST /api/reference/User/search` | 500 — Object reference not set |

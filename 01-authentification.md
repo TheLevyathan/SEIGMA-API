@@ -7,10 +7,10 @@ L'endpoint `POST /api/auth/authenticate` échange un couple identifiant/mot de p
 ## 1. Aperçu rapide
 
 ```bash
-curl -X POST https://blvitres.seigma.app/api/auth/authenticate \
+curl -X POST https://{VOTRE_INSTANCE}.seigma.app/api/auth/authenticate \
   -H "Content-Type: application/json" \
   -H "Accept-Language: fr-CA" \
-  -d '{"username":"web@blvitres.com","password":"votre_mot_de_passe"}'
+  -d '{"username":"{VOTRE_EMAIL}","password":"{VOTRE_MOT_DE_PASSE}"}'
 ```
 
 **Réponse (200 OK) :**
@@ -27,9 +27,11 @@ curl -X POST https://blvitres.seigma.app/api/auth/authenticate \
 
 | Élément         | Valeur                                              |
 |-----------------|-----------------------------------------------------|
-| **URL de base** | `https://blvitres.seigma.app/api/`                  |
+| **URL de base** | `https://{VOTRE_INSTANCE}.seigma.app/api/`                  |
 | **Endpoint**    | `POST /api/auth/authenticate`                       |
 | **Content-Type**| `application/json`                                  |
+
+> 🚧 **À compléter** : Remplacez `{VOTRE_INSTANCE}`, `{VOTRE_EMAIL}` et `{VOTRE_MOT_DE_PASSE}` par les credentials de votre propre instance SEIGMA. Contactez votre administrateur SEIGMA si vous ne disposez pas d'un compte API dédié.
 
 ---
 
@@ -55,10 +57,10 @@ curl -X POST https://blvitres.seigma.app/api/auth/authenticate \
 ```json
 {
   "jti": "identifiant_unique_du_jeton",
-  "sub": "web@blvitres.com",
+  "sub": "{VOTRE_EMAIL}",
   "name": "Web",
-  "aud": "blvitres.seigma.app",
-  "iss": "blvitres.seigma.app",
+  "aud": "{VOTRE_INSTANCE}.seigma.app",
+  "iss": "{VOTRE_INSTANCE}.seigma.app",
   "nbf": 1718880000,
   "exp": 1719484800,
   "iat": 1718880000
@@ -99,7 +101,7 @@ Tous les appels subséquents à l'API nécessitent **trois en-têtes obligatoire
 | En-tête             | Valeur                              | Description                               |
 |---------------------|-------------------------------------|-------------------------------------------|
 | `Authorization`     | `Bearer {token}`                    | Jeton JWT obtenu via l'authentification.  |
-| `seigma-company`    | `8d5c5ee5-746e-4a2b-ba80-ce73393916e5` | GUID de l'entreprise SEIGMA.        |
+| `seigma-company`    | `{VOTRE_COMPANY_ID}` | GUID de l'entreprise SEIGMA.        |
 | `Accept-Language`   | `fr-CA`                             | Langue des réponses (fr-CA pour le français canadien). |
 
 ---
@@ -111,8 +113,9 @@ Tous les appels subséquents à l'API nécessitent **trois en-têtes obligatoire
 ```typescript
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 
-const SEIGMA_BASE = "https://blvitres.seigma.app/api";
-const COMPANY_ID = "8d5c5ee5-746e-4a2b-ba80-ce73393916e5";
+// ⚠️ Utilisez des variables d'environnement pour les valeurs sensibles
+const SEIGMA_BASE = Deno.env.get("SEIGMA_BASE_URL")!; // ex: "https://instance.seigma.app/api"
+const COMPANY_ID = Deno.env.get("SEIGMA_COMPANY_ID")!; // ex: "xxxxxxxx-xxxx-..."
 
 async function authenticate(username: string, password: string): Promise<string> {
   const res = await fetch(`${SEIGMA_BASE}/auth/authenticate`, {
@@ -149,8 +152,8 @@ async function fetchSeigma(endpoint: string, token: string) {
 ```python
 import requests
 
-BASE_URL = "https://blvitres.seigma.app/api"
-COMPANY_ID = "8d5c5ee5-746e-4a2b-ba80-ce73393916e5"
+BASE_URL = "https://{VOTRE_INSTANCE}.seigma.app/api"
+COMPANY_ID = "{VOTRE_COMPANY_ID}"
 
 def authenticate(username: str, password: str) -> str:
     """Retourne le jeton JWT SEIGMA."""
@@ -166,7 +169,7 @@ def authenticate(username: str, password: str) -> str:
     return resp.json()["token"]
 
 # Utilisation
-token = authenticate("web@blvitres.com", "mon_mot_de_passe")
+token = authenticate("{VOTRE_EMAIL}", "{VOTRE_MOT_DE_PASSE}")
 
 headers = {
     "Authorization": f"Bearer {token}",

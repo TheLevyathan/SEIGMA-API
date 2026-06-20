@@ -1,7 +1,24 @@
-# Documentation API SEIGMA — BL Vitres Inc.
+# Documentation API SEIGMA — {VOTRE_ENTREPRISE}
 
 > **Version** : 1.0.0 | **Dernière mise à jour** : 2026-06-20
-> **Instance** : `blvitres.seigma.app` | **CompanyId** : `8d5c5ee5-746e-4a2b-ba80-ce73393916e5`
+> **Instance** : `{VOTRE_INSTANCE}.seigma.app` | **CompanyId** : `{VOTRE_COMPANY_ID}`
+
+---
+
+## Comment utiliser cette documentation
+
+Cette documentation est **neutre** et conçue pour s'adapter à n'importe quelle instance SEIGMA. Vous y trouverez des **placeholders** que vous devez remplacer par vos propres valeurs :
+
+| Placeholder | Description | Exemple |
+|---|---|---|
+| `{VOTRE_INSTANCE}` | Sous-domaine de votre instance SEIGMA | `monentreprise` → `monentreprise.seigma.app` |
+| `{VOTRE_EMAIL}` | Courriel du compte API SEIGMA | `api@monentreprise.com` |
+| `{VOTRE_MOT_DE_PASSE}` | Mot de passe du compte API | *(votre mot de passe)* |
+| `{VOTRE_COMPANY_ID}` | GUID de l'entreprise dans SEIGMA | `xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx` |
+| `{VOTRE_ENTREPRISE}` | Nom de votre entreprise | `Mon Entreprise Inc.` |
+| `{VOTRE_PROJET}` | Chemin vers votre projet | `/chemin/vers/votre/projet/` |
+
+> 🚧 **À compléter** : Obtenez votre `{VOTRE_COMPANY_ID}` depuis l'interface SEIGMA (menu Administration → Entreprises) ou contactez votre administrateur SEIGMA.
 
 ---
 
@@ -9,14 +26,14 @@
 
 ```bash
 # 1. Obtenir un jeton
-TOKEN=$(curl -sk -X POST https://blvitres.seigma.app/api/auth/authenticate \
+TOKEN=$(curl -sk -X POST https://exemple.seigma.app/api/auth/authenticate \
   -H "Content-Type: application/json" \
-  -d '{"username":"web@blvitres.com","password":"***"}' | jq -r '.token')
+  -d '{"username":"{VOTRE_EMAIL}","password":"{VOTRE_MOT_DE_PASSE}"}' | jq -r '.token')
 
 # 2. Faire un appel
-curl -sk -X POST https://blvitres.seigma.app/api/reference/Customer/search \
-  -H "Authorization: Bearer $TOKEN" \
-  -H "seigma-company: 8d5c5ee5-746e-4a2b-ba80-ce73393916e5" \
+curl -sk -X POST https://exemple.seigma.app/api/reference/Customer/search \
+  -H "Authorization: Bearer ${TOKEN}" \
+  -H "seigma-company: {VOTRE_COMPANY_ID}" \
   -H "Accept-Language: fr-CA" \
   -H "Content-Type: application/json" \
   -d '{"Offset":0,"Limit":3,"IsSelector":false,"ModelListId":null,"CurrentReferenceId":null,"WhereCondition":[],"WhereOrCondition":[],"WhereInCondition":[],"OrderByCondition":[]}'
@@ -46,7 +63,7 @@ Tu devrais voir 3 clients.
 - 📅 Récupérer le planning quotidien des 9 équipes (getactivitiesfordate)
 - ⏱️ Gérer les poinçons (timelogs) par WO : consulter, créer, modifier, supprimer
 - ✍️ Créer et modifier des bons de travail (SalesOrder)
-- 🔄 Synchroniser SEIGMA ↔ Supabase pour les apps BL Vitres (facturation, billets, pourboires, reconnaissance)
+- 🔄 Synchroniser SEIGMA ↔ Supabase pour les apps {VOTRE_ENTREPRISE} (facturation, billets, pourboires, reconnaissance)
 
 ## Ce que cette API NE permet PAS de faire
 
@@ -60,7 +77,7 @@ Tu devrais voir 3 clients.
 ## Architecture de l'API
 
 ```
-https://blvitres.seigma.app/api/
+https://{VOTRE_INSTANCE}.seigma.app/api/
 ├── /auth/authenticate          ← JWT (7 jours)
 ├── /reference/{ModelCode}/{id} ← GET fiche
 ├── /reference/{ModelCode}/search ← POST rechercher
@@ -78,7 +95,7 @@ https://blvitres.seigma.app/api/
 
 ## Ressources
 
-- **PDFs officiels SEIGMA** : `\\BEELINK\Partage\API\` (Reference API, Activity API, Timelog API)
+- **PDFs officiels SEIGMA** : `/mnt/beelink_partage/API/` (Reference API, Activity API, Timelog API)
 - **Skill Hermes** : `seigma-api` (expertise terrain, v1.13.0)
-- **Code production** : `/mnt/storage/Dev/bl-inventaire/supabase/functions/` (seigma-facturation, seigma-timelogs, seigma-clients, bl-vitres-sync)
-- **Instance SEIGMA** : https://blvitres.seigma.app
+- **Code production** : `{VOTRE_PROJET}/supabase/functions/` (seigma-facturation, seigma-timelogs, seigma-clients, bl-vitres-sync)
+- **Instance SEIGMA** : https://exemple.seigma.app

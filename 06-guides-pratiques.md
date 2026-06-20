@@ -1,6 +1,6 @@
 # Chapitre 6 — Guides pratiques (Workflows)
 
-> **Version documentée** : API SEIGMA v1.13.0 — Basée sur les Edge Functions Supabase de production BL Vitres Inc.
+> **Version documentée** : API SEIGMA v1.13.0 — Basée sur les Edge Functions Supabase de production {VOTRE_ENTREPRISE}.
 > **Dernière mise à jour** : 2026-06-20
 
 ---
@@ -355,7 +355,7 @@ function extractRefColor(field: unknown): string {
 └─────────────────────────────────────────────────────────────────────────┘
 ```
 
-> ℹ️ Ce pipeline est implémenté en production dans l'Edge Function `seigma-facturation` — voir `supabase/functions/seigma-facturation/index.ts`.
+> ℹ️ Ce pipeline est implémenté en production dans l'Edge Function `seigma-facturation` — voir `{VOTRE_PROJET}/supabase/functions/seigma-facturation/index.ts`.
 
 ---
 
@@ -363,21 +363,24 @@ function extractRefColor(field: unknown): string {
 
 ### 6.2.1 Vue d'ensemble
 
-Le planning quotidien de BL Vitres repose sur **9 équipes** avec chacune un `UserId` unique. L'endpoint `POST /api/activity/getactivitiesfordate` retourne les activités d'un utilisateur (chef d'équipe) pour une date donnée.
+Le planning quotidien de {VOTRE_ENTREPRISE} repose sur **9 équipes** avec chacune un `UserId` unique. L'endpoint `POST /api/activity/getactivitiesfordate` retourne les activités d'un utilisateur (chef d'équipe) pour une date donnée.
 
 ### 6.2.2 Configuration des équipes
 
 ```typescript
+// 🚧 **À compléter** : Remplacez les UserId ci-dessous par ceux de vos propres équipes.
+// Obtenez les UserId via l'interface d'administration SEIGMA ou via l'API.
 const SEIGMA_TEAMS = [
-  { id: "team-1", name: "Équipe 1", userId: "d3c672d1-0e0f-4f27-b37b-dcef5e390969" },
-  { id: "team-2", name: "Équipe 2", userId: "78478d0b-bb80-426f-8436-568f509b876f" },
-  { id: "team-3", name: "Équipe 3", userId: "13ed37a8-4bbd-4286-bd31-0b960327505b" },
-  { id: "team-4", name: "Équipe 4", userId: "8cfdf67f-b932-4f6e-840b-1935163805b6" },
-  { id: "team-5", name: "Équipe 5", userId: "f120ee46-9943-4f86-992c-cb502d61062a" },
-  { id: "team-6", name: "Équipe 6", userId: "13a61d80-30ca-4ebd-8137-d09186d7979b" },
-  { id: "team-7", name: "Équipe 7", userId: "ed0114c1-63c2-4d95-97d3-edfa6d15da43" },
-  { id: "team-8", name: "Équipe 8", userId: "a7d108e2-5e2a-4e11-930f-aa6187f94b88" },
-  { id: "team-9", name: "Équipe 9", userId: "e11caacf-e086-477a-a378-fb06a6e0bc99" },
+  { id: "team-1", name: "Équipe 1", userId: "{un-user-id-equipe-1}" },
+  { id: "team-2", name: "Équipe 2", userId: "{un-user-id-equipe-2}" },
+  { id: "team-3", name: "Équipe 3", userId: "{un-user-id-equipe-3}" },
+  { id: "team-4", name: "Équipe 4", userId: "{un-user-id-equipe-4}" },
+  { id: "team-5", name: "Équipe 5", userId: "{un-user-id-equipe-5}" },
+  { id: "team-6", name: "Équipe 6", userId: "{un-user-id-equipe-6}" },
+  { id: "team-7", name: "Équipe 7", userId: "{un-user-id-equipe-7}" },
+  { id: "team-8", name: "Équipe 8", userId: "{un-user-id-equipe-8}" },
+  { id: "team-9", name: "Équipe 9", userId: "{un-user-id-equipe-9}" },
+  // Ajoutez ou retirez des équipes selon votre configuration
 ];
 ```
 
@@ -636,7 +639,7 @@ async function buildDailyPlan(
 
 ### 6.3.1 Architecture des Edge Functions
 
-L'infrastructure BL Vitres utilise **4 Edge Functions Supabase** pour synchroniser les données SEIGMA vers Supabase :
+L'infrastructure {VOTRE_ENTREPRISE} utilise **4 Edge Functions Supabase** pour synchroniser les données SEIGMA vers Supabase :
 
 | Edge Function | Modèle(s) SEIGMA | Table(s) Supabase | Fréquence |
 |---|---|---|---|

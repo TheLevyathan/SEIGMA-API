@@ -174,6 +174,8 @@ def get_activity(activity_id: str, token: str) -> dict:
 
 Cet endpoint est le pilier du module de planification SEIGMA. Il retourne l'ensemble des activités planifiées pour un utilisateur à une date spécifique, couvrant toutes ses équipes et références.
 
+> 🚧 **À compléter** : Les `UserId` des équipes sont spécifiques à votre instance SEIGMA. Vous devez obtenir la liste de vos équipes et leurs UserId auprès de votre administrateur SEIGMA ou via l'interface d'administration.
+
 **Requête :**
 
 ```bash
