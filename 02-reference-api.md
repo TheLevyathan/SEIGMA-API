@@ -58,7 +58,8 @@ GET /api/reference/{ModelCode}/{ReferenceId}
 ```bash
 curl -X GET \
   "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/12345" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Authorization: Bearer *** \
+  -H "Accept-Language: fr-CA" \
   -H "Accept: application/json"
 ```
 
@@ -116,10 +117,10 @@ Les attributs à l'intérieur de `reference` varient selon le `ModelCode`. Voir 
 | `200 OK` | Référence trouvée et retournée |
 | `401 Unauthorized` | Authentification requise |
 | `403 Forbidden` | Accès non autorisé à ce modèle |
-| `500 Internal Server Error` | Référence inexistante ou `ModelCode` invalide (bug SEIGMA — le serveur crash au lieu de retourner 404) |
+| `500 Internal Server Error` | Référence inexistante ou `ModelCode` invalide (bug SEIGMA — le serveur retourne une erreur 500 au lieu de 404) |
 | `500 Internal Server Error` | Erreur serveur (modèle instable, voir [Endpoints cassés](#endpoints-cassés)) |
 
-> 💡 **Workaround GET/ID inexistant → 500** : Avant de faire un GET par ID, faites un `POST search` avec `WhereCondition` sur un champ identifiable (ex: `Display`, `Number`). Si le search retourne 0 résultat, l'ID n'existe pas — évitez le GET qui crasherait en 500.
+> 💡 **Workaround GET/ID inexistant → 500** : Avant de faire un GET par ID, faites un `POST search` avec `WhereCondition` sur un champ identifiable (ex: `Display`, `Number`). Si le search retourne 0 résultat, l'ID n'existe pas — évitez le GET qui retournerait une erreur 500.
 
 ---
 
@@ -316,38 +317,7 @@ Pour les attributs de **type liste** (MultiSelect, MultiUser, etc.). Permet de f
 
 Voici les `ModelCode` documentés et testés. Les statistiques sont indicatives et dépendent de l'instance SEIGMA cible.
 
-### SalesOrder — Bons de commande
-
-| Propriété | Valeur |
-|-----------|--------|
-| **ModelCode** | `SalesOrder` |
-| **Références** | ~1932 |
-| **Champs en search** | 23 |
-| **Champs en détail** | 87 |
-| **Statut** | ✅ Stable |
-
-**Attributs notables** : `CustomerId`, `CustomerDisplay`, `TotalAmount`, `Status`, `DateCreated`, `AssignedTo`
-
-```bash
-# Exemple : rechercher les 10 derniers bons de commande
-curl -X POST \
-  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/search" \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
-  -d '{
-    "Offset": 0,
-    "Limit": 10,
-    "IsSelector": false,
-    "ModelListId": null,
-    "CurrentReferenceId": null,
-    "WhereCondition": [],
-    "WhereOrCondition": [],
-    "WhereInCondition": [],
-    "OrderByCondition": [
-      {"ModelAttributeCode": "DateCreated", "IsDescending": true}
-    ]
-  }'
-```
+SalesOrder — Voir [Chapitre 5](05-modeles-reference.md) pour la fiche détaillée.
 
 ### Customer — Clients
 
@@ -379,7 +349,7 @@ curl -X POST \
 
 > ✅ **CRÉATION FONCTIONNELLE** : `POST /api/reference/Receipt` → 201 Created. Champs obligatoires : `CustomerId`, `Amount`, `PaymentMethodId`. ⚠️ `PaymentMethodId` est **obligatoire** — utilisez `POST /api/reference/PaymentMethod/search` pour l'obtenir. Voir le [Chapitre 4 — Opérations d'écriture](04-operations-ecriture.md).
 
-> ⚠️ **PITFALL** : `SalesOrderId` est **TRANSITIF** sur `Receipt`. Cela signifie qu'il n'est **jamais résolu** lors d'un search — vous ne recevrez pas l'objet SalesOrder lié, seulement l'ID brut. Pour obtenir le détail du bon de commande associé, faites un GET supplémentaire sur `/api/reference/SalesOrder/{SalesOrderId}`.
+> ⚠️ **PITFALL** : `SalesOrderId` est **TRANSITIF** sur `Receipt` → voir ch.7 [pitfall #8](07-pitfalls-limitations.md#8-salesorderid-est-transitif-sur-receipt).
 
 ### SalesInvoice — Factures de vente
 
@@ -445,7 +415,7 @@ curl -X POST \
 | **Références** | ~0 (compte Web non-admin) |
 | **Statut** | ✅ search OK |
 
-> ✅ **CORRIGÉ — Juin 2026** : `Employee/search` n'est plus cassé. L'endpoint retourne 200 avec 0 résultat pour les comptes non-admin (utilisateur Web standard). Les comptes admin peuvent voir plus de résultats. Le crash `500 Null parameter` qui existait précédemment a été résolu.
+> ✅ **CORRIGÉ — Juin 2026** : `Employee/search` n'est plus cassé. L'endpoint retourne 200 avec 0 résultat pour les comptes non-admin (utilisateur Web standard). Les comptes admin peuvent voir plus de résultats. L'erreur `500 Null parameter` qui existait précédemment a été résolu.
 
 ---
 
@@ -859,7 +829,8 @@ print(detail['reference']['Display'])
 ```bash
 curl -X GET \
   "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/12345" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Authorization: Bearer *** \
+  -H "Accept-Language: fr-CA" \
   -H "Accept: application/json" | jq '.reference.Display'
 ```
 
@@ -869,7 +840,8 @@ curl -X GET \
 curl -X POST \
   "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/search" \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Accept-Language: fr-CA" \
+  -H "Authorization: Bearer *** \
   -d '{
     "Offset": 0,
     "Limit": 10,
@@ -894,7 +866,8 @@ curl -X POST \
 curl -X POST \
   "https://{VOTRE_INSTANCE}.seigma.app/api/reference/Customer/search" \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Accept-Language: fr-CA" \
+  -H "Authorization: Bearer *** \
   -d '{
     "Offset": 0,
     "Limit": 50,
@@ -917,7 +890,8 @@ curl -X POST \
 curl -X POST \
   "https://{VOTRE_INSTANCE}.seigma.app/api/reference/Call/search" \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Accept-Language: fr-CA" \
+  -H "Authorization: Bearer *** \
   -d '{
     "Offset": 0,
     "Limit": 5,
@@ -944,8 +918,6 @@ curl -X POST \
 5. **Utilisez GET par `ReferenceId` pour obtenir tous les champs** après un search.
 6. **Testez les endpoints avant intégration** — certains modèles peuvent retourner 500 selon la version de SEIGMA.
 7. **Aucune limite stricte** sur le `Limit` (testé jusqu'à 1000). Pour des performances optimales, paginez par tranches de 200.
-
----
 
 ---
 

@@ -55,6 +55,9 @@ Ces IDs sont nécessaires pour les opérations d'écriture (création de WO, fac
 - [ ] J'ai obtenu un `WarehouseId` via `Warehouse/search`
 - [ ] J'ai obtenu un `PaymentMethodId` via `PaymentMethod/search` (si j'utilise Receipt)
 - [ ] J'ai les `UserId` de mes équipes (si j'utilise `getactivitiesfordate`)
+- [ ] J'ai testé `GetReferences` (résolution par lot d'IDs)
+- [ ] J'ai testé `POST /api/timelogs/search`
+- [ ] J'ai testé `GET .../timelogs/start` et `GET .../timelogs/stop`
 - [ ] J'ai vérifié quels ModelCodes sont disponibles sur mon instance
 - [ ] J'ai noté les endpoints qui retournent 500 sur mon instance
 

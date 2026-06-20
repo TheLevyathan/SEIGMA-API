@@ -109,6 +109,8 @@ Contactez votre administrateur SEIGMA si vous ne disposez pas d'un compte API d�
 | `400`     | Corps de requête mal formé ou champ manquant.       |
 | `500`     | Erreur interne du serveur d'authentification.       |
 
+> ⚠️ **Note sur le code 404** — Le code HTTP 404 pour identifiants invalides est un **comportement non standard** : le code HTTP attendu serait 401 Unauthorized. L'API SEIGMA utilise 404 pour ce cas.
+
 > ⚠️ **Attention** — L'API ne renvoie **pas de message d'erreur détaillé** en cas de 404. Traitez tout 404 comme « credentials invalides » sans tenter de deviner la raison précise.
 
 ---

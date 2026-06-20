@@ -166,7 +166,7 @@ Tous les 21 produits ont `Price: 0.0` dans leur définition. Le prix réel est d
 
 | Champ | Operator | OperatorCode |
 |-------|----------|-------------|
-| `Number` (SalesOrder) | `"="` ✅ | `"Equal"` ❌ (retourne HTTP 500 — crash serveur) |
+| `Number` (SalesOrder) | `"="` ✅ | `"Equal"` ❌ (retourne HTTP 500 — erreur serveur) |
 | `SalesOrderStatusId` | `"="` ✅ | `"Equal"` ✅ |
 | `Display` | `"Like"` ✅ | — |
 
@@ -174,7 +174,7 @@ Tous les 21 produits ont `Price: 0.0` dans leur définition. Le prix réel est d
 
 ### 14. Contains / StartsWith / EndsWith → HTTP 500 (crash serveur)
 
-Les opérateurs `Contains`, `StartsWith` et `EndsWith` retournent **HTTP 500 Internal Server Error** sur certains champs (notamment `SalesOrderStatusId`). Le serveur crash au lieu de retourner des résultats.
+Les opérateurs `Contains`, `StartsWith` et `EndsWith` retournent **HTTP 500 Internal Server Error** sur certains champs (notamment `SalesOrderStatusId`). Le serveur retourne une erreur 500 au lieu de retourner des résultats.
 
 **Workaround** : Utiliser exclusivement l'opérateur `"="` pour les filtres sur ces attributs problématiques.
 
@@ -253,7 +253,7 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 | `POST /api/reference/Report/search` | 500 — Object reference not set |
 | `GET /api/reference/{ModelCode}/metadata` | 500 — Endpoint inexistant (pas un endpoint valide) |
 
-⚠️ Ces endpoints existent (pas de 404) mais crashent côté serveur — probablement un bug SEIGMA ou des paramètres obligatoires non documentés.
+⚠️ Ces endpoints existent (pas de 404) mais retournent une erreur 500 côté serveur — probablement un bug SEIGMA ou des paramètres obligatoires non documentés.
 
 ---
 

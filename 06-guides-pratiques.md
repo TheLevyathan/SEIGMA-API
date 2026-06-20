@@ -34,7 +34,7 @@ Lead ──→ Quotation ──→ SalesOrder ──→ SalesInvoice ──→ R
 | 4 | Facture | `SalesInvoice` | `POST /search` + `GET /{id}` | ⚠️ `SalesOrderId` transitif dans le search |
 | 5 | Paiement | `Receipt` | `POST /search` + `GET /{id}` | ⚠️ `SalesOrderId` transitif — nécessite getDetail |
 
-> ⚠️ **PITFALL CRITIQUE** — `SalesOrderId` est **transitif** sur `Receipt` et `SalesInvoice`. Cela signifie qu'un **search ne résout jamais** l'objet SalesOrder lié. Vous recevez seulement l'ID brut. Pour remonter du Receipt ou de la SalesInvoice au SalesOrder, vous **devez** faire un `GET /api/reference/Receipt/{id}` ou `GET /api/reference/SalesInvoice/{id}` pour obtenir le `SalesOrderId` complet.
+> ⚠️ **PITFALL** — `SalesOrderId` est **transitif** sur `Receipt` et `SalesInvoice` → voir ch.7 [pitfall #8](07-pitfalls-limitations.md#8-salesorderid-est-transitif-sur-receipt).
 
 ### 6.1.2 Étape 1 — Récupérer les SalesOrders par statut
 
@@ -84,7 +84,7 @@ async function fetchCompletedOrders(
 }
 ```
 
-> ℹ️ **Note** — Le filtre `=` sur `SalesOrderStatusId` fonctionne car le search retourne le Display sous forme de string dans ce champ. ⚠️ **ATTENTION** : `Contains`, `StartsWith` et `EndsWith` sur ce champ retournent **HTTP 500** (crash serveur) — utilisez exclusivement `=`.
+> ℹ️ **Note** — Le filtre `=` sur `SalesOrderStatusId` fonctionne car le search retourne le Display sous forme de string dans ce champ. ⚠️ **ATTENTION** : `Contains`, `StartsWith` et `EndsWith` sur ce champ retournent **HTTP 500** (erreur serveur) — utilisez exclusivement `=`.
 
 ### 6.1.3 Étape 2 — Obtenir le client d'un WO
 

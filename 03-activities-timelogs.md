@@ -95,6 +95,8 @@ La réponse est **wrappée** dans un objet contenant la clé `activity` :
 | `Subject` | `string` | Objet / titre de l'activité |
 | `CustomerDisplay` | `string` | Nom d'affichage du client lié |
 | `ActivityTypeId` | `ModelAttributeList` | Type d'activité avec sa couleur |
+
+> ⚠️ **Note sur le champ Color** — La présence du champ `Color` dans `ActivityTypeId` varie selon les versions SEIGMA. La documentation officielle est elle-même incohérente sur ce point. En cas de doute, omettez `Color` — le serveur l'ignore.
 | `AssignedToId` | `UserAssignableModel` | Utilisateur assigné (`{UserId, Display}`) |
 | `Location` | `string` | Adresse ou lieu de l'intervention |
 | `ResourceIds` | `GUID[]` | Ressources associées |
