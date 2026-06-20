@@ -51,7 +51,7 @@ Récupère une activité spécifique par son identifiant unique.
 
 ```bash
 curl -X GET \
-  "https://api.seigma.fr/api/activity/a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/activity/a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -137,7 +137,7 @@ async function getActivity(
   token: string
 ): Promise<Activity> {
   const res = await fetch(
-    `https://api.seigma.fr/api/activity/${activityId}`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/activity/${activityId}`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -151,7 +151,7 @@ async function getActivity(
 import requests
 
 def get_activity(activity_id: str, token: str) -> dict:
-    url = f"https://api.seigma.fr/api/activity/{activity_id}"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/activity/{activity_id}"
     headers = {"Authorization": f"Bearer {token}"}
     resp = requests.get(url, headers=headers)
     resp.raise_for_status()
@@ -180,7 +180,7 @@ Cet endpoint est le pilier du module de planification SEIGMA. Il retourne l'ense
 
 ```bash
 curl -X POST \
-  "https://api.seigma.fr/api/activity/getactivitiesfordate" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/activity/getactivitiesfordate" \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -281,7 +281,7 @@ async function getActivitiesForDate(
   token: string
 ): Promise<ActivitiesForDateResponse> {
   const res = await fetch(
-    "https://api.seigma.fr/api/activity/getactivitiesfordate",
+    "https://{VOTRE_INSTANCE}.seigma.app/api/activity/getactivitiesfordate",
     {
       method: "POST",
       headers: {
@@ -315,7 +315,7 @@ def get_activities_for_date(
     Exemple valide   : "2026-05-26T00:00:00"
     Exemple invalide : "2026-05-26" → 500
     """
-    url = "https://api.seigma.fr/api/activity/getactivitiesfordate"
+    url = "https://{VOTRE_INSTANCE}.seigma.app/api/activity/getactivitiesfordate"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
@@ -351,7 +351,7 @@ Crée une nouvelle activité **liée à une référence existante** (client, con
 
 ```bash
 curl -X POST \
-  "https://api.seigma.fr/api/activity/ref-customer-123" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/activity/ref-customer-123" \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -460,7 +460,7 @@ async function createActivity(
   token: string
 ): Promise<Activity> {
   const res = await fetch(
-    `https://api.seigma.fr/api/activity/${referenceId}`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/activity/${referenceId}`,
     {
       method: "POST",
       headers: {
@@ -483,7 +483,7 @@ def create_activity(reference_id: str, payload: dict, token: str) -> dict:
     Crée une activité liée à une référence.
     payload doit être wrappé : {"activity": {...}}
     """
-    url = f"https://api.seigma.fr/api/activity/{reference_id}"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/activity/{reference_id}"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
@@ -513,7 +513,7 @@ Met à jour une activité existante. Le corps peut être **partiel** : seuls les
 
 ```bash
 curl -X PUT \
-  "https://api.seigma.fr/api/activity/a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/activity/a1b2c3d4-e5f6-7890-abcd-ef1234567890" \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -575,7 +575,7 @@ async function updateActivity(
   token: string
 ): Promise<Activity> {
   const res = await fetch(
-    `https://api.seigma.fr/api/activity/${activityId}`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/activity/${activityId}`,
     {
       method: "PUT",
       headers: {
@@ -597,7 +597,7 @@ def update_activity(activity_id: str, updates: dict, token: str) -> dict:
     """
     Met à jour une activité. Les champs absents de 'updates' sont ignorés.
     """
-    url = f"https://api.seigma.fr/api/activity/{activity_id}"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/activity/{activity_id}"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
@@ -671,14 +671,14 @@ const payload = {
 
 ```bash
 # ❌ Ceci retourne 404 — pas de création sans référence
-curl -X POST "https://api.seigma.fr/api/activity"
+curl -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/activity"
 ```
 
 **Règle :** Les activités SEIGMA sont toujours rattachées à une référence. Utilisez `POST /api/activity/{referenceId}`.
 
 ```bash
 # ✅ Correct — création liée à une référence
-curl -X POST "https://api.seigma.fr/api/activity/ref-client-123"
+curl -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/activity/ref-client-123"
 ```
 
 ---
@@ -687,7 +687,7 @@ curl -X POST "https://api.seigma.fr/api/activity/ref-client-123"
 
 ```bash
 # ❌ Retourne 500 Object reference not set to an instance of an object
-curl -X POST "https://api.seigma.fr/api/reference/Activity/search"
+curl -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/reference/Activity/search"
 ```
 
 **Règle :** Ne pas utiliser l'endpoint de recherche générique pour les activités. Utiliser `getactivitiesfordate` pour le planning ou `GET /api/activity/{id}` pour une activité spécifique.
@@ -727,7 +727,7 @@ Récupère la liste complète des poinçons associés à une référence.
 
 ```bash
 curl -X GET \
-  "https://api.seigma.fr/api/reference/WorkOrder/wo-123-abc/timelogs" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123-abc/timelogs" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -820,7 +820,7 @@ async function getTimelogs(
   token: string
 ): Promise<TimelogsResponse> {
   const res = await fetch(
-    `https://api.seigma.fr/api/reference/${modelCode}/${refId}/timelogs`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/reference/${modelCode}/${refId}/timelogs`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -835,7 +835,7 @@ def get_timelogs(model_code: str, ref_id: str, token: str) -> dict:
     Récupère les poinçons d'une référence.
     Ex: model_code="WorkOrder", ref_id="wo-123-abc"
     """
-    url = f"https://api.seigma.fr/api/reference/{model_code}/{ref_id}/timelogs"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/reference/{model_code}/{ref_id}/timelogs"
     headers = {"Authorization": f"Bearer {token}"}
     resp = requests.get(url, headers=headers)
     resp.raise_for_status()
@@ -860,7 +860,7 @@ Crée un nouveau poinçon de temps sur une référence.
 
 ```bash
 curl -X POST \
-  "https://api.seigma.fr/api/reference/WorkOrder/wo-123-abc/timelogs/add" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123-abc/timelogs/add" \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -937,7 +937,7 @@ async function addTimelog(
   token: string
 ): Promise<TimeLog> {
   const res = await fetch(
-    `https://api.seigma.fr/api/reference/${modelCode}/${refId}/timelogs/add`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/reference/${modelCode}/${refId}/timelogs/add`,
     {
       method: "POST",
       headers: {
@@ -960,7 +960,7 @@ def add_timelog(model_code: str, ref_id: str, payload: dict, token: str) -> dict
     Ajoute un poinçon. Le payload doit être wrappé : {"timeLog": {...}}.
     ⚠️ UserId utilise {Display, ReferenceId, ModelCode:"User"} (PAS {UserId, Display})
     """
-    url = f"https://api.seigma.fr/api/reference/{model_code}/{ref_id}/timelogs/add"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/reference/{model_code}/{ref_id}/timelogs/add"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
@@ -989,7 +989,7 @@ Met à jour un poinçon existant. Le `TimeLogId` doit être inclus dans le corps
 
 ```bash
 curl -X PUT \
-  "https://api.seigma.fr/api/reference/WorkOrder/wo-123-abc/timelogs" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123-abc/timelogs" \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{
@@ -1015,7 +1015,7 @@ async function updateTimelog(
   token: string
 ): Promise<TimeLog> {
   const res = await fetch(
-    `https://api.seigma.fr/api/reference/${modelCode}/${refId}/timelogs`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/reference/${modelCode}/${refId}/timelogs`,
     {
       method: "PUT",
       headers: {
@@ -1038,7 +1038,7 @@ async function updateTimelog(
 def update_timelog(
     model_code: str, ref_id: str, timelog_id: str, updates: dict, token: str
 ) -> dict:
-    url = f"https://api.seigma.fr/api/reference/{model_code}/{ref_id}/timelogs"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/reference/{model_code}/{ref_id}/timelogs"
     headers = {
         "Authorization": f"Bearer {token}",
         "Content-Type": "application/json"
@@ -1068,7 +1068,7 @@ Supprime définitivement un poinçon de temps.
 
 ```bash
 curl -X DELETE \
-  "https://api.seigma.fr/api/reference/WorkOrder/wo-123-abc/timelogs/tl-001" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123-abc/timelogs/tl-001" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -1087,7 +1087,7 @@ async function deleteTimelog(
   token: string
 ): Promise<void> {
   const res = await fetch(
-    `https://api.seigma.fr/api/reference/${modelCode}/${refId}/timelogs/${timelogId}`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/reference/${modelCode}/${refId}/timelogs/${timelogId}`,
     {
       method: "DELETE",
       headers: { Authorization: `Bearer ${token}` }
@@ -1101,7 +1101,7 @@ async function deleteTimelog(
 ```python
 # Python
 def delete_timelog(model_code: str, ref_id: str, timelog_id: str, token: str) -> None:
-    url = f"https://api.seigma.fr/api/reference/{model_code}/{ref_id}/timelogs/{timelog_id}"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/reference/{model_code}/{ref_id}/timelogs/{timelog_id}"
     headers = {"Authorization": f"Bearer {token}"}
     resp = requests.delete(url, headers=headers)
     resp.raise_for_status()  # lève une exception si != 2xx
@@ -1126,7 +1126,7 @@ Démarre un nouveau poinçon de temps avec l'heure courante du serveur. Cet endp
 
 ```bash
 curl -X GET \
-  "https://api.seigma.fr/api/reference/WorkOrder/wo-123-abc/timelogs/start" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123-abc/timelogs/start" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -1162,7 +1162,7 @@ async function startTimelog(
   token: string
 ): Promise<TimeLog> {
   const res = await fetch(
-    `https://api.seigma.fr/api/reference/${modelCode}/${refId}/timelogs/start`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/reference/${modelCode}/${refId}/timelogs/start`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1175,7 +1175,7 @@ async function startTimelog(
 # Python
 def start_timelog(model_code: str, ref_id: str, token: str) -> dict:
     """Démarre un poinçon (chronomètre) sur une référence."""
-    url = f"https://api.seigma.fr/api/reference/{model_code}/{ref_id}/timelogs/start"
+    url = f"https://{VOTRE_INSTANCE}.seigma.app/api/reference/{model_code}/{ref_id}/timelogs/start"
     headers = {"Authorization": f"Bearer {token}"}
     resp = requests.get(url, headers=headers)
     resp.raise_for_status()
@@ -1192,7 +1192,7 @@ Arrête un poinçon en cours. L'heure de fin est automatiquement définie à l'h
 
 ```bash
 curl -X GET \
-  "https://api.seigma.fr/api/reference/WorkOrder/wo-123-abc/timelogs/tl-running-004/stop" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123-abc/timelogs/tl-running-004/stop" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -1229,7 +1229,7 @@ async function stopTimelog(
   token: string
 ): Promise<TimeLog> {
   const res = await fetch(
-    `https://api.seigma.fr/api/reference/${modelCode}/${refId}/timelogs/${timelogId}/stop`,
+    `https://{VOTRE_INSTANCE}.seigma.app/api/reference/${modelCode}/${refId}/timelogs/${timelogId}/stop`,
     { headers: { Authorization: `Bearer ${token}` } }
   );
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -1243,7 +1243,7 @@ async function stopTimelog(
 def stop_timelog(model_code: str, ref_id: str, timelog_id: str, token: str) -> dict:
     """Arrête un poinçon en cours."""
     url = (
-        f"https://api.seigma.fr/api/reference/{model_code}/{ref_id}"
+        f"https://{VOTRE_INSTANCE}.seigma.app/api/reference/{model_code}/{ref_id}"
         f"/timelogs/{timelog_id}/stop"
     )
     headers = {"Authorization": f"Bearer {token}"}
@@ -1260,7 +1260,7 @@ def stop_timelog(model_code: str, ref_id: str, timelog_id: str, token: str) -> d
 
 ```bash
 # ❌ Retourne 0 résultats — endpoint inopérant
-curl -X POST "https://api.seigma.fr/api/timelogs/search" \
+curl -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/timelogs/search" \
   -H "Authorization: Bearer {token}" \
   -H "Content-Type: application/json" \
   -d '{"WorkOrderId": "wo-123-abc"}'
@@ -1271,7 +1271,7 @@ curl -X POST "https://api.seigma.fr/api/timelogs/search" \
 ```bash
 # ✅ Correct — GET sur la référence
 curl -X GET \
-  "https://api.seigma.fr/api/reference/WorkOrder/wo-123-abc/timelogs" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123-abc/timelogs" \
   -H "Authorization: Bearer {token}"
 ```
 
@@ -1320,11 +1320,11 @@ Tous les corps de requête POST et PUT doivent être wrappés dans l'objet appro
 
 ```bash
 # ❌ INCORRECT — corps non wrappé
-curl -X POST "https://api.seigma.fr/api/reference/WorkOrder/wo-123/timelogs/add" \
+curl -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123/timelogs/add" \
   -d '{"StartTime": "...", "UserId": {...}}'
 
 # ✅ CORRECT — corps wrappé dans "timeLog"
-curl -X POST "https://api.seigma.fr/api/reference/WorkOrder/wo-123/timelogs/add" \
+curl -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/reference/WorkOrder/wo-123/timelogs/add" \
   -d '{"timeLog": {"StartTime": "...", "UserId": {...}}}'
 ```
 

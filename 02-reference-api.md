@@ -57,8 +57,8 @@ GET /api/reference/{ModelCode}/{ReferenceId}
 
 ```bash
 curl -X GET \
-  "https://votre-instance.seigma.com/api/reference/SalesOrder/12345" \
-  -H "Cookie: .ASPXAUTH=..." \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/12345" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -H "Accept: application/json"
 ```
 
@@ -327,9 +327,9 @@ Voici les `ModelCode` documentés et testés. Les statistiques sont indicatives 
 ```bash
 # Exemple : rechercher les 10 derniers bons de commande
 curl -X POST \
-  "https://votre-instance.seigma.com/api/reference/SalesOrder/search" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/search" \
   -H "Content-Type: application/json" \
-  -H "Cookie: .ASPXAUTH=..." \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -d '{
     "Offset": 0,
     "Limit": 10,
@@ -707,7 +707,7 @@ class SeigmaClient {
       headers: {
         'Content-Type': 'application/json',
         'Accept': 'application/json',
-        'Cookie': `.ASPXAUTH=${this.cookie}`,
+        'Authorization': `Bearer ${this.token}`,
       },
       body: body ? JSON.stringify(body) : undefined,
     });
@@ -779,7 +779,7 @@ class SeigmaClient {
 }
 
 // Utilisation
-const client = new SeigmaClient('https://votre-instance.seigma.com', 'votre-cookie');
+const client = new SeigmaClient('https://{VOTRE_INSTANCE}.seigma.app', '{VOTRE_TOKEN}');
 
 // Recherche simple
 const orders = await client.searchReferences('SalesOrder', {
@@ -809,10 +809,10 @@ class SeigmaClient:
     def __init__(self, base_url: str, cookie: str):
         self.base_url = base_url.rstrip('/')
         self.session = requests.Session()
-        self.session.cookies.set('.ASPXAUTH', cookie)
         self.session.headers.update({
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'Authorization': f'Bearer {cookie}',
         })
 
     def get_reference(self, model_code: str, reference_id: int) -> Dict[str, Any]:
@@ -876,7 +876,7 @@ class SeigmaClient:
         return all_refs
 
 # Utilisation
-client = SeigmaClient('https://votre-instance.seigma.com', 'votre-cookie')
+client = SeigmaClient('https://{VOTRE_INSTANCE}.seigma.app', '{VOTRE_TOKEN}')
 
 # Recherche simple
 results = client.search_references(
@@ -903,8 +903,8 @@ print(detail['reference']['Display'])
 
 ```bash
 curl -X GET \
-  "https://votre-instance.seigma.com/api/reference/SalesOrder/12345" \
-  -H "Cookie: .ASPXAUTH=VOTRE_COOKIE" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/12345" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -H "Accept: application/json" | jq '.reference.Display'
 ```
 
@@ -912,9 +912,9 @@ curl -X GET \
 
 ```bash
 curl -X POST \
-  "https://votre-instance.seigma.com/api/reference/SalesOrder/search" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/search" \
   -H "Content-Type: application/json" \
-  -H "Cookie: .ASPXAUTH=VOTRE_COOKIE" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -d '{
     "Offset": 0,
     "Limit": 10,
@@ -937,9 +937,9 @@ curl -X POST \
 
 ```bash
 curl -X POST \
-  "https://votre-instance.seigma.com/api/reference/Customer/search" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/Customer/search" \
   -H "Content-Type: application/json" \
-  -H "Cookie: .ASPXAUTH=VOTRE_COOKIE" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -d '{
     "Offset": 0,
     "Limit": 50,
@@ -960,9 +960,9 @@ curl -X POST \
 
 ```bash
 curl -X POST \
-  "https://votre-instance.seigma.com/api/reference/Call/search" \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/Call/search" \
   -H "Content-Type: application/json" \
-  -H "Cookie: .ASPXAUTH=VOTRE_COOKIE" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -d '{
     "Offset": 0,
     "Limit": 5,
@@ -994,4 +994,4 @@ curl -X POST \
 
 > **Prochain chapitre** : [03 — Activities & Timelogs](03-activities-timelogs.md)
 >
-> **Chapitre précédent** : [01 — Introduction à l'API SEIGMA](01-introduction.md)
+> **Chapitre précédent** : [01 — Authentification](01-authentification.md)

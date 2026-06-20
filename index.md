@@ -25,21 +25,19 @@ Cette documentation est **neutre** et conçue pour s'adapter à n'importe quelle
 ## Quickstart — Premier appel en 2 minutes
 
 ```bash
-# 1. Obtenir un jeton
-TOKEN=$(curl -sk -X POST https://exemple.seigma.app/api/auth/authenticate \
+TOKEN=$(curl -sk -X POST "https://{VOTRE_INSTANCE}.seigma.app/api/auth/authenticate" \
   -H "Content-Type: application/json" \
-  -d '{"username":"{VOTRE_EMAIL}","password":"{VOTRE_MOT_DE_PASSE}"}' | jq -r '.token')
+  -d '{"username":"{VOTRE_EMAIL}","password":"{VOTRE_MOT_DE_PASSE}"}' \
+  | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
 
-# 2. Faire un appel
-curl -sk -X POST https://exemple.seigma.app/api/reference/Customer/search \
-  -H "Authorization: Bearer ${TOKEN}" \
+curl -sk "https://{VOTRE_INSTANCE}.seigma.app/api/reference/SalesOrder/search" \
+  -H "Authorization: Bearer $TOKEN" \
   -H "seigma-company: {VOTRE_COMPANY_ID}" \
-  -H "Accept-Language: fr-CA" \
   -H "Content-Type: application/json" \
-  -d '{"Offset":0,"Limit":3,"IsSelector":false,"ModelListId":null,"CurrentReferenceId":null,"WhereCondition":[],"WhereOrCondition":[],"WhereInCondition":[],"OrderByCondition":[]}'
+  -d '{"Offset":0,"Limit":1}'
 ```
 
-Tu devrais voir 3 clients.
+Tu devrais voir 1 résultat.
 
 ---
 
@@ -51,7 +49,7 @@ Tu devrais voir 3 clients.
 | **2** | [02-reference-api.md](02-reference-api.md) | GET/{id} + POST/search — le cœur de l'API |
 | **3** | [03-activities-timelogs.md](03-activities-timelogs.md) | Activities (planning) + Timelogs (poinçons) |
 | **4** | [04-operations-ecriture.md](04-operations-ecriture.md) | Créer et modifier : SalesOrder, Activity, Timelog |
-| **5** | [05-modeles-reference.md](05-modeles-reference.md) | Catalogue des 10+ ModelCodes, relations, pipeline VENTES |
+| **5** | [05-modeles-reference.md](05-modeles-reference.md) | Catalogue exhaustif : 155 modules + 15 fiches détaillées |
 | **6** | [06-guides-pratiques.md](06-guides-pratiques.md) | Workflows : facturation, planning, sync externe |
 | **7** | [07-pitfalls-limitations.md](07-pitfalls-limitations.md) | Tous les pièges, bugs connus et workarounds |
 | **8** | [08-checklist-completion.md](08-checklist-completion.md) | Checklist des 🚧 à compléter pour votre instance |
@@ -82,7 +80,7 @@ https://{VOTRE_INSTANCE}.seigma.app/api/
 ├── /auth/authenticate          ← JWT (7 jours)
 ├── /reference/{ModelCode}/{id} ← GET fiche
 ├── /reference/{ModelCode}/search ← POST rechercher
-├── /reference/{ModelCode}/GetReferences ← POST batch resolve (fonctionne sur 16 modèles)
+├── /reference/{ModelCode}/GetReferences ← POST batch resolve
 ├── /reference/SalesOrder/{id}/timelogs ← GET poinçons
 ├── /reference/SalesOrder/{id}/timelogs/add ← POST ajouter poinçon
 ├── /reference/SalesOrder/{id}/timelogs/start ← GET démarrer chrono
@@ -97,4 +95,4 @@ https://{VOTRE_INSTANCE}.seigma.app/api/
 ## Ressources
 
 - **PDFs officiels SEIGMA** : Reference API, Activity API, Timelog API
-- **Instance SEIGMA** : https://exemple.seigma.app
+- **Instance SEIGMA** : https://{VOTRE_INSTANCE}.seigma.app

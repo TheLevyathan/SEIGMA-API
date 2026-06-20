@@ -227,4 +227,4 @@ Vous ne saurez pas si c'est le courriel ou le mot de passe qui est erroné. Jour
 
 ---
 
-*Chapitre suivant : [02-structure-api.md](./02-structure-api.md)*
+*Chapitre suivant : [02-reference-api.md](./02-reference-api.md)*

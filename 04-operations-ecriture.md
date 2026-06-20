@@ -5,15 +5,15 @@
 - [4.1 Format universel d'écriture](#41-format-universel-décriture)
 - [4.2 Créer un bon de travail — `POST /api/reference/SalesOrder`](#42-créer-un-bon-de-travail--post-apireferencesalesorder)
 - [4.3 Modifier un bon de travail — `PUT /api/reference/SalesOrder/{id}`](#43-modifier-un-bon-de-travail--put-apireferencesalesorderid)
-- [4.4 Créer une facture — `POST /api/reference/SalesInvoice`](#411-créer-une-facture--post-apireferencesalesinvoice)
-- [4.5 Créer un encaissement — `POST /api/reference/Receipt`](#412-créer-un-encaissement--post-apireferencereceipt)
-- [4.6 Créer une activité liée — `POST /api/activity/{referenceId}`](#44-créer-une-activité-liée--post-apiactivityreferenceid)
-- [4.7 Modifier une activité — `PUT /api/activity/{activityId}`](#45-modifier-une-activité--put-apiactivityactivityid)
-- [4.8 Ajouter un poinçon — `POST …/timelogs/add`](#46-ajouter-un-poinçon--post-timelogsadd)
-- [4.9 Modifier un poinçon — `PUT …/timelogs`](#47-modifier-un-poinçon--put-timelogs)
-- [4.10 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`](#48-supprimer-un-poinçon--delete-timelogstimelogid)
-- [4.11 Démarrer un chrono — `GET …/timelogs/start`](#49-démarrer-un-chrono--get-timelogsstart)
-- [4.12 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`](#410-arrêter-un-chrono--get-timelogstimelogidstop)
+- [4.4 Créer une facture — `POST /api/reference/SalesInvoice`](#44-créer-une-facture--post-apireferencesalesinvoice)
+- [4.5 Créer un encaissement — `POST /api/reference/Receipt`](#45-créer-un-encaissement--post-apireferencereceipt)
+- [4.6 Créer une activité liée — `POST /api/activity/{referenceId}`](#46-créer-une-activité-liée--post-apiactivityreferenceid)
+- [4.7 Modifier une activité — `PUT /api/activity/{activityId}`](#47-modifier-une-activité--put-apiactivityactivityid)
+- [4.8 Ajouter un poinçon — `POST …/timelogs/add`](#48-ajouter-un-poinçon--post-timelogsadd)
+- [4.9 Modifier un poinçon — `PUT …/timelogs`](#49-modifier-un-poinçon--put-timelogs)
+- [4.10 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`](#410-supprimer-un-poinçon--delete-timelogstimelogid)
+- [4.11 Démarrer un chrono — `GET …/timelogs/start`](#411-démarrer-un-chrono--get-timelogsstart)
+- [4.12 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`](#412-arrêter-un-chrono--get-timelogstimelogidstop)
 - [4.13 Référentiels nécessaires](#413-référentiels-nécessaires)
 - [4.14 Pièges et limitations](#414-pièges-et-limitations)
 - [4.15 Exemples complets](#415-exemples-complets)
@@ -188,399 +188,6 @@ curl -X PUT "{VOTRE_INSTANCE}/api/reference/SalesOrder/{referenceId}" \
 
 ---
 
-## 4.6 Créer une activité liée — `POST /api/activity/{referenceId}`
-
-Crée une activité (rendez-vous, tâche, note) attachée à une référence existante.
-
-| Élément | Détail |
-|---|---|
-| **URL** | `POST {VOTRE_INSTANCE}/api/activity/{referenceId}` |
-| **Status succès** | `201 Created` |
-
-> 🚧 **Important :** `POST /api/activity` **sans** `referenceId` retourne `404`. Les activités doivent **obligatoirement** être liées à une référence existante.
-
-### 4.4.1 Format du corps
-
-Le corps est wrappé dans `"activity"` :
-
-```json
-{
-  "activity": {
-    "ActivityTypeId": { "…": "…" },
-    "ActivityFollowUpId": { "…": "…" }
-  }
-}
-```
-
-### 4.4.2 Champs obligatoires
-
-| Champ | Format | Détail |
-|---|---|---|
-| `ActivityTypeId` | `ModelAttributeList` | `{"Display": "Appel", "ReferenceId": "{id}", "ModelCode": "ActivityType"}` |
-| `ActivityFollowUpId` | `ModelAttributeList` | `{"Display": "À faire", "ReferenceId": "{id}", "ModelCode": "ActivityFollowUp"}` |
-
-### 4.4.3 Champs optionnels
-
-| Champ | Type | Description |
-|---|---|---|
-| `Subject` | string | Sujet de l'activité |
-| `StartDate` | DateTime ISO | Date/heure de début |
-| `EndDate` | DateTime ISO | Date/heure de fin |
-| `AssignedToId` | objet | `{"UserId": "{id}", "Display": "Nom"}` |
-| `Notes` | string | Notes textuelles |
-| `Location` | string | Lieu |
-| `ActivityLabelId` | objet | Étiquette |
-| `ContactMethodId` | objet | Méthode de contact |
-| `IsCompleted` | bool | Activité terminée ? |
-| `AllDay` | bool | Toute la journée ? |
-
-### 4.4.4 Corps canonique
-
-```json
-{
-  "activity": {
-    "ActivityTypeId": {
-      "Display": "Appel",
-      "ReferenceId": "{activity-type-id}",
-      "ModelCode": "ActivityType"
-    },
-    "ActivityFollowUpId": {
-      "Display": "À faire",
-      "ReferenceId": "{followup-id}",
-      "ModelCode": "ActivityFollowUp"
-    },
-    "Subject": "Appel de suivi client",
-    "StartDate": "2026-06-22T09:00:00",
-    "Notes": "Vérifier l'état de la commande"
-  }
-}
-```
-
-### 4.4.5 Exemple cURL
-
-```bash
-curl -X POST "{VOTRE_INSTANCE}/api/activity/{referenceId}" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "activity": {
-      "ActivityTypeId": {
-        "Display": "Appel",
-        "ReferenceId": "aaa-bbb-ccc",
-        "ModelCode": "ActivityType"
-      },
-      "ActivityFollowUpId": {
-        "Display": "À faire",
-        "ReferenceId": "ddd-eee-fff",
-        "ModelCode": "ActivityFollowUp"
-      },
-      "Subject": "Appel de suivi"
-    }
-  }'
-```
-
-### 4.4.6 Réponse
-
-```json
-{
-  "activity": {
-    "ActivityId": "nouvel-id-activite",
-    "Subject": "Appel de suivi",
-    "…": "…"
-  }
-}
-```
-
----
-
-## 4.7 Modifier une activité — `PUT /api/activity/{activityId}`
-
-Modifie une activité existante. Seuls les champs envoyés sont mis à jour.
-
-| Élément | Détail |
-|---|---|
-| **URL** | `PUT {VOTRE_INSTANCE}/api/activity/{activityId}` |
-| **Status succès** | `200 OK` |
-
-### 4.5.1 Corps de requête
-
-Mêmes champs modifiables qu'à la création. Les champs absents sont ignorés.
-
-```json
-{
-  "activity": {
-    "Subject": "Sujet modifié",
-    "IsCompleted": true
-  }
-}
-```
-
-### 4.5.2 Exemple cURL
-
-```bash
-curl -X PUT "{VOTRE_INSTANCE}/api/activity/{activityId}" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "activity": {
-      "IsCompleted": true
-    }
-  }'
-```
-
-### 4.5.3 Réponse
-
-```json
-{
-  "activity": {
-    "ActivityId": "{activityId}",
-    "Subject": "Sujet modifié",
-    "IsCompleted": true,
-    "…": "…"
-  }
-}
-```
-
----
-
-## 4.8 Ajouter un poinçon — `POST …/timelogs/add`
-
-Ajoute une entrée de temps (poinçon) sur une référence.
-
-| Élément | Détail |
-|---|---|
-| **URL** | `POST {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/add` |
-| **Status succès** | `200 OK` |
-
-### 4.6.1 Format du corps
-
-Le corps est wrappé dans `"timeLog"` :
-
-```json
-{
-  "timeLog": {
-    "StartTime": "…",
-    "UserId": { "…": "…" }
-  }
-}
-```
-
-### 4.6.2 Champs obligatoires
-
-| Champ | Format | Détail |
-|---|---|---|
-| `StartTime` | DateTime ISO | Date et heure de début du poinçon |
-| `UserId` | objet | `{"Display": "Nom", "ReferenceId": "{id}", "ModelCode": "User"}` |
-
-> ⚠️ **Attention :** le format du `UserId` dans les poinçons (`{Display, ReferenceId, ModelCode:"User"}`) est **différent** du `AssignedToId` des activités (`{UserId, Display}`). Ne les mélangez pas.
-
-### 4.6.3 Champs optionnels
-
-| Champ | Type | Description |
-|---|---|---|
-| `EndTime` | DateTime ISO | Date/heure de fin |
-| `LogDate` | DateTime ISO | Date du poinçon |
-| `Description` | string | Description textuelle |
-
-### 4.6.4 Corps canonique
-
-```json
-{
-  "timeLog": {
-    "StartTime": "2026-06-20T08:00:00",
-    "EndTime": "2026-06-20T12:00:00",
-    "UserId": {
-      "Display": "Jean Tremblay",
-      "ReferenceId": "{user-guid}",
-      "ModelCode": "User"
-    },
-    "Description": "Inspection initiale"
-  }
-}
-```
-
-### 4.6.5 Exemple cURL
-
-```bash
-curl -X POST "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/add" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "timeLog": {
-      "StartTime": "2026-06-20T08:00:00",
-      "UserId": {
-        "Display": "Jean Tremblay",
-        "ReferenceId": "{user-guid}",
-        "ModelCode": "User"
-      }
-    }
-  }'
-```
-
-### 4.6.6 Réponse
-
-```json
-{
-  "timeLog": {
-    "TimeLogId": "{nouvel-id}",
-    "StartTime": "2026-06-20T08:00:00",
-    "EndTime": null,
-    "UserId": { "…": "…" }
-  }
-}
-```
-
----
-
-## 4.9 Modifier un poinçon — `PUT …/timelogs`
-
-Modifie une entrée de temps existante.
-
-| Élément | Détail |
-|---|---|
-| **URL** | `PUT {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs` |
-| **Status succès** | `200 OK` |
-
-### 4.7.1 Corps de requête
-
-Le `TimeLogId` est **obligatoire** dans le corps. Les autres champs sont facultatifs.
-
-```json
-{
-  "timeLog": {
-    "TimeLogId": "{timelogId}",
-    "Description": "Description mise à jour",
-    "EndTime": "2026-06-20T17:00:00"
-  }
-}
-```
-
-**Restrictions :**
-- On ne peut **pas** changer de référence (`refId`).
-- On ne peut **pas** modifier le `LogDate`.
-- Si `StartTime` ou `UserId` sont `null` → ils sont **ignorés** (aucune modification).
-
-### 4.7.2 Exemple cURL
-
-```bash
-curl -X PUT "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}" \
-  -H "Content-Type: application/json" \
-  -d '{
-    "timeLog": {
-      "TimeLogId": "{timelogId}",
-      "EndTime": "2026-06-20T17:00:00"
-    }
-  }'
-```
-
-### 4.7.3 Réponse
-
-```json
-{
-  "timeLog": {
-    "TimeLogId": "{timelogId}",
-    "StartTime": "2026-06-20T08:00:00",
-    "EndTime": "2026-06-20T17:00:00",
-    "…": "…"
-  }
-}
-```
-
----
-
-## 4.10 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`
-
-Supprime définitivement une entrée de temps.
-
-| Élément | Détail |
-|---|---|
-| **URL** | `DELETE {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/{timelogId}` |
-| **Status succès** | `204 No Content` |
-| **Status refusé** | `403 Forbidden` (droits insuffisants) |
-
-### 4.8.1 Exemple cURL
-
-```bash
-curl -X DELETE "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/{timelogId}" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}"
-```
-
-### 4.8.2 Réponse
-
-Succès : corps vide, status `204`.
-
----
-
-## 4.11 Démarrer un chrono — `GET …/timelogs/start`
-
-Démarre un chronomètre (TimeLog sans `EndTime`) sur une référence.
-
-| Élément | Détail |
-|---|---|
-| **URL** | `GET {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/start` |
-| **Status succès** | `200 OK` |
-
-### 4.9.1 Comportement
-
-- Crée un TimeLog avec l'heure courante comme `StartTime` et `EndTime = null`.
-- Si un TimeLog **sans EndTime** existe déjà pour cet utilisateur sur cette référence → retourne le TimeLog existant (pas de nouveau).
-
-### 4.9.2 Exemple cURL
-
-```bash
-curl -X GET "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/start" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}"
-```
-
-### 4.9.3 Réponse
-
-```json
-{
-  "timeLog": {
-    "TimeLogId": "{timelogId}",
-    "StartTime": "2026-06-20T14:30:00",
-    "EndTime": null
-  }
-}
-```
-
----
-
-## 4.12 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`
-
-Arrête un chronomètre en cours.
-
-| Élément | Détail |
-|---|---|
-| **URL** | `GET {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/{timelogId}/stop` |
-| **Status succès** | `200 OK` |
-
-### 4.10.1 Comportement
-
-Définit `EndTime` à l'heure courante sur le TimeLog spécifié.
-
-### 4.10.2 Exemple cURL
-
-```bash
-curl -X GET "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/{timelogId}/stop" \
-  -H "Authorization: Bearer {VOTRE_TOKEN}"
-```
-
-### 4.10.3 Réponse
-
-```json
-{
-  "timeLog": {
-    "TimeLogId": "{timelogId}",
-    "StartTime": "2026-06-20T14:30:00",
-    "EndTime": "2026-06-20T16:45:00"
-  }
-}
-```
-
----
-
 ## 4.4 Créer une facture — `POST /api/reference/SalesInvoice`
 
 Crée une facture de vente (SalesInvoice) dans SEIGMA.
@@ -631,7 +238,7 @@ Deux champs sont **strictement requis** sous forme d'objets `ReferenceId`.
 
 ```bash
 curl -X POST "{VOTRE_INSTANCE}/api/reference/SalesInvoice" \
-  -H "Authorization: Bearer *** \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
     "Properties": {
@@ -711,7 +318,7 @@ Trois champs sont **strictement requis**.
 
 ```bash
 curl -X POST "{VOTRE_INSTANCE}/api/reference/Receipt" \
-  -H "Authorization: Bearer *** \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
   -H "Content-Type: application/json" \
   -d '{
     "Properties": {
@@ -739,6 +346,399 @@ curl -X POST "{VOTRE_INSTANCE}/api/reference/Receipt" \
 ```
 
 Le `Display` suit le format `RE-XXXXX` (numéro d'encaissement auto-généré).
+
+---
+
+## 4.6 Créer une activité liée — `POST /api/activity/{referenceId}`
+
+Crée une activité (rendez-vous, tâche, note) attachée à une référence existante.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `POST {VOTRE_INSTANCE}/api/activity/{referenceId}` |
+| **Status succès** | `201 Created` |
+
+> 🚧 **Important :** `POST /api/activity` **sans** `referenceId` retourne `404`. Les activités doivent **obligatoirement** être liées à une référence existante.
+
+### 4.6.1 Format du corps
+
+Le corps est wrappé dans `"activity"` :
+
+```json
+{
+  "activity": {
+    "ActivityTypeId": { "…": "…" },
+    "ActivityFollowUpId": { "…": "…" }
+  }
+}
+```
+
+### 4.6.2 Champs obligatoires
+
+| Champ | Format | Détail |
+|---|---|---|
+| `ActivityTypeId` | `ModelAttributeList` | `{"Display": "Appel", "ReferenceId": "{id}", "ModelCode": "ActivityType"}` |
+| `ActivityFollowUpId` | `ModelAttributeList` | `{"Display": "À faire", "ReferenceId": "{id}", "ModelCode": "ActivityFollowUp"}` |
+
+### 4.6.3 Champs optionnels
+
+| Champ | Type | Description |
+|---|---|---|
+| `Subject` | string | Sujet de l'activité |
+| `StartDate` | DateTime ISO | Date/heure de début |
+| `EndDate` | DateTime ISO | Date/heure de fin |
+| `AssignedToId` | objet | `{"UserId": "{id}", "Display": "Nom"}` |
+| `Notes` | string | Notes textuelles |
+| `Location` | string | Lieu |
+| `ActivityLabelId` | objet | Étiquette |
+| `ContactMethodId` | objet | Méthode de contact |
+| `IsCompleted` | bool | Activité terminée ? |
+| `AllDay` | bool | Toute la journée ? |
+
+### 4.6.4 Corps canonique
+
+```json
+{
+  "activity": {
+    "ActivityTypeId": {
+      "Display": "Appel",
+      "ReferenceId": "{activity-type-id}",
+      "ModelCode": "ActivityType"
+    },
+    "ActivityFollowUpId": {
+      "Display": "À faire",
+      "ReferenceId": "{followup-id}",
+      "ModelCode": "ActivityFollowUp"
+    },
+    "Subject": "Appel de suivi client",
+    "StartDate": "2026-06-22T09:00:00",
+    "Notes": "Vérifier l'état de la commande"
+  }
+}
+```
+
+### 4.6.5 Exemple cURL
+
+```bash
+curl -X POST "{VOTRE_INSTANCE}/api/activity/{referenceId}" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "activity": {
+      "ActivityTypeId": {
+        "Display": "Appel",
+        "ReferenceId": "aaa-bbb-ccc",
+        "ModelCode": "ActivityType"
+      },
+      "ActivityFollowUpId": {
+        "Display": "À faire",
+        "ReferenceId": "ddd-eee-fff",
+        "ModelCode": "ActivityFollowUp"
+      },
+      "Subject": "Appel de suivi"
+    }
+  }'
+```
+
+### 4.6.6 Réponse
+
+```json
+{
+  "activity": {
+    "ActivityId": "nouvel-id-activite",
+    "Subject": "Appel de suivi",
+    "…": "…"
+  }
+}
+```
+
+---
+
+## 4.7 Modifier une activité — `PUT /api/activity/{activityId}`
+
+Modifie une activité existante. Seuls les champs envoyés sont mis à jour.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `PUT {VOTRE_INSTANCE}/api/activity/{activityId}` |
+| **Status succès** | `200 OK` |
+
+### 4.7.1 Corps de requête
+
+Mêmes champs modifiables qu'à la création. Les champs absents sont ignorés.
+
+```json
+{
+  "activity": {
+    "Subject": "Sujet modifié",
+    "IsCompleted": true
+  }
+}
+```
+
+### 4.7.2 Exemple cURL
+
+```bash
+curl -X PUT "{VOTRE_INSTANCE}/api/activity/{activityId}" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "activity": {
+      "IsCompleted": true
+    }
+  }'
+```
+
+### 4.7.3 Réponse
+
+```json
+{
+  "activity": {
+    "ActivityId": "{activityId}",
+    "Subject": "Sujet modifié",
+    "IsCompleted": true,
+    "…": "…"
+  }
+}
+```
+
+---
+
+## 4.8 Ajouter un poinçon — `POST …/timelogs/add`
+
+Ajoute une entrée de temps (poinçon) sur une référence.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `POST {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/add` |
+| **Status succès** | `200 OK` |
+
+### 4.8.1 Format du corps
+
+Le corps est wrappé dans `"timeLog"` :
+
+```json
+{
+  "timeLog": {
+    "StartTime": "…",
+    "UserId": { "…": "…" }
+  }
+}
+```
+
+### 4.8.2 Champs obligatoires
+
+| Champ | Format | Détail |
+|---|---|---|
+| `StartTime` | DateTime ISO | Date et heure de début du poinçon |
+| `UserId` | objet | `{"Display": "Nom", "ReferenceId": "{id}", "ModelCode": "User"}` |
+
+> ⚠️ **Attention :** le format du `UserId` dans les poinçons (`{Display, ReferenceId, ModelCode:"User"}`) est **différent** du `AssignedToId` des activités (`{UserId, Display}`). Ne les mélangez pas.
+
+### 4.8.3 Champs optionnels
+
+| Champ | Type | Description |
+|---|---|---|
+| `EndTime` | DateTime ISO | Date/heure de fin |
+| `LogDate` | DateTime ISO | Date du poinçon |
+| `Description` | string | Description textuelle |
+
+### 4.8.4 Corps canonique
+
+```json
+{
+  "timeLog": {
+    "StartTime": "2026-06-20T08:00:00",
+    "EndTime": "2026-06-20T12:00:00",
+    "UserId": {
+      "Display": "Jean Tremblay",
+      "ReferenceId": "{user-guid}",
+      "ModelCode": "User"
+    },
+    "Description": "Inspection initiale"
+  }
+}
+```
+
+### 4.8.5 Exemple cURL
+
+```bash
+curl -X POST "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/add" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "timeLog": {
+      "StartTime": "2026-06-20T08:00:00",
+      "UserId": {
+        "Display": "Jean Tremblay",
+        "ReferenceId": "{user-guid}",
+        "ModelCode": "User"
+      }
+    }
+  }'
+```
+
+### 4.8.6 Réponse
+
+```json
+{
+  "timeLog": {
+    "TimeLogId": "{nouvel-id}",
+    "StartTime": "2026-06-20T08:00:00",
+    "EndTime": null,
+    "UserId": { "…": "…" }
+  }
+}
+```
+
+---
+
+## 4.9 Modifier un poinçon — `PUT …/timelogs`
+
+Modifie une entrée de temps existante.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `PUT {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs` |
+| **Status succès** | `200 OK` |
+
+### 4.9.1 Corps de requête
+
+Le `TimeLogId` est **obligatoire** dans le corps. Les autres champs sont facultatifs.
+
+```json
+{
+  "timeLog": {
+    "TimeLogId": "{timelogId}",
+    "Description": "Description mise à jour",
+    "EndTime": "2026-06-20T17:00:00"
+  }
+}
+```
+
+**Restrictions :**
+- On ne peut **pas** changer de référence (`refId`).
+- On ne peut **pas** modifier le `LogDate`.
+- Si `StartTime` ou `UserId` sont `null` → ils sont **ignorés** (aucune modification).
+
+### 4.9.2 Exemple cURL
+
+```bash
+curl -X PUT "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "timeLog": {
+      "TimeLogId": "{timelogId}",
+      "EndTime": "2026-06-20T17:00:00"
+    }
+  }'
+```
+
+### 4.9.3 Réponse
+
+```json
+{
+  "timeLog": {
+    "TimeLogId": "{timelogId}",
+    "StartTime": "2026-06-20T08:00:00",
+    "EndTime": "2026-06-20T17:00:00",
+    "…": "…"
+  }
+}
+```
+
+---
+
+## 4.10 Supprimer un poinçon — `DELETE …/timelogs/{timelogId}`
+
+Supprime définitivement une entrée de temps.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `DELETE {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/{timelogId}` |
+| **Status succès** | `204 No Content` |
+| **Status refusé** | `403 Forbidden` (droits insuffisants) |
+
+### 4.10.1 Exemple cURL
+
+```bash
+curl -X DELETE "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/{timelogId}" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}"
+```
+
+### 4.10.2 Réponse
+
+Succès : corps vide, status `204`.
+
+---
+
+## 4.11 Démarrer un chrono — `GET …/timelogs/start`
+
+Démarre un chronomètre (TimeLog sans `EndTime`) sur une référence.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `GET {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/start` |
+| **Status succès** | `200 OK` |
+
+### 4.11.1 Comportement
+
+- Crée un TimeLog avec l'heure courante comme `StartTime` et `EndTime = null`.
+- Si un TimeLog **sans EndTime** existe déjà pour cet utilisateur sur cette référence → retourne le TimeLog existant (pas de nouveau).
+
+### 4.11.2 Exemple cURL
+
+```bash
+curl -X GET "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/start" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}"
+```
+
+### 4.11.3 Réponse
+
+```json
+{
+  "timeLog": {
+    "TimeLogId": "{timelogId}",
+    "StartTime": "2026-06-20T14:30:00",
+    "EndTime": null
+  }
+}
+```
+
+---
+
+## 4.12 Arrêter un chrono — `GET …/timelogs/{timelogId}/stop`
+
+Arrête un chronomètre en cours.
+
+| Élément | Détail |
+|---|---|
+| **URL** | `GET {VOTRE_INSTANCE}/api/reference/{ModelCode}/{refId}/timelogs/{timelogId}/stop` |
+| **Status succès** | `200 OK` |
+
+### 4.12.1 Comportement
+
+Définit `EndTime` à l'heure courante sur le TimeLog spécifié.
+
+### 4.12.2 Exemple cURL
+
+```bash
+curl -X GET "{VOTRE_INSTANCE}/api/reference/SalesOrder/{refId}/timelogs/{timelogId}/stop" \
+  -H "Authorization: Bearer {VOTRE_TOKEN}"
+```
+
+### 4.12.3 Réponse
+
+```json
+{
+  "timeLog": {
+    "TimeLogId": "{timelogId}",
+    "StartTime": "2026-06-20T14:30:00",
+    "EndTime": "2026-06-20T16:45:00"
+  }
+}
+```
 
 ---
 

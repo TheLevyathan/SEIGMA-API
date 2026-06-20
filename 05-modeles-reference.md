@@ -1025,7 +1025,7 @@ Relations transitives : Receipt ──→ SalesInvoice ──→ SalesOrder
 
 ---
 
-> **Chapitre précédent** : [04 — Authentification et sécurité](04-authentification.md) *(si applicable)*
+> **Chapitre précédent** : [04 — Opérations d'écriture](04-operations-ecriture.md)
 >
 > **Chapitre 2** : [Référence API SEIGMA](02-reference-api.md) — Détail des endpoints GET/search, format des requêtes, pagination et opérateurs.
 >

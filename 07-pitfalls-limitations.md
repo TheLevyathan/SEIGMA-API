@@ -122,7 +122,7 @@ Tous les 21 produits ont `Price: 0.0` dans leur définition. Le prix réel est d
 
 ## Pièges d'opérateur
 
-### 12. Operator vs OperatorCode — comportement incohérent
+### 13. Operator vs OperatorCode — comportement incohérent
 
 | Champ | Operator | OperatorCode |
 |-------|----------|-------------|
@@ -132,13 +132,13 @@ Tous les 21 produits ont `Price: 0.0` dans leur définition. Le prix réel est d
 
 **Règle** : Essayer `Operator` d'abord. Si 0 résultat, essayer `OperatorCode`.
 
-### 12bis. Contains / StartsWith / EndsWith → HTTP 500 (crash serveur)
+### 14. Contains / StartsWith / EndsWith → HTTP 500 (crash serveur)
 
 Les opérateurs `Contains`, `StartsWith` et `EndsWith` retournent **HTTP 500 Internal Server Error** sur certains champs (notamment `SalesOrderStatusId`). Le serveur crash au lieu de retourner des résultats.
 
 **Workaround** : Utiliser exclusivement l'opérateur `"="` pour les filtres sur ces attributs problématiques.
 
-### 13. Recherche par numéro de WO — utiliser Number, pas Display
+### 15. Recherche par numéro de WO — utiliser Number, pas Display
 
 ```json
 // ✅ Fiable
@@ -155,13 +155,13 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 
 ## Pièges de performance
 
-### 14. Timeout O(n²) sur grosses requêtes
+### 16. Timeout O(n²) sur grosses requêtes
 
 - **Limite safe** : 200 résultats par requête
 - **Au-delà** : timeout exponentiel, échecs de connexion
 - **Solution** : pagination avec chunks ≤ 200
 
-### 15. Rate limiting à >50 requêtes parallèles
+### 17. Rate limiting à >50 requêtes parallèles
 
 - **Max safe** : 50 requêtes concurrentes
 - **Au-delà** : rate limiting agressif, bannissement temporaire
@@ -171,7 +171,7 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 
 ## Pièges de body
 
-### 16. Body canonique obligatoire pour certains search
+### 18. Body canonique obligatoire pour certains search
 
 ```json
 // ✅ CORRECT — body complet
@@ -183,7 +183,7 @@ La valeur est le numéro **SANS le préfixe** (ex: `"713"` pour WO-00713).
 // → 500 sur SalesOrderLine et endpoints non testés
 ```
 
-### 17. Wrapper Properties/Attributes pour l'écriture
+### 19. Wrapper Properties/Attributes pour l'écriture
 
 ```json
 // ✅ CORRECT — création SalesOrder
