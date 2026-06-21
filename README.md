@@ -12,6 +12,7 @@ Générée automatiquement par introspection des endpoints réels.
 | `seigma-swagger.html` | **Swagger UI interactif** — tester l'API en direct (autonome, YAML intégré) |
 | `seigma-api-reference.html` | Redoc — documentation navigable (recherche, navigation par modèle) |
 | `seigma-openapi.yaml` | Spécification OpenAPI 3.1 brute — pour import dans Postman, Insomnia, etc. |
+| `seigma-api-reference.pdf` | Export PDF (411 pages) — consultation hors ligne, archivage |
 
 ## Utilisation rapide
 
