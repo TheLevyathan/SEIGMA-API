@@ -6,9 +6,9 @@ info:
 
     Généré automatiquement le 2026-06-20.
 
-    107 modèles documentés avec schémas complets, 47 sans données [0-données], 15 indisponibles [500].
+    107 modèles documentés avec schémas complets, 47 sans données [sans données], 15 indisponibles [500].
 
-    Les modèles marqués [0-données] n''ont pas d''enregistrements dans l''instance de référence.
+    Les modèles marqués [sans données] n''ont pas de données.
 
     Les modèles marqués [indisponible] retournent HTTP 500 (bug serveur).
 
@@ -37995,223 +37995,223 @@ tags:
 - name: Authentification
   description: Authentification et jetons JWT
 - name: Action
-  description: Modèle Action [ok] — 36 enregistrements
+  description: Modèle Action
 - name: Activity
   description: Endpoints de gestion des activités
 - name: ActivityAnswer
-  description: Modèle ActivityAnswer [ok] — 3 enregistrements
+  description: Modèle ActivityAnswer
 - name: ActivityCategory
-  description: Modèle ActivityCategory [ok] — 1 enregistrements
+  description: Modèle ActivityCategory
 - name: ActivityCycle
-  description: Modèle ActivityCycle [ok] — 2 enregistrements
+  description: Modèle ActivityCycle
 - name: ActivityFollowUp
-  description: Modèle ActivityFollowUp [ok] — 3 enregistrements
+  description: Modèle ActivityFollowUp
 - name: ActivityLabel
-  description: Modèle ActivityLabel [ok] — 15 enregistrements
+  description: Modèle ActivityLabel
 - name: ActivityTimeSpan
-  description: Modèle ActivityTimeSpan [ok] — 5 enregistrements
+  description: Modèle ActivityTimeSpan
 - name: ActivityType
-  description: Modèle ActivityType [ok] — 11 enregistrements
+  description: Modèle ActivityType
 - name: Affiliate
-  description: Modèle Affiliate [ok] — 11 enregistrements
+  description: Modèle Affiliate
 - name: AffiliateClass
-  description: Modèle AffiliateClass [ok] — 3 enregistrements
+  description: Modèle AffiliateClass
 - name: Alert
-  description: Modèle Alert [ok] — 1 enregistrements
+  description: Modèle Alert
 - name: AlertType
-  description: Modèle AlertType [ok] — 5 enregistrements
+  description: Modèle AlertType
 - name: Annex
-  description: Modèle Annex [ok] — 1 enregistrements
+  description: Modèle Annex
 - name: AnnexStatus
-  description: Modèle AnnexStatus [ok] — 7 enregistrements
+  description: Modèle AnnexStatus
 - name: AnnexType
-  description: Modèle AnnexType [ok] — 1 enregistrements
+  description: Modèle AnnexType
 - name: BankAccount
-  description: Modèle BankAccount [ok] — 1 enregistrements
+  description: Modèle BankAccount
 - name: Call
-  description: Modèle Call [ok] — 96 enregistrements
+  description: Modèle Call
 - name: CallStatus
-  description: Modèle CallStatus [ok] — 6 enregistrements
+  description: Modèle CallStatus
 - name: CallType
-  description: Modèle CallType [ok] — 4 enregistrements
+  description: Modèle CallType
 - name: Company
-  description: Modèle Company [ok] — 1 enregistrements
+  description: Modèle Company
 - name: ContactMethod
-  description: Modèle ContactMethod [ok] — 3 enregistrements
+  description: Modèle ContactMethod
 - name: Country
-  description: Modèle Country [ok] — 2 enregistrements
+  description: Modèle Country
 - name: CountryState
-  description: Modèle CountryState [ok] — 63 enregistrements
+  description: Modèle CountryState
 - name: CreditCardType
-  description: Modèle CreditCardType [ok] — 2 enregistrements
+  description: Modèle CreditCardType
 - name: Currency
-  description: Modèle Currency [ok] — 3 enregistrements
+  description: Modèle Currency
 - name: Customer
-  description: Modèle Customer [ok] — 3845 enregistrements
+  description: Modèle Customer
 - name: CustomerAddress
-  description: Modèle CustomerAddress [ok] — 431 enregistrements
+  description: Modèle CustomerAddress
 - name: CustomerClass
-  description: Modèle CustomerClass [ok] — 1 enregistrements
+  description: Modèle CustomerClass
 - name: CustomerContact
-  description: Modèle CustomerContact [ok] — 441 enregistrements
+  description: Modèle CustomerContact
 - name: Difficulty
-  description: Modèle Difficulty [ok] — 3 enregistrements
+  description: Modèle Difficulty
 - name: Division
-  description: Modèle Division [ok] — 1 enregistrements
+  description: Modèle Division
 - name: Equipment
-  description: Modèle Equipment [ok] — 2 enregistrements
+  description: Modèle Equipment
 - name: EquipmentStatus
-  description: Modèle EquipmentStatus [ok] — 6 enregistrements
+  description: Modèle EquipmentStatus
 - name: Form
-  description: Modèle Form [ok] — 1 enregistrements
+  description: Modèle Form
 - name: Group
-  description: Modèle Group [ok] — 9 enregistrements
+  description: Modèle Group
 - name: InventoryLogType
-  description: Modèle InventoryLogType [ok] — 4 enregistrements
+  description: Modèle InventoryLogType
 - name: InventoryMoveStatus
-  description: Modèle InventoryMoveStatus [ok] — 3 enregistrements
+  description: Modèle InventoryMoveStatus
 - name: InventoryStockStatus
-  description: Modèle InventoryStockStatus [ok] — 5 enregistrements
+  description: Modèle InventoryStockStatus
 - name: LaborCost
-  description: Modèle LaborCost [ok] — 1 enregistrements
+  description: Modèle LaborCost
 - name: Language
-  description: Modèle Language [ok] — 2 enregistrements
+  description: Modèle Language
 - name: Lead
-  description: Modèle Lead [ok] — 593 enregistrements
+  description: Modèle Lead
 - name: LeadCycle
-  description: Modèle LeadCycle [ok] — 1 enregistrements
+  description: Modèle LeadCycle
 - name: LeadPipeline
-  description: Modèle LeadPipeline [ok] — 1 enregistrements
+  description: Modèle LeadPipeline
 - name: LeadSource
-  description: Modèle LeadSource [ok] — 7 enregistrements
+  description: Modèle LeadSource
 - name: LeadStatus
-  description: Modèle LeadStatus [ok] — 6 enregistrements
+  description: Modèle LeadStatus
 - name: MailMessageTemplate
-  description: Modèle MailMessageTemplate [ok] — 13 enregistrements
+  description: Modèle MailMessageTemplate
 - name: MailSender
-  description: Modèle MailSender [ok] — 2 enregistrements
+  description: Modèle MailSender
 - name: ModelGroupTemplate
-  description: Modèle ModelGroupTemplate [ok] — 1 enregistrements
+  description: Modèle ModelGroupTemplate
 - name: Operator
-  description: Modèle Operator [ok] — 8 enregistrements
+  description: Modèle Operator
 - name: Page
-  description: Modèle Page [ok] — 4 enregistrements
+  description: Modèle Page
 - name: PaymentMethod
-  description: Modèle PaymentMethod [ok] — 6 enregistrements
+  description: Modèle PaymentMethod
 - name: PaymentStatus
-  description: Modèle PaymentStatus [ok] — 3 enregistrements
+  description: Modèle PaymentStatus
 - name: PaymentTerm
-  description: Modèle PaymentTerm [ok] — 4 enregistrements
+  description: Modèle PaymentTerm
 - name: PaymentTransaction
-  description: Modèle PaymentTransaction [ok] — 16 enregistrements
+  description: Modèle PaymentTransaction
 - name: PaymentTransactionStatus
-  description: Modèle PaymentTransactionStatus [ok] — 3 enregistrements
+  description: Modèle PaymentTransactionStatus
 - name: PrintLocation
-  description: Modèle PrintLocation [ok] — 2 enregistrements
+  description: Modèle PrintLocation
 - name: Priority
-  description: Modèle Priority [ok] — 3 enregistrements
+  description: Modèle Priority
 - name: Product
-  description: Modèle Product [ok] — 21 enregistrements
+  description: Modèle Product
 - name: ProductCategory
-  description: Modèle ProductCategory [ok] — 5 enregistrements
+  description: Modèle ProductCategory
 - name: ProductType
-  description: Modèle ProductType [ok] — 3 enregistrements
+  description: Modèle ProductType
 - name: Project
-  description: Modèle Project [ok] — 1 enregistrements
+  description: Modèle Project
 - name: ProjectStatus
-  description: Modèle ProjectStatus [ok] — 6 enregistrements
+  description: Modèle ProjectStatus
 - name: ProjectTemplate
-  description: Modèle ProjectTemplate [ok] — 1 enregistrements
+  description: Modèle ProjectTemplate
 - name: PurchaseInvoiceStatus
-  description: Modèle PurchaseInvoiceStatus [ok] — 5 enregistrements
+  description: Modèle PurchaseInvoiceStatus
 - name: PurchaseOrderStatus
-  description: Modèle PurchaseOrderStatus [ok] — 6 enregistrements
+  description: Modèle PurchaseOrderStatus
 - name: PurchaseType
-  description: Modèle PurchaseType [ok] — 1 enregistrements
+  description: Modèle PurchaseType
 - name: QuantityLabel
-  description: Modèle QuantityLabel [ok] — 1 enregistrements
+  description: Modèle QuantityLabel
 - name: Question
-  description: Modèle Question [ok] — 12 enregistrements
+  description: Modèle Question
 - name: QuestionType
-  description: Modèle QuestionType [ok] — 8 enregistrements
+  description: Modèle QuestionType
 - name: Quotation
-  description: Modèle Quotation [ok] — 1955 enregistrements
+  description: Modèle Quotation
 - name: QuotationCycle
-  description: Modèle QuotationCycle [ok] — 1 enregistrements
+  description: Modèle QuotationCycle
 - name: QuotationStatus
-  description: Modèle QuotationStatus [ok] — 8 enregistrements
+  description: Modèle QuotationStatus
 - name: QuotationStatusReason
-  description: Modèle QuotationStatusReason [ok] — 26 enregistrements
+  description: Modèle QuotationStatusReason
 - name: Receipt
-  description: Modèle Receipt [ok] — 968 enregistrements
+  description: Modèle Receipt
 - name: ReceiptStatus
-  description: Modèle ReceiptStatus [ok] — 5 enregistrements
+  description: Modèle ReceiptStatus
 - name: ReceivingStatus
-  description: Modèle ReceivingStatus [ok] — 6 enregistrements
+  description: Modèle ReceivingStatus
 - name: SalesAccountingMapping
-  description: Modèle SalesAccountingMapping [ok] — 24 enregistrements
+  description: Modèle SalesAccountingMapping
 - name: SalesInvoice
-  description: Modèle SalesInvoice [ok] — 1021 enregistrements
+  description: Modèle SalesInvoice
 - name: SalesInvoiceStatus
-  description: Modèle SalesInvoiceStatus [ok] — 5 enregistrements
+  description: Modèle SalesInvoiceStatus
 - name: SalesInvoiceStatusReason
-  description: Modèle SalesInvoiceStatusReason [ok] — 2 enregistrements
+  description: Modèle SalesInvoiceStatusReason
 - name: SalesOrder
-  description: Modèle SalesOrder [ok] — 1954 enregistrements
+  description: Modèle SalesOrder
 - name: SalesOrderCustomList1
-  description: Modèle SalesOrderCustomList1 [ok] — 2 enregistrements
+  description: Modèle SalesOrderCustomList1
 - name: SalesOrderCycle
-  description: Modèle SalesOrderCycle [ok] — 1 enregistrements
+  description: Modèle SalesOrderCycle
 - name: SalesOrderStatus
-  description: Modèle SalesOrderStatus [ok] — 7 enregistrements
+  description: Modèle SalesOrderStatus
 - name: SalesOrderStatusReason
-  description: Modèle SalesOrderStatusReason [ok] — 23 enregistrements
+  description: Modèle SalesOrderStatusReason
 - name: SalesType
-  description: Modèle SalesType [ok] — 6 enregistrements
+  description: Modèle SalesType
 - name: SalesWorkflow
-  description: Modèle SalesWorkflow [ok] — 2 enregistrements
+  description: Modèle SalesWorkflow
 - name: ShippingStatus
-  description: Modèle ShippingStatus [ok] — 6 enregistrements
+  description: Modèle ShippingStatus
 - name: ShippingType
-  description: Modèle ShippingType [ok] — 3 enregistrements
+  description: Modèle ShippingType
 - name: SubscriptionMode
-  description: Modèle SubscriptionMode [ok] — 5 enregistrements
+  description: Modèle SubscriptionMode
 - name: SubscriptionPrintMode
-  description: Modèle SubscriptionPrintMode [ok] — 3 enregistrements
+  description: Modèle SubscriptionPrintMode
 - name: SubscriptionRenewal
-  description: Modèle SubscriptionRenewal [ok] — 2 enregistrements
+  description: Modèle SubscriptionRenewal
 - name: TaxCode
-  description: Modèle TaxCode [ok] — 3 enregistrements
+  description: Modèle TaxCode
 - name: Territory
-  description: Modèle Territory [ok] — 17 enregistrements
+  description: Modèle Territory
 - name: TextMessageTemplate
-  description: Modèle TextMessageTemplate [ok] — 2 enregistrements
+  description: Modèle TextMessageTemplate
 - name: Timelog
   description: Endpoints de gestion des poinçons (timelogs)
 - name: TimeLogLabel
-  description: Modèle TimeLogLabel [ok] — 1 enregistrements
+  description: Modèle TimeLogLabel
 - name: TimeLogMode
-  description: Modèle TimeLogMode [ok] — 3 enregistrements
+  description: Modèle TimeLogMode
 - name: TimeLogType
-  description: Modèle TimeLogType [ok] — 2 enregistrements
+  description: Modèle TimeLogType
 - name: TimeUnit
-  description: Modèle TimeUnit [ok] — 4 enregistrements
+  description: Modèle TimeUnit
 - name: Trigger
-  description: Modèle Trigger [ok] — 22 enregistrements
+  description: Modèle Trigger
 - name: TriggerAction
-  description: Modèle TriggerAction [ok] — 26 enregistrements
+  description: Modèle TriggerAction
 - name: TriggerCondition
-  description: Modèle TriggerCondition [ok] — 28 enregistrements
+  description: Modèle TriggerCondition
 - name: TriggerType
-  description: Modèle TriggerType [ok] — 2 enregistrements
+  description: Modèle TriggerType
 - name: ValidationType
-  description: Modèle ValidationType [ok] — 3 enregistrements
+  description: Modèle ValidationType
 - name: Warehouse
-  description: Modèle Warehouse [ok] — 1 enregistrements
+  description: Modèle Warehouse
 - name: Warranty
-  description: Modèle Warranty [ok] — 2 enregistrements
+  description: Modèle Warranty
 - name: WarrantyStatus
-  description: Modèle WarrantyStatus [ok] — 2 enregistrements
+  description: Modèle WarrantyStatus
 - name: Carrier
   description: Modèle Carrier [0 enregistrements]
 - name: Color
