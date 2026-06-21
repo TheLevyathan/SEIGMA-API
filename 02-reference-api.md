@@ -10,12 +10,13 @@
 1. [Aperçu général](#aperçu-général)
 2. [GET /api/reference/{ModelCode}/{ReferenceId}](#get-apireferencemodelcodereferenceid)
 3. [POST /api/reference/{ModelCode}/search](#post-apireferencemodelcodesearch)
-4. [ModelCodes connus](#modelcodes-connus)
-5. [Types d'attributs](#types-dattributs)
-6. [Pièges et limitations (Pitfalls)](#pièges-et-limitations-pitfalls)
-7. [Endpoints cassés](#endpoints-cassés)
-8. [Codes d'erreur](#codes-derreur)
-9. [Exemples multi-langages](#exemples-multi-langages)
+4. [Paramètre SelectAttributes](#paramètre-selectattributes)
+5. [ModelCodes connus](#modelcodes-connus)
+6. [Types d'attributs](#types-dattributs)
+7. [Pièges et limitations (Pitfalls)](#pièges-et-limitations-pitfalls)
+8. [Endpoints cassés](#endpoints-cassés)
+9. [Codes d'erreur](#codes-derreur)
+10. [Exemples multi-langages](#exemples-multi-langages)
 
 ---
 
@@ -308,6 +309,103 @@ Pour les attributs de **type liste** (MultiSelect, MultiUser, etc.). Permet de f
 | `401 Unauthorized` | Authentification requise |
 | `403 Forbidden` | Accès non autorisé à ce modèle |
 | `500 Internal Server Error` | Erreur serveur |
+
+---
+
+## Paramètre SelectAttributes
+
+> 🚧 **Comportement variable** : Le paramètre `SelectAttributes` a été testé sur `Customer/search` et n'a **pas** filtré les champs retournés (16 champs retournés avec ou sans). Il est possible qu'il fonctionne sur d'autres modèles ou avec une configuration spécifique. À valider avec votre instance.
+
+Le paramètre `SelectAttributes` permet théoriquement de spécifier quels attributs doivent être retournés dans la réponse.
+
+Le paramètre `SelectAttributes` permet de spécifier quels attributs doivent être retournés dans chaque référence de la réponse `search`. Sans ce paramètre, le `search` retourne un sous-ensemble fixe d'attributs par défaut.
+
+### Format
+
+```json
+POST /api/reference/{ModelCode}/search
+{
+  "Offset": 0,
+  "Limit": 10,
+  "IsSelector": false,
+  "ModelListId": null,
+  "CurrentReferenceId": null,
+  "WhereCondition": [],
+  "WhereOrCondition": [],
+  "WhereInCondition": [],
+  "OrderByCondition": [],
+  "SelectAttributes": ["Number", "CustomerId", "DateCreated"]
+}
+```
+
+### Paramètre
+
+| Paramètre | Type | Requis | Description |
+|-----------|------|--------|-------------|
+| `SelectAttributes` | `array` de `string` | Non | Liste des codes d'attributs à inclure dans chaque référence retournée |
+
+### Effet
+
+- **Filtrage** : Seuls les champs listés dans `SelectAttributes` sont retournés dans les objets du tableau `references[]`
+- **Performance** : Réduit la quantité de données transmises, ce qui améliore les temps de réponse
+- **Lisibilité** : Évite le bruit des champs inutiles dans les intégrations
+
+### Exemple cURL — Customer/search avec sélection d'attributs
+
+```bash
+curl -X POST \
+  "https://{VOTRE_INSTANCE}.seigma.app/api/reference/Customer/search" \
+  -H "Authorization: Bearer ***" \
+  -H "Content-Type: application/json" \
+  -H "Accept: application/json" \
+  -d '{
+    "Offset": 0,
+    "Limit": 5,
+    "IsSelector": false,
+    "ModelListId": null,
+    "CurrentReferenceId": null,
+    "WhereCondition": [],
+    "WhereOrCondition": [],
+    "WhereInCondition": [],
+    "OrderByCondition": [],
+    "SelectAttributes": ["Number", "Name", "Email"]
+  }'
+```
+
+### Réponse avec SelectAttributes
+
+```json
+{
+  "metadata": {
+    "count": 5,
+    "totalCount": 3839,
+    "offset": 0,
+    "limit": 5
+  },
+  "references": [
+    {
+      "ReferenceId": 12345,
+      "ModelCode": "Customer",
+      "Display": "ACME Corp",
+      "Number": "CUST-001",
+      "Name": "ACME Corp",
+      "Email": "contact@acme.com"
+    },
+    {
+      "ReferenceId": 12346,
+      "ModelCode": "Customer",
+      "Display": "Globex Inc",
+      "Number": "CUST-002",
+      "Name": "Globex Inc",
+      "Email": "info@globex.com"
+    }
+  ]
+}
+```
+
+> 💡 **Bon à savoir** : Sans `SelectAttributes`, le `search` retourne un sous-ensemble d'attributs par défaut (généralement 14 champs). Avec `SelectAttributes`, seuls les champs demandés sont retournés, ce qui est utile pour les intégrations où seules quelques colonnes sont nécessaires.
+
+> ⚠️ **Limitation** : Le paramètre `SelectAttributes` est **ignoré** sur certains modèles (`Receipt`, `SalesInvoice`). Sur ces modèles, les 14 champs par défaut sont toujours retournés, sans filtrage. Voir le [Chapitre 7 — Pitfall #9](07-pitfalls-limitations.md#9-selectattributes-ignoré-sur-receiptsearch-et-salesinvoicesearch) pour la liste complète des modèles affectés.
 
 ---
 

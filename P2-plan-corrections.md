@@ -1,7 +1,7 @@
 # P2 — Corrections structurelles
 
 Plan sauvegardé le 2026-06-20.
-**À exécuter après que Levy a créé des enregistrements pour les 47 modèles vides.**
+**À exécuter après que l'administrateur a créé des enregistrements pour les 47 modèles vides.**
 
 ---
 
@@ -70,7 +70,7 @@ Renommer :
 
 ## Procédure de reprise
 
-1. Lévy crée les 47 enregistrements
+1. Créer les 47 enregistrements
 2. Relancer `collect_seigma_schemas.py` pour obtenir les schémas
 3. Exécuter P2-3 + P2-5 + P2-6 + P2-7
 4. Régénérer Swagger + Redoc + PDF
