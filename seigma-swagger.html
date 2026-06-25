@@ -40,8 +40,17 @@
     <input id="seigma-password" type="password" placeholder="••••" size="16">
     <button id="seigma-login-btn">Connexion</button>
     <span id="login-status"></span>
+    <span id="guid-display" style="display:none; margin-left:10px; color:#49cc90; font-family:monospace; font-size:12px;">
+      GUID: <code id="guid-value" style="background:#2a2a2a; padding:2px 6px; border-radius:3px;"></code>
+      <button id="guid-copy-btn" style="padding:2px 8px; font-size:11px; background:#444; color:#fff; border:1px solid #666; border-radius:3px; cursor:pointer;">📋 Copier</button>
+    </span>
   </div>
   <div id="swagger-ui"></div>
+  <div id="guid-footer" style="position:fixed; bottom:0; left:0; right:0; background:#1b1b1b; border-top:2px solid #49cc90; padding:8px 20px; display:flex; align-items:center; gap:10px; z-index:200; font-family:sans-serif; font-size:13px;">
+    <label style="color:#ccc;">GUID entreprise (manuel) :</label>
+    <input id="guid-manual" placeholder="Coller le GUID ici — auto-fill tous les endpoints" size="40" style="padding:6px 8px; border:1px solid #444; border-radius:4px; background:#2a2a2a; color:#fff; font-size:13px; font-family:monospace; flex:1;">
+    <span id="guid-manual-status" style="color:#666; font-size:11px;"></span>
+  </div>
   <script type="application/yaml" id="seigma-spec">
 openapi: 3.1.0
 info:
@@ -82433,12 +82442,22 @@ tags:
           ui.specActions.updateUrl('https://' + instance + '.seigma.app/api');
           // Stocker le companyId pour le header seigma-company
           window.__seigmaCompany = companyId;
+          // Afficher le GUID avec bouton copie
+          var guidDisplay = document.getElementById('guid-display');
+          var guidValue = document.getElementById('guid-value');
+          guidValue.textContent = companyId;
+          guidDisplay.style.display = 'inline';
+          // Remplir aussi le champ manuel
+          document.getElementById('guid-manual').value = companyId;
+          document.getElementById('guid-manual-status').textContent = '✓ Auto-rempli';
+          document.getElementById('guid-manual-status').style.color = '#49cc90';
           status.textContent = 'Connecté — Token valide 7 jours';
           status.className = '';
           // Ajouter interceptor pour header seigma-company
           ui.getConfigs().requestInterceptor = function(req) {
-            if (window.__seigmaCompany) {
-              req.headers['seigma-company'] = window.__seigmaCompany;
+            var cid = window.__seigmaCompany;
+            if (cid) {
+              req.headers['seigma-company'] = cid;
             }
             return req;
           };
@@ -82448,6 +82467,27 @@ tags:
           status.className = 'error';
         });
       }
+      // Bouton copier GUID
+      document.getElementById('guid-copy-btn').addEventListener('click', function() {
+        var guid = document.getElementById('guid-value').textContent;
+        navigator.clipboard.writeText(guid).then(function() {
+          var btn = document.getElementById('guid-copy-btn');
+          btn.textContent = '✓ Copié!';
+          setTimeout(function() { btn.textContent = '📋 Copier'; }, 2000);
+        });
+      });
+      // Champ GUID manuel — auto-fill dès qu'on colle/tape
+      document.getElementById('guid-manual').addEventListener('input', function() {
+        var val = this.value.trim();
+        if (val.length >= 32) {
+          window.__seigmaCompany = val;
+          document.getElementById('guid-manual-status').textContent = '✓ Actif — injecté dans toutes les requêtes';
+          document.getElementById('guid-manual-status').style.color = '#49cc90';
+        } else {
+          document.getElementById('guid-manual-status').textContent = val.length > 0 ? 'GUID trop court...' : '';
+          document.getElementById('guid-manual-status').style.color = '#666';
+        }
+      });
       document.getElementById('seigma-login-btn').addEventListener('click', doLogin);
       document.getElementById('seigma-password').addEventListener('keypress', function(e) {
         if (e.key === 'Enter') doLogin();
