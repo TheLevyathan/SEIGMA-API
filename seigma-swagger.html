@@ -82404,7 +82404,13 @@ tags:
         defaultModelsExpandDepth: 0,
         docExpansion: 'list',
         filter: true,
-        tryItOutEnabled: true
+        tryItOutEnabled: true,
+        requestInterceptor: function(req) {
+          if (window.__seigmaCompany) {
+            req.headers['seigma-company'] = window.__seigmaCompany;
+          }
+          return req;
+        }
       });
 
       function doLogin() {
@@ -82449,16 +82455,11 @@ tags:
           .then(function(r) { return r.json(); })
           .then(function(companyData) {
             var companies = companyData.references || [];
-            // Toujours mettre à jour l'interceptor
             function setCompanyGuid(guid) {
               window.__seigmaCompany = guid;
               document.getElementById('guid-manual').value = guid;
               document.getElementById('guid-manual-status').textContent = '✓ Actif — injecté dans toutes les requêtes';
               document.getElementById('guid-manual-status').style.color = '#49cc90';
-              ui.getConfigs().requestInterceptor = function(req) {
-                if (window.__seigmaCompany) req.headers['seigma-company'] = window.__seigmaCompany;
-                return req;
-              };
             }
             
             if (companies.length === 0) {
@@ -82472,11 +82473,11 @@ tags:
               document.getElementById('guid-display').style.display = 'inline';
               status.textContent = 'Connecté — 1 entreprise: ' + (companies[0].Display || cid);
             } else {
-              // Plusieurs entreprises — afficher un selecteur
+              // Plusieurs entreprises — afficher un selecteur SANS détruire le DOM
               var guidDisplay = document.getElementById('guid-display');
-              guidDisplay.innerHTML = 'Entreprise: <select id="guid-select" style="background:#2a2a2a;color:#49cc90;border:1px solid #49cc90;border-radius:3px;padding:2px 6px;font-family:monospace;max-width:300px;"></select>';
-              guidDisplay.style.display = 'inline';
-              var sel = document.getElementById('guid-select');
+              var sel = document.createElement('select');
+              sel.id = 'guid-select';
+              sel.style.cssText = 'background:#2a2a2a;color:#49cc90;border:1px solid #49cc90;border-radius:3px;padding:2px 6px;font-family:monospace;max-width:300px;';
               companies.forEach(function(c) {
                 var opt = document.createElement('option');
                 opt.value = c.ReferenceId;
@@ -82488,8 +82489,14 @@ tags:
                 document.getElementById('guid-value').textContent = this.value;
                 document.getElementById('guid-manual').value = this.value;
               });
+              // Insérer AVANT le bouton copier (qui reste intact)
+              var copyBtn = document.getElementById('guid-copy-btn');
+              guidDisplay.insertBefore(document.createTextNode('Entreprise: '), copyBtn);
+              guidDisplay.insertBefore(sel, copyBtn);
+              guidDisplay.style.display = 'inline';
               // Premier choix par défaut
               setCompanyGuid(companies[0].ReferenceId);
+              document.getElementById('guid-value').textContent = companies[0].ReferenceId;
               status.textContent = 'Connecté — ' + companies.length + ' entreprises disponibles';
             }
           })
@@ -82510,6 +82517,18 @@ tags:
           var btn = document.getElementById('guid-copy-btn');
           btn.textContent = '✓ Copié!';
           setTimeout(function() { btn.textContent = '📋 Copier'; }, 2000);
+        }).catch(function() {
+          // Fallback pour HTTP ou vieux navigateurs
+          var ta = document.createElement('textarea');
+          ta.value = guid;
+          ta.style.position = 'fixed'; ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          document.body.removeChild(ta);
+          var btn = document.getElementById('guid-copy-btn');
+          btn.textContent = '✓ Copié!';
+          setTimeout(function() { btn.textContent = '📋 Copier'; }, 2000);
         });
       });
       // Champ GUID manuel — auto-fill dès qu'on colle/tape
@@ -82520,6 +82539,9 @@ tags:
           document.getElementById('guid-manual-status').textContent = '✓ Actif — injecté dans toutes les requêtes';
           document.getElementById('guid-manual-status').style.color = '#49cc90';
         } else {
+          if (val.length === 0) {
+            window.__seigmaCompany = null;
+          }
           document.getElementById('guid-manual-status').textContent = val.length > 0 ? 'GUID trop court...' : '';
           document.getElementById('guid-manual-status').style.color = '#666';
         }
