@@ -82210,99 +82210,99 @@ tags:
   - name: WarrantyStatus
     description: Modèle WarrantyStatus
   - name: Carrier
-    description: Modèle Carrier [0 enregistrements]
+    description: Modèle Carrier
   - name: Color
-    description: Modèle Color [0 enregistrements]
+    description: Modèle Color
   - name: CompanyAddress
-    description: Modèle CompanyAddress [0 enregistrements]
+    description: Modèle CompanyAddress
   - name: CustomerProfile
-    description: Modèle CustomerProfile [0 enregistrements]
+    description: Modèle CustomerProfile
   - name: CustomerUnit
-    description: Modèle CustomerUnit [0 enregistrements]
+    description: Modèle CustomerUnit
   - name: Employee
-    description: Modèle Employee [0 enregistrements]
+    description: Modèle Employee
   - name: EquipmentCategory
-    description: Modèle EquipmentCategory [0 enregistrements]
+    description: Modèle EquipmentCategory
   - name: Expense
-    description: Modèle Expense [0 enregistrements]
+    description: Modèle Expense
   - name: ExpenseCategory
-    description: Modèle ExpenseCategory [0 enregistrements]
+    description: Modèle ExpenseCategory
   - name: Gender
-    description: Modèle Gender [0 enregistrements]
+    description: Modèle Gender
   - name: Holiday
-    description: Modèle Holiday [0 enregistrements]
+    description: Modèle Holiday
   - name: InventoryLocation
-    description: Modèle InventoryLocation [0 enregistrements]
+    description: Modèle InventoryLocation
   - name: InventoryLog
-    description: Modèle InventoryLog [0 enregistrements]
+    description: Modèle InventoryLog
   - name: InventoryMove
-    description: Modèle InventoryMove [0 enregistrements]
+    description: Modèle InventoryMove
   - name: InventoryStock
-    description: Modèle InventoryStock [0 enregistrements]
+    description: Modèle InventoryStock
   - name: LeadStatusReason
-    description: Modèle LeadStatusReason [0 enregistrements]
+    description: Modèle LeadStatusReason
   - name: MailCopy
-    description: Modèle MailCopy [0 enregistrements]
+    description: Modèle MailCopy
   - name: Payment
-    description: Modèle Payment [0 enregistrements]
+    description: Modèle Payment
   - name: PaymentTerminal
-    description: Modèle PaymentTerminal [0 enregistrements]
+    description: Modèle PaymentTerminal
   - name: PriceList
-    description: Modèle PriceList [0 enregistrements]
+    description: Modèle PriceList
   - name: ProductClass
-    description: Modèle ProductClass [0 enregistrements]
+    description: Modèle ProductClass
   - name: ProductCost
-    description: Modèle ProductCost [0 enregistrements]
+    description: Modèle ProductCost
   - name: ProductPrice
-    description: Modèle ProductPrice [0 enregistrements]
+    description: Modèle ProductPrice
   - name: PurchaseAccountingMapping
-    description: Modèle PurchaseAccountingMapping [0 enregistrements]
+    description: Modèle PurchaseAccountingMapping
   - name: PurchaseInvoice
-    description: Modèle PurchaseInvoice [0 enregistrements]
+    description: Modèle PurchaseInvoice
   - name: PurchaseInvoiceStatusReason
-    description: Modèle PurchaseInvoiceStatusReason [0 enregistrements]
+    description: Modèle PurchaseInvoiceStatusReason
   - name: PurchaseOrder
-    description: Modèle PurchaseOrder [0 enregistrements]
+    description: Modèle PurchaseOrder
   - name: PurchaseOrderStatusReason
-    description: Modèle PurchaseOrderStatusReason [0 enregistrements]
+    description: Modèle PurchaseOrderStatusReason
   - name: ReadOnlyRange
-    description: Modèle ReadOnlyRange [0 enregistrements]
+    description: Modèle ReadOnlyRange
   - name: Receiving
-    description: Modèle Receiving [0 enregistrements]
+    description: Modèle Receiving
   - name: SalesOrderCustomList2
-    description: Modèle SalesOrderCustomList2 [0 enregistrements]
+    description: Modèle SalesOrderCustomList2
   - name: SalesOrderCustomList3
-    description: Modèle SalesOrderCustomList3 [0 enregistrements]
+    description: Modèle SalesOrderCustomList3
   - name: SalesProfit
-    description: Modèle SalesProfit [0 enregistrements]
+    description: Modèle SalesProfit
   - name: Shipping
-    description: Modèle Shipping [0 enregistrements]
+    description: Modèle Shipping
   - name: ShippingMethod
-    description: Modèle ShippingMethod [0 enregistrements]
+    description: Modèle ShippingMethod
   - name: Size
-    description: Modèle Size [0 enregistrements]
+    description: Modèle Size
   - name: Subscription
-    description: Modèle Subscription [0 enregistrements]
+    description: Modèle Subscription
   - name: Supplier
-    description: Modèle Supplier [0 enregistrements]
+    description: Modèle Supplier
   - name: SupplierClass
-    description: Modèle SupplierClass [0 enregistrements]
+    description: Modèle SupplierClass
   - name: SupplierContact
-    description: Modèle SupplierContact [0 enregistrements]
+    description: Modèle SupplierContact
   - name: SupplierDiscount
-    description: Modèle SupplierDiscount [0 enregistrements]
+    description: Modèle SupplierDiscount
   - name: UnitBrand
-    description: Modèle UnitBrand [0 enregistrements]
+    description: Modèle UnitBrand
   - name: UnitCategory
-    description: Modèle UnitCategory [0 enregistrements]
+    description: Modèle UnitCategory
   - name: UnitClass
-    description: Modèle UnitClass [0 enregistrements]
+    description: Modèle UnitClass
   - name: UnitOfMeasure
-    description: Modèle UnitOfMeasure [0 enregistrements]
+    description: Modèle UnitOfMeasure
   - name: UnitType
-    description: Modèle UnitType [0 enregistrements]
+    description: Modèle UnitType
   - name: WarehouseProduct
-    description: Modèle WarehouseProduct [0 enregistrements]
+    description: Modèle WarehouseProduct
   - name: EmailSender
     description: Modèle EmailSender [HTTP 500 — endpoint indisponible]
   - name: FinancialReport

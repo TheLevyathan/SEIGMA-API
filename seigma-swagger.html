@@ -1,49 +1,49 @@
-1|<!DOCTYPE html>
-2|<html lang="fr">
-3|<head>
-4|  <meta charset="UTF-8">
-5|  <base href="https://seigma.app/api/">
-6|  <title>API SEIGMA — Swagger UI</title>
-7|  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
-8|  <script src="https://unpkg.com/js-yaml@4/dist/js-yaml.min.js"></script>
-9|  <style>
-10|    html { box-sizing: border-box; overflow-y: scroll; }
-11|    *, *:before, *:after { box-sizing: inherit; }
-12|    body { margin: 0; background: #fafafa; }
-13|    .topbar { display: none; }
-14|    #login-bar {
-15|      background: #1b1b1b; color: #fff; padding: 10px 20px;
-16|      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-17|      font-family: sans-serif; font-size: 13px; position: sticky; top: 0; z-index: 100;
-18|      border-bottom: 2px solid #49cc90;
-19|    }
-20|    #login-bar label { color: #ccc; }
-21|    #login-bar input {
-22|      padding: 6px 8px; border: 1px solid #444; border-radius: 4px;
-23|      background: #2a2a2a; color: #fff; font-size: 13px;
-24|    }
-25|    #login-bar button {
-26|      padding: 6px 14px; border: none; border-radius: 4px;
-27|      background: #49cc90; color: #000; cursor: pointer; font-weight: bold;
-28|    }
-29|    #login-bar button:hover { background: #5ee0a5; }
-30|    #login-status { color: #49cc90; font-weight: bold; min-width: 200px; }
-31|    #login-status.error { color: #f93e3e; }
-32|  </style>
-33|</head>
-34|<body>
-35|  <div id="login-bar">
-36|    <label>Instance:</label>
-37|    <input id="seigma-instance" placeholder="votre-instance" value="" size="18">
-38|    <label>Email:</label>
-39|    <input id="seigma-email" placeholder="utilisateur@exemple.com" size="22">
-40|    <label>MDP:</label>
-41|    <input id="seigma-password" type="password" placeholder="••••" size="16">
-42|    <button id="seigma-login-btn">Connexion</button>
-43|    <span id="login-status"></span>
-44|  </div>
-45|  <div id="swagger-ui"></div>
-46|  <script type="application/yaml" id="seigma-spec">
+1|1|<!DOCTYPE html>
+2|2|<html lang="fr">
+3|3|<head>
+4|4|  <meta charset="UTF-8">
+5|5|  <base href="https://seigma.app/api/">
+6|6|  <title>API SEIGMA — Swagger UI</title>
+7|7|  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+8|8|  <script src="https://unpkg.com/js-yaml@4/dist/js-yaml.min.js"></script>
+9|9|  <style>
+10|10|    html { box-sizing: border-box; overflow-y: scroll; }
+11|11|    *, *:before, *:after { box-sizing: inherit; }
+12|12|    body { margin: 0; background: #fafafa; }
+13|13|    .topbar { display: none; }
+14|14|    #login-bar {
+15|15|      background: #1b1b1b; color: #fff; padding: 10px 20px;
+16|16|      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+17|17|      font-family: sans-serif; font-size: 13px; position: sticky; top: 0; z-index: 100;
+18|18|      border-bottom: 2px solid #49cc90;
+19|19|    }
+20|20|    #login-bar label { color: #ccc; }
+21|21|    #login-bar input {
+22|22|      padding: 6px 8px; border: 1px solid #444; border-radius: 4px;
+23|23|      background: #2a2a2a; color: #fff; font-size: 13px;
+24|24|    }
+25|25|    #login-bar button {
+26|26|      padding: 6px 14px; border: none; border-radius: 4px;
+27|27|      background: #49cc90; color: #000; cursor: pointer; font-weight: bold;
+28|28|    }
+29|29|    #login-bar button:hover { background: #5ee0a5; }
+30|30|    #login-status { color: #49cc90; font-weight: bold; min-width: 200px; }
+31|31|    #login-status.error { color: #f93e3e; }
+32|32|  </style>
+33|33|</head>
+34|34|<body>
+35|35|  <div id="login-bar">
+36|36|    <label>Instance:</label>
+37|37|    <input id="seigma-instance" placeholder="votre-instance" value="" size="18">
+38|38|    <label>Email:</label>
+39|39|    <input id="seigma-email" placeholder="utilisateur@exemple.com" size="22">
+40|40|    <label>MDP:</label>
+41|41|    <input id="seigma-password" type="password" placeholder="••••" size="16">
+42|42|    <button id="seigma-login-btn">Connexion</button>
+43|43|    <span id="login-status"></span>
+44|44|  </div>
+45|45|  <div id="swagger-ui"></div>
+46|46|  <script type="application/yaml" id="seigma-spec">
 openapi: 3.1.0
 info:
   title: API SEIGMA — Référence technique
@@ -82256,99 +82256,99 @@ tags:
   - name: WarrantyStatus
     description: Modèle WarrantyStatus
   - name: Carrier
-    description: Modèle Carrier [0 enregistrements]
+    description: Modèle Carrier
   - name: Color
-    description: Modèle Color [0 enregistrements]
+    description: Modèle Color
   - name: CompanyAddress
-    description: Modèle CompanyAddress [0 enregistrements]
+    description: Modèle CompanyAddress
   - name: CustomerProfile
-    description: Modèle CustomerProfile [0 enregistrements]
+    description: Modèle CustomerProfile
   - name: CustomerUnit
-    description: Modèle CustomerUnit [0 enregistrements]
+    description: Modèle CustomerUnit
   - name: Employee
-    description: Modèle Employee [0 enregistrements]
+    description: Modèle Employee
   - name: EquipmentCategory
-    description: Modèle EquipmentCategory [0 enregistrements]
+    description: Modèle EquipmentCategory
   - name: Expense
-    description: Modèle Expense [0 enregistrements]
+    description: Modèle Expense
   - name: ExpenseCategory
-    description: Modèle ExpenseCategory [0 enregistrements]
+    description: Modèle ExpenseCategory
   - name: Gender
-    description: Modèle Gender [0 enregistrements]
+    description: Modèle Gender
   - name: Holiday
-    description: Modèle Holiday [0 enregistrements]
+    description: Modèle Holiday
   - name: InventoryLocation
-    description: Modèle InventoryLocation [0 enregistrements]
+    description: Modèle InventoryLocation
   - name: InventoryLog
-    description: Modèle InventoryLog [0 enregistrements]
+    description: Modèle InventoryLog
   - name: InventoryMove
-    description: Modèle InventoryMove [0 enregistrements]
+    description: Modèle InventoryMove
   - name: InventoryStock
-    description: Modèle InventoryStock [0 enregistrements]
+    description: Modèle InventoryStock
   - name: LeadStatusReason
-    description: Modèle LeadStatusReason [0 enregistrements]
+    description: Modèle LeadStatusReason
   - name: MailCopy
-    description: Modèle MailCopy [0 enregistrements]
+    description: Modèle MailCopy
   - name: Payment
-    description: Modèle Payment [0 enregistrements]
+    description: Modèle Payment
   - name: PaymentTerminal
-    description: Modèle PaymentTerminal [0 enregistrements]
+    description: Modèle PaymentTerminal
   - name: PriceList
-    description: Modèle PriceList [0 enregistrements]
+    description: Modèle PriceList
   - name: ProductClass
-    description: Modèle ProductClass [0 enregistrements]
+    description: Modèle ProductClass
   - name: ProductCost
-    description: Modèle ProductCost [0 enregistrements]
+    description: Modèle ProductCost
   - name: ProductPrice
-    description: Modèle ProductPrice [0 enregistrements]
+    description: Modèle ProductPrice
   - name: PurchaseAccountingMapping
-    description: Modèle PurchaseAccountingMapping [0 enregistrements]
+    description: Modèle PurchaseAccountingMapping
   - name: PurchaseInvoice
-    description: Modèle PurchaseInvoice [0 enregistrements]
+    description: Modèle PurchaseInvoice
   - name: PurchaseInvoiceStatusReason
-    description: Modèle PurchaseInvoiceStatusReason [0 enregistrements]
+    description: Modèle PurchaseInvoiceStatusReason
   - name: PurchaseOrder
-    description: Modèle PurchaseOrder [0 enregistrements]
+    description: Modèle PurchaseOrder
   - name: PurchaseOrderStatusReason
-    description: Modèle PurchaseOrderStatusReason [0 enregistrements]
+    description: Modèle PurchaseOrderStatusReason
   - name: ReadOnlyRange
-    description: Modèle ReadOnlyRange [0 enregistrements]
+    description: Modèle ReadOnlyRange
   - name: Receiving
-    description: Modèle Receiving [0 enregistrements]
+    description: Modèle Receiving
   - name: SalesOrderCustomList2
-    description: Modèle SalesOrderCustomList2 [0 enregistrements]
+    description: Modèle SalesOrderCustomList2
   - name: SalesOrderCustomList3
-    description: Modèle SalesOrderCustomList3 [0 enregistrements]
+    description: Modèle SalesOrderCustomList3
   - name: SalesProfit
-    description: Modèle SalesProfit [0 enregistrements]
+    description: Modèle SalesProfit
   - name: Shipping
-    description: Modèle Shipping [0 enregistrements]
+    description: Modèle Shipping
   - name: ShippingMethod
-    description: Modèle ShippingMethod [0 enregistrements]
+    description: Modèle ShippingMethod
   - name: Size
-    description: Modèle Size [0 enregistrements]
+    description: Modèle Size
   - name: Subscription
-    description: Modèle Subscription [0 enregistrements]
+    description: Modèle Subscription
   - name: Supplier
-    description: Modèle Supplier [0 enregistrements]
+    description: Modèle Supplier
   - name: SupplierClass
-    description: Modèle SupplierClass [0 enregistrements]
+    description: Modèle SupplierClass
   - name: SupplierContact
-    description: Modèle SupplierContact [0 enregistrements]
+    description: Modèle SupplierContact
   - name: SupplierDiscount
-    description: Modèle SupplierDiscount [0 enregistrements]
+    description: Modèle SupplierDiscount
   - name: UnitBrand
-    description: Modèle UnitBrand [0 enregistrements]
+    description: Modèle UnitBrand
   - name: UnitCategory
-    description: Modèle UnitCategory [0 enregistrements]
+    description: Modèle UnitCategory
   - name: UnitClass
-    description: Modèle UnitClass [0 enregistrements]
+    description: Modèle UnitClass
   - name: UnitOfMeasure
-    description: Modèle UnitOfMeasure [0 enregistrements]
+    description: Modèle UnitOfMeasure
   - name: UnitType
-    description: Modèle UnitType [0 enregistrements]
+    description: Modèle UnitType
   - name: WarehouseProduct
-    description: Modèle WarehouseProduct [0 enregistrements]
+    description: Modèle WarehouseProduct
   - name: EmailSender
     description: Modèle EmailSender [HTTP 500 — endpoint indisponible]
   - name: FinancialReport

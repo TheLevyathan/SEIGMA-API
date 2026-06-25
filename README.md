@@ -1,9 +1,9 @@
 # SEIGMA API — Documentation REST
 
-Documentation complète de l'API REST SEIGMA. 779 endpoints, 154 modèles.
-Générée automatiquement par introspection des endpoints réels.
+Documentation complète de l'API REST SEIGMA. 2 672 endpoints, 154 modèles.
+Générée par introspection des endpoints de l'API SEIGMA.
 
-> Généré le 2026-06-20 — Spécification OpenAPI 3.1
+> Généré le 2026-06-25 — Spécification OpenAPI 3.1
 
 ## Contenu
 
@@ -27,7 +27,6 @@ Générée automatiquement par introspection des endpoints réels.
 4. Cliquer **Connexion** — le token JWT est automatiquement injecté dans toutes les requêtes
 5. Déplier un endpoint → **Try it out** → **Execute**
 
-> ⚠️ Le fichier est autonome (le YAML est intégré dans le HTML). Ne pas le re-séparer si vous l'éditez.
 
 ### Redoc (référence navigable)
 
