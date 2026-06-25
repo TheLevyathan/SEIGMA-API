@@ -1,49 +1,48 @@
-1|1|<!DOCTYPE html>
-2|2|<html lang="fr">
-3|3|<head>
-4|4|  <meta charset="UTF-8">
-5|5|  <base href="https://seigma.app/api/">
-6|6|  <title>API SEIGMA — Swagger UI</title>
-7|7|  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
-8|8|  <script src="https://unpkg.com/js-yaml@4/dist/js-yaml.min.js"></script>
-9|9|  <style>
-10|10|    html { box-sizing: border-box; overflow-y: scroll; }
-11|11|    *, *:before, *:after { box-sizing: inherit; }
-12|12|    body { margin: 0; background: #fafafa; }
-13|13|    .topbar { display: none; }
-14|14|    #login-bar {
-15|15|      background: #1b1b1b; color: #fff; padding: 10px 20px;
-16|16|      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-17|17|      font-family: sans-serif; font-size: 13px; position: sticky; top: 0; z-index: 100;
-18|18|      border-bottom: 2px solid #49cc90;
-19|19|    }
-20|20|    #login-bar label { color: #ccc; }
-21|21|    #login-bar input {
-22|22|      padding: 6px 8px; border: 1px solid #444; border-radius: 4px;
-23|23|      background: #2a2a2a; color: #fff; font-size: 13px;
-24|24|    }
-25|25|    #login-bar button {
-26|26|      padding: 6px 14px; border: none; border-radius: 4px;
-27|27|      background: #49cc90; color: #000; cursor: pointer; font-weight: bold;
-28|28|    }
-29|29|    #login-bar button:hover { background: #5ee0a5; }
-30|30|    #login-status { color: #49cc90; font-weight: bold; min-width: 200px; }
-31|31|    #login-status.error { color: #f93e3e; }
-32|32|  </style>
-33|33|</head>
-34|34|<body>
-35|35|  <div id="login-bar">
-36|36|    <label>Instance:</label>
-37|37|    <input id="seigma-instance" placeholder="votre-instance" value="" size="18">
-38|38|    <label>Email:</label>
-39|39|    <input id="seigma-email" placeholder="utilisateur@exemple.com" size="22">
-40|40|    <label>MDP:</label>
-41|41|    <input id="seigma-password" type="password" placeholder="••••" size="16">
-42|42|    <button id="seigma-login-btn">Connexion</button>
-43|43|    <span id="login-status"></span>
-44|44|  </div>
-45|45|  <div id="swagger-ui"></div>
-46|46|  <script type="application/yaml" id="seigma-spec">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>API SEIGMA — Swagger UI</title>
+  <link rel="stylesheet" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css">
+  <script src="https://unpkg.com/js-yaml@4/dist/js-yaml.min.js"></script>
+  <style>
+    html { box-sizing: border-box; overflow-y: scroll; }
+    *, *:before, *:after { box-sizing: inherit; }
+    body { margin: 0; background: #fafafa; }
+    .topbar { display: none; }
+    #login-bar {
+      background: #1b1b1b; color: #fff; padding: 10px 20px;
+      display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+      font-family: sans-serif; font-size: 13px; position: sticky; top: 0; z-index: 100;
+      border-bottom: 2px solid #49cc90;
+    }
+    #login-bar label { color: #ccc; }
+    #login-bar input {
+      padding: 6px 8px; border: 1px solid #444; border-radius: 4px;
+      background: #2a2a2a; color: #fff; font-size: 13px;
+    }
+    #login-bar button {
+      padding: 6px 14px; border: none; border-radius: 4px;
+      background: #49cc90; color: #000; cursor: pointer; font-weight: bold;
+    }
+    #login-bar button:hover { background: #5ee0a5; }
+    #login-status { color: #49cc90; font-weight: bold; min-width: 200px; }
+    #login-status.error { color: #f93e3e; }
+  </style>
+</head>
+<body>
+  <div id="login-bar">
+    <label>Instance:</label>
+    <input id="seigma-instance" placeholder="votre-instance" value="" size="18">
+    <label>Email:</label>
+    <input id="seigma-email" placeholder="utilisateur@exemple.com" size="22">
+    <label>MDP:</label>
+    <input id="seigma-password" type="password" placeholder="••••" size="16">
+    <button id="seigma-login-btn">Connexion</button>
+    <span id="login-status"></span>
+  </div>
+  <div id="swagger-ui"></div>
+  <script type="application/yaml" id="seigma-spec">
 openapi: 3.1.0
 info:
   title: API SEIGMA — Référence technique
@@ -82381,63 +82380,79 @@ tags:
     description: Modèle WorkOrderItem [HTTP 500 — endpoint indisponible]
 
   </script>
-  <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js" crossorigin></script>
+  <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
   <script>
-(function() {
-  var yamlText = document.getElementById("seigma-spec").textContent;
-  var spec = jsyaml.load(yamlText);
+    (function() {
+      var yamlText = document.getElementById('seigma-spec').textContent;
+      var spec = jsyaml.load(yamlText);
+      spec.servers = [{ url: 'https://{instance}.seigma.app/api', variables: { instance: { default: 'votre-instance' } } }];
+      var ui = SwaggerUIBundle({
+        spec: spec,
+        dom_id: '#swagger-ui',
+        deepLinking: true,
+        presets: [SwaggerUIBundle.presets.apis],
+        layout: 'BaseLayout',
+        defaultModelsExpandDepth: 0,
+        docExpansion: 'list',
+        filter: true,
+        tryItOutEnabled: true
+      });
 
-  var ui = SwaggerUIBundle({
-    spec: spec,
-    dom_id: "#swagger-ui",
-    deepLinking: true,
-    presets: [SwaggerUIBundle.presets.apis],
-    layout: "BaseLayout",
-    defaultModelsExpandDepth: 1,
-    defaultModelExpandDepth: 2,
-    docExpansion: "list",
-    filter: true,
-    tryItOutEnabled: true,
-  });
-
-  document.getElementById("seigma-login-btn").addEventListener("click", function() {
-    var inst = document.getElementById("seigma-instance").value.trim() || "votre-instance";
-    var email = document.getElementById("seigma-email").value.trim();
-    var pass = document.getElementById("seigma-password").value.trim();
-    var statusEl = document.getElementById("login-status");
-    
-    if (!email || !pass) {
-      statusEl.textContent = "Email et mot de passe requis";
-      statusEl.className = "error";
-      return;
-    }
-    
-    statusEl.textContent = "Connexion...";
-    statusEl.className = "";
-    
-    var authUrl = "https://" + inst + ".seigma.app/api/auth/authenticate";
-    fetch(authUrl, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({username: email, password: pass}),
-    })
-    .then(function(r) { return r.json(); })
-    .then(function(data) {
-      if (data.token) {
-        ui.preauthorizeApiKey("bearerAuth", "Bearer " + data.token);
-        statusEl.textContent = "Connecte - token valide 7 jours";
-        statusEl.className = "";
-      } else {
-        statusEl.textContent = "Echec: " + (data.message || JSON.stringify(data));
-        statusEl.className = "error";
+      function doLogin() {
+        var instance = document.getElementById('seigma-instance').value.trim();
+        var email = document.getElementById('seigma-email').value.trim();
+        var password = document.getElementById('seigma-password').value;
+        var status = document.getElementById('login-status');
+        if (!instance || !email || !password) {
+          status.textContent = 'Remplis tous les champs';
+          status.className = 'error';
+          return;
+        }
+        status.textContent = 'Connexion...';
+        status.className = '';
+        var authUrl = 'https://' + instance + '.seigma.app/api/auth/authenticate';
+        fetch(authUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username: email, password: password })
+        })
+        .then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+        .then(function(result) {
+          if (!result.ok || !result.data.token) {
+            status.textContent = 'Échec: ' + (result.data.message || result.data.Message || 'Erreur inconnue');
+            status.className = 'error';
+            return;
+          }
+          var token = result.data.token;
+          // Décoder le JWT pour trouver le companyId
+          var claims = JSON.parse(atob(token.split('.')[1]));
+          var companyId = claims.CompanyId || claims.company_id || claims.cid || '';
+          // Injecter le token
+          ui.authActions.authorize({ bearerAuth: { name: 'bearerAuth', schema: { type: 'http', scheme: 'bearer' }, value: token } });
+          // Mettre à jour le server
+          ui.specActions.updateUrl('https://' + instance + '.seigma.app/api');
+          // Stocker le companyId pour le header seigma-company
+          window.__seigmaCompany = companyId;
+          status.textContent = 'Connecté — Token valide 7 jours';
+          status.className = '';
+          // Ajouter interceptor pour header seigma-company
+          ui.getConfigs().requestInterceptor = function(req) {
+            if (window.__seigmaCompany) {
+              req.headers['seigma-company'] = window.__seigmaCompany;
+            }
+            return req;
+          };
+        })
+        .catch(function(e) {
+          status.textContent = 'Erreur réseau: ' + e.message;
+          status.className = 'error';
+        });
       }
-    })
-    .catch(function(err) {
-      statusEl.textContent = "Erreur reseau: " + err.message;
-      statusEl.className = "error";
-    });
-  });
-})();
+      document.getElementById('seigma-login-btn').addEventListener('click', doLogin);
+      document.getElementById('seigma-password').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') doLogin();
+      });
+    })();
   </script>
 </body>
 </html>
