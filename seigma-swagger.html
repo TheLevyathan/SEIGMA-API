@@ -82433,34 +82433,70 @@ tags:
             return;
           }
           var token = result.data.token;
-          // Décoder le JWT pour trouver le companyId
-          var claims = JSON.parse(atob(token.split('.')[1]));
-          var companyId = claims.CompanyId || claims.company_id || claims.cid || '';
           // Injecter le token
           ui.authActions.authorize({ bearerAuth: { name: 'bearerAuth', schema: { type: 'http', scheme: 'bearer' }, value: token } });
           // Mettre à jour le server
           ui.specActions.updateUrl('https://' + instance + '.seigma.app/api');
-          // Stocker le companyId pour le header seigma-company
-          window.__seigmaCompany = companyId;
-          // Afficher le GUID avec bouton copie
-          var guidDisplay = document.getElementById('guid-display');
-          var guidValue = document.getElementById('guid-value');
-          guidValue.textContent = companyId;
-          guidDisplay.style.display = 'inline';
-          // Remplir aussi le champ manuel
-          document.getElementById('guid-manual').value = companyId;
-          document.getElementById('guid-manual-status').textContent = '✓ Auto-rempli';
-          document.getElementById('guid-manual-status').style.color = '#49cc90';
-          status.textContent = 'Connecté — Token valide 7 jours';
+          status.textContent = 'Token OK — recherche des entreprises...';
           status.className = '';
-          // Ajouter interceptor pour header seigma-company
-          ui.getConfigs().requestInterceptor = function(req) {
-            var cid = window.__seigmaCompany;
-            if (cid) {
-              req.headers['seigma-company'] = cid;
+          
+          // Découvrir les entreprises disponibles (sans header seigma-company)
+          fetch('https://' + instance + '.seigma.app/api/reference/Company/search', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+            body: JSON.stringify({Offset:0,Limit:50,IsSelector:false,WhereCondition:[],WhereOrCondition:[],WhereInCondition:[],OrderByCondition:[]})
+          })
+          .then(function(r) { return r.json(); })
+          .then(function(companyData) {
+            var companies = companyData.references || [];
+            // Toujours mettre à jour l'interceptor
+            function setCompanyGuid(guid) {
+              window.__seigmaCompany = guid;
+              document.getElementById('guid-manual').value = guid;
+              document.getElementById('guid-manual-status').textContent = '✓ Actif — injecté dans toutes les requêtes';
+              document.getElementById('guid-manual-status').style.color = '#49cc90';
+              ui.getConfigs().requestInterceptor = function(req) {
+                if (window.__seigmaCompany) req.headers['seigma-company'] = window.__seigmaCompany;
+                return req;
+              };
             }
-            return req;
-          };
+            
+            if (companies.length === 0) {
+              status.textContent = 'Connecté — aucune entreprise trouvée (GUID manuel requis)';
+              status.className = '';
+              // Afficher quand même le champ manuel
+            } else if (companies.length === 1) {
+              var cid = companies[0].ReferenceId;
+              setCompanyGuid(cid);
+              document.getElementById('guid-value').textContent = cid;
+              document.getElementById('guid-display').style.display = 'inline';
+              status.textContent = 'Connecté — 1 entreprise: ' + (companies[0].Display || cid);
+            } else {
+              // Plusieurs entreprises — afficher un selecteur
+              var guidDisplay = document.getElementById('guid-display');
+              guidDisplay.innerHTML = 'Entreprise: <select id="guid-select" style="background:#2a2a2a;color:#49cc90;border:1px solid #49cc90;border-radius:3px;padding:2px 6px;font-family:monospace;max-width:300px;"></select>';
+              guidDisplay.style.display = 'inline';
+              var sel = document.getElementById('guid-select');
+              companies.forEach(function(c) {
+                var opt = document.createElement('option');
+                opt.value = c.ReferenceId;
+                opt.textContent = c.Display || c.ReferenceId;
+                sel.appendChild(opt);
+              });
+              sel.addEventListener('change', function() {
+                setCompanyGuid(this.value);
+                document.getElementById('guid-value').textContent = this.value;
+                document.getElementById('guid-manual').value = this.value;
+              });
+              // Premier choix par défaut
+              setCompanyGuid(companies[0].ReferenceId);
+              status.textContent = 'Connecté — ' + companies.length + ' entreprises disponibles';
+            }
+          })
+          .catch(function(e) {
+            status.textContent = 'Connecté (Token OK) — impossible de lister les entreprises';
+            status.className = '';
+          });
         })
         .catch(function(e) {
           status.textContent = 'Erreur réseau: ' + e.message;
